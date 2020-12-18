@@ -6,3 +6,4 @@ userCtrl.createUser = async (req,res) => {
 }
 
 module.exports = userCtrl;
+
