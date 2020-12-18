@@ -1,10 +1,15 @@
-const express = require('express');
-const app = express();
+require('dotenv').config();
+const app = require('./app');
+require('./database');
 
-app.get('/', (req, res) => {
-    res.send("hola mundo");
-});
+async function main() {
+    try {
+        await app.listen(app.get('port')); 
+        console.log('Server on port ', app.get('port'));
+    } catch (error) {
+        console.log(error);
+    }
 
-app.listen(4000, () => {
-    console.log('server on port 4000');
-});
+}
+
+main();
