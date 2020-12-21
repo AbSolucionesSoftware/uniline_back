@@ -8,10 +8,14 @@ const userSchema = new Schema(
     keyImage: String,
     urlImage: String,
     phone: String,
-    email: String,
+    email: {
+      type: String,
+      unique: true
+    },
     password: String,
     type: String,
     sessiontype: String,
+    policies: Boolean
   },
   {
     timestamps: true,
