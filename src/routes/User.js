@@ -1,11 +1,20 @@
 const {Router} = require('express');
 const router = Router();
+const auth = require('../middleware/auth');
 
-const {createUser} = require('../controllers/User.controllers');
+const {createUser,createTeacher,getUser,signInUser,editUser,uploadFile,userFirebaseSign} = require('../controllers/User.controllers');
+
+router.route('/firebase').post(userFirebaseSign);
+
+router.route('/').post(createUser).get()
+
+router.route('/:idUser/teacher').put(createTeacher);
+
+router.route('/:idUser').get(getUser).put(uploadFile,editUser)
+
+router.route('/signIn').post(signInUser);
 
 
-
-router.route('/').post(createUser)
 
 
 module.exports = router;
