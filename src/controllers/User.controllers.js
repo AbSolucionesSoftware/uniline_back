@@ -3,7 +3,6 @@ const modelUser = require("../models/User");
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
 const uploadFile = require("../middleware/awsFile");
-const { upload } = require("../middleware/awsFile");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {

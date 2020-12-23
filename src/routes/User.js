@@ -6,7 +6,7 @@ const {createUser,createTeacher,getUser,signInUser,editUser,uploadFile,userFireb
 
 router.route('/firebase').post(userFirebaseSign);
 
-router.route('/').post(createUser).get()
+router.route('/').post(createUser);
 
 router.route('/:idUser/teacher').put(auth,createTeacher);
 
