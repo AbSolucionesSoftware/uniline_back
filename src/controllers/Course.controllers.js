@@ -1,4 +1,5 @@
 const courseCtrl = {};
+const modelCourse = require('../models/Course');
 
 courseCtrl.getCourses = async (req,res) => {
     try {
@@ -20,7 +21,7 @@ courseCtrl.getCourse = async (req,res) => {
 
 courseCtrl.createCourse = async (req,res) => {
     try {
-        
+        const newCourse = new modelCourse(req.body);
     } catch (error) {
         res.status(505).json({message: "Error del servidor",error});
         console.log(error);
