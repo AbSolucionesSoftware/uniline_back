@@ -20,15 +20,15 @@ userCtrl.uploadFile = async (req, res, next) => {
 
 userCtrl.createUser = async (req, res) => {
   try {
-    const { name, email, password, resetPassword, acceptPolicies } = req.body;
+    const { name, email, password, repeatPassword, acceptPolicies } = req.body;
 
     const newUser = new modelUser();
 
     if (acceptPolicies) {
-      if (!password || !resetPassword) {
+      if (!password || !repeatPassword) {
         res.status(404).json({ message: "The password is required." });
       } else {
-        if (password === resetPassword) {
+        if (password === repeatPassword) {
           bcrypt.hash(password, null, null, function (err, hash) {
             if (err) {
               res

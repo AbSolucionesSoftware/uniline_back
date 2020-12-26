@@ -22,7 +22,7 @@ const courseSchema = new mongoose.Schema(
       },
     ],
     category: String,
-    subMategory: String,
+    subCategory: String,
     requirements: [
       {
         requirement: String,
