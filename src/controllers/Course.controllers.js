@@ -17,6 +17,30 @@ courseCtrl.getCourse = async (req, res) => {
   }
 };
 
+courseCtrl.editLerningsRequiredStudents = async (req, res) => {
+  try {
+    const { learnigs, requeriments, whoStudents } = req.body;
+    const course = await modelCourse.findById(req.params.idCourse);
+    const editCourse = course;
+    if(learnigs.length > 0){
+      editCourse.learnings = learnings;
+    }
+    if(requeriments.length > 0){
+      editCourse.requirements = requirements;
+    }
+    if(whoStudents.length > 0){
+      editCourse.whoStudents = whoStudents;
+    }
+
+    await modelCourse.findByIdAndUpdate(req.params.idCourse,editCourse);
+    res.status(200).json({message: "Curso actualizado"});
+
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+};
+
 courseCtrl.createCourse = async (req, res) => {
   try {
     const newCourse = new modelCourse(req.body);
@@ -39,13 +63,12 @@ courseCtrl.createCourse = async (req, res) => {
   }
 };
 
-courseCtrl.editCourse = async (req,res) => {
-    try {
-        
-    } catch (error) {
-      res.status(505).json({ message: "Error del servidor", error });
-      console.log(error);
-    }
-}
+courseCtrl.editCourse = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+};
 
 module.exports = courseCtrl;

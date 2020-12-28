@@ -91,8 +91,19 @@ userCtrl.createTeacher = async (req, res) => {
 
     newTeacher.type = "Maestro";
     await modelUser.findByIdAndUpdate(idUser, newTeacher);
-
-    res.status(200).json({ message: "User is now teacher." });
+    const userUpdate = await modelUser.findById(idUser);
+    const token = jwt.sign(
+      {
+        email: userUpdate.email,
+        name: userUpdate.name,
+        imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
+        _id: userUpdate._id,
+        sessiontype: userUpdate.sessiontype,
+        rol: false,
+      },
+      process.env.AUTH_KEY
+    );
+    res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);
@@ -135,7 +146,7 @@ userCtrl.editUser = async (req, res) => {
         {
           email: userUpdate.email,
           name: userUpdate.name,
-          imagen: userBase.urlImage ? userBase.urlImage : null,
+          imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
           _id: userUpdate._id,
           sessiontype: userUpdate.sessiontype,
           rol: false,
@@ -267,7 +278,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
                   {
                     email: newUser.email,
                     name: newUser.name,
-                    imagen: userBase.urlImage ? userBase.urlImage : null,
+                    imagen: newUser.urlImage ? newUser.urlImage : null,
                     _id: newUser._id,
                     sessiontype: newUser.sessiontype,
                     rol: false,
