@@ -21,7 +21,6 @@ userCtrl.uploadFile = async (req, res, next) => {
 userCtrl.createUser = async (req, res) => {
   try {
     const { name, email, password, repeatPassword, acceptPolicies } = req.body;
-
     const newUser = new modelUser();
 
     if (acceptPolicies) {
@@ -31,9 +30,7 @@ userCtrl.createUser = async (req, res) => {
         if (password === repeatPassword) {
           bcrypt.hash(password, null, null, function (err, hash) {
             if (err) {
-              res
-                .status(500)
-                .json({ message: "Error encrypting the password.", err });
+              res.status(500).json({ message: "Error encrypting the password.", err });
             } else {
               newUser.name = name;
               newUser.email = email;
@@ -59,7 +56,7 @@ userCtrl.createUser = async (req, res) => {
                       {
                         email: newUser.email,
                         name: newUser.name,
-                        imagen: userBase.urlImage ? userBase.urlImage : null,
+                        imagen: newUser.urlImage ? newUser.urlImage : null,
                         _id: newUser._id,
                         sessiontype: newUser.sessiontype,
                         rol: false,
