@@ -59,7 +59,7 @@ userCtrl.createUser = async (req, res) => {
                         imagen: newUser.urlImage ? newUser.urlImage : null,
                         _id: newUser._id,
                         sessiontype: newUser.sessiontype,
-                        rol: false,
+                        rol: newUser.type,
                       },
                       process.env.AUTH_KEY
                     );
@@ -99,7 +99,7 @@ userCtrl.createTeacher = async (req, res) => {
         imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
         _id: userUpdate._id,
         sessiontype: userUpdate.sessiontype,
-        rol: false,
+        rol: userUpdate.type,
       },
       process.env.AUTH_KEY
     );
@@ -149,7 +149,7 @@ userCtrl.editUser = async (req, res) => {
           imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
           _id: userUpdate._id,
           sessiontype: userUpdate.sessiontype,
-          rol: false,
+          rol: userUpdate.type,
         },
         process.env.AUTH_KEY
       );
@@ -188,7 +188,7 @@ userCtrl.signInUser = async (req, res) => {
             imagen: userBase.urlImage ? userBase.urlImage : null,
             _id: userBase._id,
             sessiontype: userBase.sessiontype,
-            rol: false,
+            rol: userBase.type,
           },
           process.env.AUTH_KEY
         );
@@ -239,7 +239,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
               imagen: userBase.urlImage,
               _id: userBase._id,
               sessiontype: userBase.sessiontype,
-              rol: false,
+              rol: userBase.type,
             },
             process.env.AUTH_KEY
           );
@@ -281,7 +281,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
                     imagen: newUser.urlImage ? newUser.urlImage : null,
                     _id: newUser._id,
                     sessiontype: newUser.sessiontype,
-                    rol: false,
+                    rol: newUser.type,
                   },
                   process.env.AUTH_KEY
                 );
