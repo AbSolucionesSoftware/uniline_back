@@ -14,7 +14,7 @@ router.route('/:idUser').get(getUser).put(auth,uploadFile,editUser)
 
 router.route('/signIn').post(signInUser);
 
-router.route('/reset/password/:idUser').put(resetPasswordUserSession)
+router.route('/reset/password/:idUser').put(auth,resetPasswordUserSession)
 
 module.exports = router;
 
