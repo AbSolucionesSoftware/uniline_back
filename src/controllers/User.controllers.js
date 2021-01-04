@@ -313,7 +313,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
         console.log("entro a sesion normal");
         if (password === repeatPassword) {
           console.log("la pass si conincide");
-          if (!bcrypt.compareSync(currentPassword, userBase.contrasena)) {
+          if (!bcrypt.compareSync(currentPassword, userBase.password)) {
             res.status(404).json({ message: "Contraseña incorrecta" });
           } else {
             console.log("Entro a cambiarla");
@@ -323,7 +323,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
                   .status(500)
                   .json({ message: "Error al encriptar la contraseña", err });
               } else {
-                newUser.contrasena = hash;
+                newUser.password = hash;
                 newUser.save(async (err, userStored) => {
                   if (err) {
                     res
