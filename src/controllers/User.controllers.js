@@ -128,8 +128,10 @@ userCtrl.editUser = async (req, res) => {
   try {
     const userBase = await modelUser.findById(req.params.idUser);
     const updateUser = req.body;
+    console.log(req.body);
     if (userBase) {
       if (req.file) {
+        console.log(req.file);
         updateUser.keyImage = req.file.key;
         updateUser.urlImage = req.file.location;
         if (userBase.keyImage) {
@@ -310,9 +312,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
       if (userBase.sessiontype === "Firebase") {
         res.status(504).json({ message: "Usuario no valido." });
       } else {
-        console.log("entro a sesion normal");
         if (password === repeatPassword) {
-          console.log("la pass si conincide");
           if (!bcrypt.compareSync(currentPassword, userBase.password)) {
             res.status(404).json({ message: "Contraseña incorrecta" });
           } else {
@@ -321,7 +321,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
               if (err) {
                 res
                   .status(500)
-                  .json({ message: "Error al encriptar la contraseña", err });
+                  .json({ message: "Error al encriptar la contraseña.", err });
               } else {
                 newUser.password = hash;
                 newUser.save(async (err, userStored) => {
@@ -329,7 +329,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
                     res
                       .status(500)
                       .json({
-                        message: "Ups, algo paso al registrar el usuario",
+                        message: "Ups, algo paso al registrar el usuario.",
                         err,
                       });
                   } else {
@@ -338,23 +338,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
                         .status(404)
                         .json({ message: "Error al crear el usuario" });
                     } else {
-                      const userUpdate = await modelUser.findById(
-                        req.params.idUser
-                      );
-                      const token = jwt.sign(
-                        {
-                          email: userUpdate.email,
-                          name: userUpdate.name,
-                          imagen: userUpdate.urlImage
-                            ? userUpdate.urlImage
-                            : null,
-                          _id: userUpdate._id,
-                          sessiontype: userUpdate.sessiontype,
-                          rol: userUpdate.type,
-                        },
-                        process.env.AUTH_KEY
-                      );
-                      res.json({ token });
+                      res.status(200).json({ message: "Contraseña actualizada." });
                     }
                   }
                 });

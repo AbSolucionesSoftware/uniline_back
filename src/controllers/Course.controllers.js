@@ -44,6 +44,7 @@ courseCtrl.editLerningsRequiredStudents = async (req, res) => {
 courseCtrl.createCourse = async (req, res) => {
   try {
     const newCourse = new modelCourse(req.body);
+    newCourse.publication = false;
     newCourse.save((err, userStored) => {
       if (err) {
         res
@@ -65,7 +66,8 @@ courseCtrl.createCourse = async (req, res) => {
 
 courseCtrl.editCourse = async (req, res) => {
   try {
-    console.log("llego");
+    console.log(req.file);
+    res.status(200).json({messege: "Curso editado"})
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
