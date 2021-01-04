@@ -300,4 +300,52 @@ userCtrl.userFirebaseSign = async (req, res) => {
   }
 };
 
+userCtrl.resetPasswordUserSession = async (req,res) => {
+  try {
+    const {currentPassword,password,repeatPassword} = req.body;
+    const userBase = await modelUser.findById(req.params.idUser);
+    const newUser = userBase;
+    if(userBase){
+      if(password === repeatPassword){
+        bcrypt.hash(currentPassword, null, null, function (err, hash) {
+          if (err) {
+            res.status(500).json({ message: "Error al encriptar la contraseña", err });
+          } else {
+            newUser.contrasena = hash;
+            newUser.save((err, userStored) => {
+              if (err) {
+                res.status(500).json({message: "Ups, algo paso al registrar el usuario",err,});
+              } else {
+                if (!userStored) {
+                  res.status(404).json({ message: "Error al crear el usuario" });
+                } else {
+                  const userUpdate = await modelUser.findById(req.params.idUser);
+                  const token = jwt.sign(
+                    {
+                      email: userUpdate.email,
+                      name: userUpdate.name,
+                      imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
+                      _id: userUpdate._id,
+                      sessiontype: userUpdate.sessiontype,
+                      rol: userUpdate.type,
+                    },
+                    process.env.AUTH_KEY
+                  );
+                  res.json({ token });
+                }
+              }
+            });
+          }
+        });
+      }else{
+        res.status(504).json({message: "Las contraseñas no son iguales."});
+      }
+    }else{
+      res.status(504).json({message: "Este usuario no existe."});
+    }
+  } catch (error) {
+    
+  }
+}
+
 module.exports = userCtrl;
