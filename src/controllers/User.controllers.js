@@ -126,41 +126,46 @@ userCtrl.getUser = async (req, res) => {
 
 userCtrl.editUser = async (req, res) => {
   try {
-    const userBase = await modelUser.findById(req.params.idUser);
-    const updateUser = req.body;
-    console.log(req.body);
-    if (userBase) {
-      if (req.file) {
-        console.log(req.file);
-        updateUser.keyImage = req.file.key;
-        updateUser.urlImage = req.file.location;
-        if (userBase.keyImage) {
-          uploadFile.eliminarImagen(userBase.keyImage);
+    if(req.body.password){
+      res.status(500).json({ message: "Error de datos enviados." });
+    }else{
+      const userBase = await modelUser.findById(req.params.idUser);
+      const updateUser = req.body;
+      console.log(req.body);
+      if (userBase) {
+        if (req.file) {
+          console.log(req.file);
+          updateUser.keyImage = req.file.key;
+          updateUser.urlImage = req.file.location;
+          if (userBase.keyImage) {
+            uploadFile.eliminarImagen(userBase.keyImage);
+          }
+        } else {
+          if (userBase.keyImage) {
+            updateUser.keyImage = userBase.keyImage;
+            updateUser.urlImage = userBase.urlImage;
+          }
         }
+        await modelUser.findByIdAndUpdate(req.params.idUser, updateUser);
+  
+        const userUpdate = await modelUser.findById(req.params.idUser);
+        const token = jwt.sign(
+          {
+            email: userUpdate.email,
+            name: userUpdate.name,
+            imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
+            _id: userUpdate._id,
+            sessiontype: userUpdate.sessiontype,
+            rol: userUpdate.type,
+          },
+          process.env.AUTH_KEY
+        );
+        res.status(200).json({ token });
       } else {
-        if (userBase.keyImage) {
-          updateUser.keyImage = userBase.keyImage;
-          updateUser.urlImage = userBase.urlImage;
-        }
+        res.status(500).json({ message: "Este usuario no existe" });
       }
-      await modelUser.findByIdAndUpdate(req.params.idUser, updateUser);
-
-      const userUpdate = await modelUser.findById(req.params.idUser);
-      const token = jwt.sign(
-        {
-          email: userUpdate.email,
-          name: userUpdate.name,
-          imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
-          _id: userUpdate._id,
-          sessiontype: userUpdate.sessiontype,
-          rol: userUpdate.type,
-        },
-        process.env.AUTH_KEY
-      );
-      res.status(200).json({ token });
-    } else {
-      res.status(500).json({ message: "Este usuario no existe" });
     }
+
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);

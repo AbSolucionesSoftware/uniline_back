@@ -66,12 +66,32 @@ courseCtrl.createCourse = async (req, res) => {
 
 courseCtrl.editCourse = async (req, res) => {
   try {
-    console.log(req.file);
-    res.status(200).json({messege: "Curso editado"})
+    const courseBase = await modelCourse.findById(req.params.idCourse); 
+    if(courseBase){
+      const editCourse = req.body;
+      await modelCourse.findByIdAndUpdate(req.params.idCourse,editCourse);
+      res.status(200).json({messege: "Curso editado"});
+    }else{
+      res.status(504).json({ message: "Este curso no existe", error });
+    }
+
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
 };
+
+courseCtrl.uploadFileCourse = async (req,res) => {
+  try {
+      if(req.file){
+        
+      }else{
+
+      }
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
 
 module.exports = courseCtrl;
