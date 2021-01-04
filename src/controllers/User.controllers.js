@@ -30,7 +30,9 @@ userCtrl.createUser = async (req, res) => {
         if (password === repeatPassword) {
           bcrypt.hash(password, null, null, function (err, hash) {
             if (err) {
-              res.status(500).json({ message: "Error encrypting the password.", err });
+              res
+                .status(500)
+                .json({ message: "Error encrypting the password.", err });
             } else {
               newUser.name = name;
               newUser.email = email;
@@ -40,12 +42,10 @@ userCtrl.createUser = async (req, res) => {
               newUser.password = hash;
               newUser.save((err, userStored) => {
                 if (err) {
-                  res
-                    .status(500)
-                    .json({
-                      message: "Ups, algo paso al registrar el usuario",
-                      err,
-                    });
+                  res.status(500).json({
+                    message: "Ups, algo paso al registrar el usuario",
+                    err,
+                  });
                 } else {
                   if (!userStored) {
                     res
@@ -180,9 +180,9 @@ userCtrl.signInUser = async (req, res) => {
     const userBase = await modelUser.findOne({ email: email });
 
     if (userBase) {
-      if(userBase.sessiontype === "Firebase"){
+      if (userBase.sessiontype === "Firebase") {
         res.status(504).json({ message: "Usuario no valido." });
-      }else{
+      } else {
         if (!bcrypt.compareSync(password, userBase.password)) {
           res.status(404).json({ message: "Contraseña incorrecta" });
         } else {
@@ -270,12 +270,10 @@ userCtrl.userFirebaseSign = async (req, res) => {
           newUser.password = hash;
           newUser.save((err, userStored) => {
             if (err) {
-              res
-                .status(404)
-                .json({
-                  message: "Ups, algo paso al registrar el usuario",
-                  err,
-                });
+              res.status(404).json({
+                message: "Ups, algo paso al registrar el usuario",
+                err,
+              });
             } else {
               if (!userStored) {
                 res.status(404).json({ message: "Error al crear el usuario" });
@@ -298,43 +296,58 @@ userCtrl.userFirebaseSign = async (req, res) => {
         }
       });
     }
-
   } catch (error) {
     console.log(error);
   }
 };
 
-userCtrl.resetPasswordUserSession = async (req,res) => {
+userCtrl.resetPasswordUserSession = async (req, res) => {
   try {
-    const {currentPassword,password,repeatPassword} = req.body;
+    const { currentPassword, password, repeatPassword } = req.body;
     const userBase = await modelUser.findById(req.params.idUser);
     const newUser = userBase;
-    if(userBase){
-      if(userBase.sessiontype === "Firebase"){
-        res.status(504).json({message: "Usuario no valido."});
-      }else{
-        if(password === repeatPassword){
+    if (userBase) {
+      if (userBase.sessiontype === "Firebase") {
+        res.status(504).json({ message: "Usuario no valido." });
+      } else {
+        console.log("entro a sesion normal");
+        if (password === repeatPassword) {
+          console.log("la pass si conincide");
           if (!bcrypt.compareSync(currentPassword, userBase.contrasena)) {
             res.status(404).json({ message: "Contraseña incorrecta" });
-          } else{
+          } else {
+            console.log("Entro a cambiarla");
             bcrypt.hash(currentPassword, null, null, function (err, hash) {
               if (err) {
-                res.status(500).json({ message: "Error al encriptar la contraseña", err });
+                res
+                  .status(500)
+                  .json({ message: "Error al encriptar la contraseña", err });
               } else {
                 newUser.contrasena = hash;
                 newUser.save(async (err, userStored) => {
                   if (err) {
-                    res.status(500).json({message: "Ups, algo paso al registrar el usuario",err,});
+                    res
+                      .status(500)
+                      .json({
+                        message: "Ups, algo paso al registrar el usuario",
+                        err,
+                      });
                   } else {
                     if (!userStored) {
-                      res.status(404).json({ message: "Error al crear el usuario" });
+                      res
+                        .status(404)
+                        .json({ message: "Error al crear el usuario" });
                     } else {
-                      const userUpdate = await modelUser.findById(req.params.idUser);
+                      const userUpdate = await modelUser.findById(
+                        req.params.idUser
+                      );
                       const token = jwt.sign(
                         {
                           email: userUpdate.email,
                           name: userUpdate.name,
-                          imagen: userUpdate.urlImage ? userUpdate.urlImage : null,
+                          imagen: userUpdate.urlImage
+                            ? userUpdate.urlImage
+                            : null,
                           _id: userUpdate._id,
                           sessiontype: userUpdate.sessiontype,
                           rol: userUpdate.type,
@@ -348,16 +361,14 @@ userCtrl.resetPasswordUserSession = async (req,res) => {
               }
             });
           }
-        }else{
-          res.status(504).json({message: "Las contraseñas no son iguales."});
+        } else {
+          res.status(504).json({ message: "Las contraseñas no son iguales." });
         }
       }
-    }else{
-      res.status(504).json({message: "Este usuario no existe."});
+    } else {
+      res.status(504).json({ message: "Este usuario no existe." });
     }
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
 module.exports = userCtrl;
