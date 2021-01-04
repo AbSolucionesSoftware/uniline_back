@@ -312,7 +312,7 @@ userCtrl.resetPasswordUserSession = async (req,res) => {
             res.status(500).json({ message: "Error al encriptar la contraseña", err });
           } else {
             newUser.contrasena = hash;
-            newUser.save((err, userStored) => {
+            newUser.save(async (err, userStored) => {
               if (err) {
                 res.status(500).json({message: "Ups, algo paso al registrar el usuario",err,});
               } else {
