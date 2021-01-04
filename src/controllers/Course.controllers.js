@@ -65,6 +65,7 @@ courseCtrl.createCourse = async (req, res) => {
 
 courseCtrl.editCourse = async (req, res) => {
   try {
+    console.log("llego");
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);

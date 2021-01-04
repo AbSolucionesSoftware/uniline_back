@@ -6,6 +6,8 @@ const { createCourse,editCourse,editLerningsRequiredStudents } = require('../con
 
 router.route('/').post(createCourse);
 
-router.route('/learnings/:idCourse').put(editLerningsRequiredStudents)
+router.route('/learnings/:idCourse').put(editLerningsRequiredStudents);
+
+router.route('/:idCourse').put(editCourse);
 
 module.exports = router;
