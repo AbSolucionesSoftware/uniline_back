@@ -28,7 +28,8 @@
     "multer-s3": "^2.9.0",
     "nodemailer": "^6.4.13",
     "shortid": "^2.2.15",
-    "stripe": "^8.97.0"
+    "stripe": "^8.97.0",
+    "vimeo": "^2.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

@@ -136,8 +136,10 @@ userCtrl.editUser = async (req, res) => {
           uploadFile.eliminarImagen(userBase.keyImage);
         }
       } else {
-        updateUser.keyImage = userBase.keyImage;
-        updateUser.urlImage = userBase.urlImage;
+        if (userBase.keyImage) {
+          updateUser.keyImage = userBase.keyImage;
+          updateUser.urlImage = userBase.urlImage;
+        }
       }
       await modelUser.findByIdAndUpdate(req.params.idUser, updateUser);
 
