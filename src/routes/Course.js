@@ -6,14 +6,14 @@ const { createCourse,editCourse,editLerningsRequiredStudents,uploadFileCourse,up
 
 router.route('/').post(createCourse);
 
-router.route('/learnings/:idCourse').put(editLerningsRequiredStudents);
+router.route('/learnings/:idCourse').put(auth,editLerningsRequiredStudents);
 
 router.route('/:idCourse').put(auth,editCourse);
 
 router.route('/imagen/:idCourse').put(auth,uploadFile,uploadFileCourse);
 
-router.route('/video/:idCourse').put(uploadVideoCourse);
+router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 
-router.route('/teacher/:idTeacher').get(getCourseTeacher);
+router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 
 module.exports = router;

@@ -126,7 +126,7 @@ courseCtrl.uploadFileCourse = async (req,res) => {
         editImagen.keyPromotionalImage = req.file.key;
         editImagen.urlPromotionalImage = req.file.location;
         await modelCourse.findByIdAndUpdate(req.params.idCourse, editImagen);
-        res.status(200).json({messege: "Imagen agregada."})
+        res.status(200).json({messege: "Imagen agregada."});
       }else{
         res.status(404).json({ message: "Es necesario una imagen."});
       }
