@@ -30,7 +30,7 @@ const courseSchema = new mongoose.Schema(
     ],
     whoStudents: [
       {
-        whoStudents: String,
+        whoStudent: String,
       },
     ],
     description: String,
