@@ -1,5 +1,7 @@
 const courseCtrl = {};
 const modelCourse = require("../models/Course");
+const modelBlock = require("../models/Block");
+const modelTopic = require("../models/Topic");
 const uploadFile = require("../middleware/awsFile");
 
 courseCtrl.uploadFile = async (req, res, next) => {
@@ -105,6 +107,7 @@ courseCtrl.createCourse = async (req, res) => {
 
 courseCtrl.editCourse = async (req, res) => {
   try {
+    console.log(req.body);
     const courseBase = await modelCourse.findById(req.params.idCourse); 
     if(courseBase){
       const editCourse = req.body;
@@ -147,14 +150,33 @@ courseCtrl.uploadVideoCourse = async (req,res) => {
       console.log(req.body);
       const video = req.body;
       await modelCourse.findByIdAndUpdate(req.params.idCourse,video);
-      res.status(200).json({message: "Video subido correctamente"})
+      res.status(200).json({message: "Video subido correctamente"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
 }
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
 courseCtrl.addBlockCourse = async (req,res) => {
+  try {
+    const {blockTitle,preference} = req.body;
+    const newBlock = await new modelBlock({
+      blockTitle,
+      preference,
+      idCourse: req.params.idCourse
+    });
+    await newBlock.save();
+    res.status(200).json({message: "Bloque agregado."});
+
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.editBlockCourse = async (req,res) => {
   try {
     
   } catch (error) {
@@ -162,5 +184,54 @@ courseCtrl.addBlockCourse = async (req,res) => {
     console.log(error);
   }
 }
+
+courseCtrl.deleteBlockCourse = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Topic >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.createTopicBlock = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.VideoTopicBlock = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.EditTopicBlock = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.editOrderTopic = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+
 
 module.exports = courseCtrl;

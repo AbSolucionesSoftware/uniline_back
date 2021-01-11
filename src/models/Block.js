@@ -7,6 +7,7 @@ const blockSchema = new Schema(
       type: Schema.ObjectId,
       ref: "course",
     },
+    preference: Number
   },
   {
     timestamps: true,
