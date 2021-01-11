@@ -26,6 +26,9 @@ courseCtrl.getCourses = async (req, res) => {
 
 courseCtrl.getCourse = async (req, res) => {
   try {
+    const course = await modelCourse.findById(req.params.idCourse);
+    console.log(course);
+    res.status(200).json(course);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -141,9 +144,19 @@ courseCtrl.uploadFileCourse = async (req,res) => {
 
 courseCtrl.uploadVideoCourse = async (req,res) => {
   try {
-      console.log(req.file);
       console.log(req.body);
-        
+      const video = req.body;
+      await modelCourse.findByIdAndUpdate(req.params.idCourse,video);
+      res.status(200).json({message: "Video subido correctamente"})
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.addBlockCourse = async (req,res) => {
+  try {
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
