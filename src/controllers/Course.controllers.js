@@ -112,7 +112,7 @@ courseCtrl.editCourse = async (req, res) => {
     if(courseBase){
       const editCourse = req.body;
       await modelCourse.findByIdAndUpdate(req.params.idCourse,editCourse);
-      res.status(200).json({messege: "Curso editado"});
+      res.status(200).json({message: "Curso editado"});
     }else{
       res.status(504).json({ message: "Este curso no existe", error });
     }
