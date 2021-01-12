@@ -2,10 +2,12 @@ const {Router} = require('express');
 const router = Router();
 const auth = require('../middleware/auth');
 
-const { createCourse,
+const { 
+    createCourse,
     editCourse,
     editLerningsRequiredStudents,
-    uploadFileCourse,uploadFile,
+    uploadFileCourse,
+    uploadFile,
     uploadVideoCourse, 
     getCourseTeacher,
     addBlockCourse,
@@ -15,7 +17,8 @@ const { createCourse,
     createTopicBlock,
     VideoTopicBlock,
     EditTopicBlock,
-    editOrderTopic
+    editOrderTopic,
+    uploadResourceTopic,
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -42,7 +45,9 @@ router.route('/block/delete/:idBlock').delete(deleteBlockCourse);
 
 router.route('/topic/:idBlock').post(createTopicBlock).put(EditTopicBlock);
 
-router.route('/topic/video/:idTema').post(VideoTopicBlock);
+router.route('/topic/video/:idTopic').post(VideoTopicBlock);
+
+router.route('/topic/resource/').post(uploadResourceTopic);
 
 router.route('/topic/order').put(editOrderTopic);
 

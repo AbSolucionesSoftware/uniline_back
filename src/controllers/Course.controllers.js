@@ -20,6 +20,7 @@ courseCtrl.uploadFile = async (req, res, next) => {
 
 courseCtrl.getCourses = async (req, res) => {
   try {
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -132,7 +133,7 @@ courseCtrl.uploadFileCourse = async (req,res) => {
         editImagen.keyPromotionalImage = req.file.key;
         editImagen.urlPromotionalImage = req.file.location;
         await modelCourse.findByIdAndUpdate(req.params.idCourse, editImagen);
-        res.status(200).json({messege: "Imagen agregada."});
+        res.status(200).json({message: "Imagen agregada."});
       }else{
         res.status(404).json({ message: "Es necesario una imagen."});
       }
@@ -178,7 +179,8 @@ courseCtrl.addBlockCourse = async (req,res) => {
 
 courseCtrl.editBlockCourse = async (req,res) => {
   try {
-    
+    await modelBlock.findByIdAndUpdate(req.params.idBlock,req.body);
+    res.status(200).json({message: "Block editado."});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -198,7 +200,14 @@ courseCtrl.deleteBlockCourse = async (req,res) => {
 
 courseCtrl.createTopicBlock = async (req,res) => {
   try {
-    
+    const {topicTitle,preference} = req.body;
+    const newTopic = new modelTopic({
+      topicTitle,
+      idBlock: req.params.idBlock,
+      preference
+    })
+    await newTopic.save();
+    res.status(200).json({message: "Tema agregado."});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -206,6 +215,17 @@ courseCtrl.createTopicBlock = async (req,res) => {
 }
 
 courseCtrl.VideoTopicBlock = async (req,res) => {
+  try {
+    const newUploadVideo = req.body;
+    await modelTopic.findByIdAndUpdate(req.params.idTopic,newUploadVideo);
+    res.status(200).json({messege: "Video agregado"})
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.uploadResourceTopic = async (req,res) => {
   try {
     
   } catch (error) {
