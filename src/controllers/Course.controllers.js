@@ -131,7 +131,6 @@ courseCtrl.uploadFileCourse = async (req,res) => {
     if(courseBase){
       if(req.file){
         console.log(req.file);
-        
         editImagen.keyPromotionalImage = req.file.key;
         editImagen.urlPromotionalImage = req.file.location;
         await modelCourse.findByIdAndUpdate(req.params.idCourse, editImagen);

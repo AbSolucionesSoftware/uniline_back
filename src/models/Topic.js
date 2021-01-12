@@ -4,7 +4,11 @@ const topicSchema = new Schema({
     topicTitle: String,
     preference: Number,
     keyTopicVideo: String,
-    resource: String,
+    resource: [{
+        title: String,
+        downloadResource: String,
+        urlExtern: String
+    }],
     idBlock: {
         type: Schema.ObjectId,
         ref: 'block'

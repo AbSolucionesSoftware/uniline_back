@@ -6,8 +6,8 @@ const courseSchema = new mongoose.Schema(
     title: String,
     subtitle: String,
     keyPromotionalImage: String,
+    urlPromotionalImage: String,
     urlCourseVideo: String,
-    keyVideo: String,
     hours: String,  
     price: Float,
     idProfessor: {
