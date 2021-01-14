@@ -38,6 +38,7 @@ const courseSchema = new mongoose.Schema(
     language: String,
     startMessage: String,
     finalMessage: String,
+    inscriptionStudents: Number
   },
   {
     timestamps: true,

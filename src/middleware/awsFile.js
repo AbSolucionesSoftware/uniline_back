@@ -67,7 +67,7 @@ subir.eliminarImagen = (keyDeleted) => {
 
 subir.upload = multer(configuracionMulter).single('imagen');
 
-subir.uploadFile = multer(configuracionMulterInFilter).single('archivo');
+subir.uploadFile = multer(configuracionMulterInFilter).single('file');
 
 
 module.exports = subir;

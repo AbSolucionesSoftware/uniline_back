@@ -19,6 +19,9 @@ const {
     EditTopicBlock,
     editOrderTopic,
     uploadResourceTopic,
+    uploadFile2,
+    deleteResoursceTopic,
+    DeleteTopicBlock
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -45,9 +48,15 @@ router.route('/block/delete/:idBlock').delete(deleteBlockCourse);
 
 router.route('/topic/:idBlock').post(createTopicBlock).put(EditTopicBlock);
 
+router.route('/topic/edit/:idTopic').put(EditTopicBlock);
+
 router.route('/topic/video/:idTopic').post(VideoTopicBlock);
 
-router.route('/topic/resource/').post(uploadResourceTopic);
+router.route('/topic/resource/:idTopic').post(uploadFile2,uploadResourceTopic);
+
+router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(deleteResoursceTopic);
+
+router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock)
 
 router.route('/topic/order').put(editOrderTopic);
 

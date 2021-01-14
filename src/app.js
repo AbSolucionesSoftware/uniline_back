@@ -33,6 +33,7 @@ app.use(express.json());
 //rutes
 app.use('/api/user', require('./routes/User'));
 app.use('/api/course', require('./routes/Course'));
+app.use('/api/categories',require('./routes/Categories'));
 
 
 //carpeta publica

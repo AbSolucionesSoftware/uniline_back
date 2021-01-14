@@ -4,9 +4,10 @@ const topicSchema = new Schema({
     topicTitle: String,
     preference: Number,
     keyTopicVideo: String,
-    resource: [{
+    resources: [{
         title: String,
-        downloadResource: String,
+        keyDownloadResource: String,
+        urlDownloadResource: String,
         urlExtern: String
     }],
     idBlock: {
