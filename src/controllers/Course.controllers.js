@@ -69,7 +69,6 @@ courseCtrl.editLerningsRequiredStudents = async (req, res) => {
   try {
     const { learnings, requirements, whoStudents } = req.body;
     console.log(req.body);
-    console.log(learnings.length);
     const course = await modelCourse.findById(req.params.idCourse);
     const editCourse = course;
     if(learnings){
@@ -91,7 +90,7 @@ courseCtrl.editLerningsRequiredStudents = async (req, res) => {
     }
 
 
-    await modelCourse.findByIdAndUpdate(req.params.idCourse,editCourse);
+    await modelCourse.findByIdAndUpdate(req.params.idCourse,req.body);
     res.status(200).json({message: "Curso actualizado"});
 
   } catch (error) {
