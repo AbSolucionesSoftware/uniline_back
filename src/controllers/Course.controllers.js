@@ -68,6 +68,7 @@ courseCtrl.getCourseTeacher = async (req,res) => {
 courseCtrl.editLerningsRequiredStudents = async (req, res) => {
   try {
     const { learnings, requirements, whoStudents } = req.body;
+    console.log(req.body);
     console.log(learnings.length);
     const course = await modelCourse.findById(req.params.idCourse);
     const editCourse = course;
