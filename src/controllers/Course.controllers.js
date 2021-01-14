@@ -3,7 +3,6 @@ const modelCourse = require("../models/Course");
 const modelBlock = require("../models/Block");
 const modelTopic = require("../models/Topic");
 const uploadFileAws = require("../middleware/awsFile");
-const modelInscription = require('../models/Inscription');
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -67,29 +66,7 @@ courseCtrl.getCourseTeacher = async (req,res) => {
 
 courseCtrl.editLerningsRequiredStudents = async (req, res) => {
   try {
-    const { learnings, requirements, whoStudents } = req.body;
     console.log(req.body);
-    const course = await modelCourse.findById(req.params.idCourse);
-    const editCourse = course;
-    if(learnings){
-      if(learnings.length > 0){
-        editCourse.learnings = learnings;
-      }
-    }
-
-    if(requirements){
-      if(requirements.length > 0){
-        editCourse.requirements = requirements;
-      }
-    }
-
-    if(whoStudents){
-      if(whoStudents.length > 0){
-        editCourse.whoStudents = whoStudents;
-      }
-    }
-
-
     await modelCourse.findByIdAndUpdate(req.params.idCourse,req.body);
     res.status(200).json({message: "Curso actualizado"});
 
@@ -179,6 +156,43 @@ courseCtrl.uploadVideoCourse = async (req,res) => {
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.getBlockAndTopicCourse = async (req,res) => {
+  try {
+    await modelBlock.find({idCourse: req.params.idCourse} , async function (err, GroupBlocks){
+      const listCourseAdmin = [];
+      for(i = 0; i < GroupBlocks.length; i++){
+        const topics =  await modelTopic.aggregate(
+            [
+              {
+                $sort : { preference: 1 }
+              },
+              {
+                $match: {
+                  $or: [ { idBlock: GroupBlocks[i]._id } ]
+                }
+              }
+            ],
+            async function(err, subCategoriasBase) {
+              return subCategoriasBase;
+            }
+          );
+        listCourseAdmin.push({
+          block: GroupBlocks[i],
+          topics: topics
+        });
+      }  
+      res.status(200).json(listCourseAdmin);
+    })
+
+    
+    
+
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
 
 courseCtrl.addBlockCourse = async (req,res) => {
   try {

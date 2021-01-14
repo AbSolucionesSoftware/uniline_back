@@ -38,7 +38,8 @@ const courseSchema = new mongoose.Schema(
     language: String,
     startMessage: String,
     finalMessage: String,
-    inscriptionStudents: Number
+    inscriptionStudents: Number,
+    
   },
   {
     timestamps: true,

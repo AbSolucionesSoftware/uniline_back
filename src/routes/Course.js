@@ -21,7 +21,8 @@ const {
     uploadResourceTopic,
     uploadFile2,
     deleteResoursceTopic,
-    DeleteTopicBlock
+    DeleteTopicBlock,
+    getBlockAndTopicCourse
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -37,6 +38,8 @@ router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+router.route('/data/:idCourse').get(getBlockAndTopicCourse)
 
 router.route('/block/:idCourse').post(addBlockCourse);
 
