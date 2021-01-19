@@ -423,7 +423,13 @@ courseCtrl.EditTopicBlock = async (req,res) => {
 
 courseCtrl.DeleteTopicBlock = async (req,res) => {
   try {
-    
+    const topic = await modelTopic.findById(req.params.idTopic);
+    if(topic){
+      res.status(404).json({ message: "Error del servidor" });
+    }else{
+      modelTopic.findByIdAndDelete(req.params.idTopic);
+      res.status(200).json({message: "Tema eliminado"})
+    }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
