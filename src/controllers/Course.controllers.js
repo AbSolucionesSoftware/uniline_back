@@ -321,7 +321,7 @@ courseCtrl.VideoTopicBlock = async (req,res) => {
     console.log(req.body);
     const newUploadVideo = req.body;
     await modelTopic.findByIdAndUpdate(req.params.idTopic,newUploadVideo);
-    res.status(200).json({messege: "Video agregado"})
+    res.status(200).json({message: "Video agregado"})
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -443,7 +443,7 @@ courseCtrl.registerTopicComplete = async (req,res) => {
   try {
     const newTopicComplete = new modelTopicComplete(req.body);
     await newTopicComplete.save();
-    res.status(200).json({messege: "Tema completado"})
+    res.status(200).json({message: "Tema completado"})
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
