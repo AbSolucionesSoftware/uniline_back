@@ -43,14 +43,15 @@ const fileFilter = (req, file, cb) => {
       s3: s3,
       bucket: process.env.NAME_BUCKET_AMS,
       acl: 'public-read',
-      contentType: multerS3.AUTO_CONTENT_TYPE,
       metadata: function (req, file, cb) {
         cb(null, {fieldName: 'Testing_metadata'});
       },
       key: function (req, file, cb) {
+        const type = file.originalname.split(".");
         console.log("llego");
         console.log(file);
-        cb(null, Date.now().toString())
+
+        cb(null, Date.now().toString() + `.${type[1]}`)
       }
     }) 
   };
