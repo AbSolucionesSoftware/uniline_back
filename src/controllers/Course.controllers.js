@@ -3,6 +3,7 @@ const modelCourse = require("../models/Course");
 const modelBlock = require("../models/Block");
 const modelTopic = require("../models/Topic");
 const uploadFileAws = require("../middleware/awsFile");
+const modelTopicComplete = require("../models/topicsCompleted");
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -155,6 +156,77 @@ courseCtrl.uploadVideoCourse = async (req,res) => {
   }
 }
 
+courseCtrl.getListCourse = async (req,res) => {
+  try {
+    const idUser  = req.params.idUser;
+    await modelBlock.find({idCourse: req.params.idCourse} , async function (err, GroupBlocks){
+      const listCourseAdmin = [];
+      //console.log(idUser);
+      //console.log(typeof  idUser);
+      /* console.log(GroupBlocks) */
+      for(i = 0; i < GroupBlocks.length; i++){
+        console.log(GroupBlocks[i]._id );
+        const topics =  await modelTopic.aggregate(
+            [
+              {
+                $sort : { preference: 1 }
+              },
+              {
+                $match: {
+                  idBlock: GroupBlocks[i]._id 
+                }
+              },
+              {
+                $lookup: {
+                  from: 'topicscompleteds',
+                  let: { "id": "$_id" , "user": `${idUser}`},
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            { $eq: ["$idTopic", {$toObjectId: "$$id"}]},
+                            { $eq: ["$idUser", {$toObjectId: "$$user"}] }
+                          ] 
+                        }
+                      }
+                    }
+                  ],
+                  as: 'topicCompleted'
+                }
+              }
+              /* {
+                $lookup: {
+                  from: 'topicscompleteds',
+                  localField: '_id',
+                  foreignField: 'idTopic',
+                  as: 'topicCompleted'
+                }
+              } */
+            ],
+            async function(err, topicsBase) {
+              if(err){
+                console.log(err);
+              }else{
+                console.log(topicsBase);
+                return topicsBase;
+                
+              }
+            }
+          );
+        listCourseAdmin.push({
+          block: GroupBlocks[i],
+          topics: topics
+        });
+      }  
+      res.status(200).json(listCourseAdmin);
+    })
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.getBlockAndTopicCourse = async (req,res) => {
@@ -184,10 +256,6 @@ courseCtrl.getBlockAndTopicCourse = async (req,res) => {
       }  
       res.status(200).json(listCourseAdmin);
     })
-
-    
-    
-
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -250,6 +318,7 @@ courseCtrl.createTopicBlock = async (req,res) => {
 
 courseCtrl.VideoTopicBlock = async (req,res) => {
   try {
+    console.log(req.body);
     const newUploadVideo = req.body;
     await modelTopic.findByIdAndUpdate(req.params.idTopic,newUploadVideo);
     res.status(200).json({messege: "Video agregado"})
@@ -364,6 +433,17 @@ courseCtrl.DeleteTopicBlock = async (req,res) => {
 courseCtrl.editOrderTopic = async (req,res) => {
   try {
     
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.registerTopicComplete = async (req,res) => {
+  try {
+    const newTopicComplete = new modelTopicComplete(req.body);
+    await newTopicComplete.save();
+    res.status(200).json({messege: "Tema completado"})
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);

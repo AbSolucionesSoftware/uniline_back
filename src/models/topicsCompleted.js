@@ -6,7 +6,7 @@ const topicsCompletedSchema = new Schema(
       type: Schema.ObjectId,
       ref: "topic",
     },
-    idUser: {
+    idUser:{
       type: Schema.ObjectId,
       ref: "user",
     },
@@ -20,4 +20,4 @@ const topicsCompletedSchema = new Schema(
   }
 );
 
-module.exports = model("tipicsCompleted", topicsCompletedSchema);
+module.exports = model("topicsCompleted", topicsCompletedSchema);

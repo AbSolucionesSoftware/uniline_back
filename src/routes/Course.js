@@ -22,7 +22,9 @@ const {
     uploadFile2,
     deleteResoursceTopic,
     DeleteTopicBlock,
-    getBlockAndTopicCourse
+    getBlockAndTopicCourse,
+    getListCourse,
+    registerTopicComplete
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -53,7 +55,7 @@ router.route('/topic/:idBlock').post(createTopicBlock).put(EditTopicBlock);
 
 router.route('/topic/edit/:idTopic').put(EditTopicBlock);
 
-router.route('/topic/video/:idTopic').post(VideoTopicBlock);
+router.route('/topic/video/:idTopic').put(VideoTopicBlock);
 
 router.route('/topic/resource/:idTopic').post(uploadFile2,uploadResourceTopic);
 
@@ -62,5 +64,12 @@ router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(deleteRe
 router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock)
 
 router.route('/topic/order').put(editOrderTopic);
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
+
+router.route('/complete/topic/').post(registerTopicComplete);
+
 
 module.exports = router;
