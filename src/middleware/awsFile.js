@@ -48,6 +48,7 @@ const fileFilter = (req, file, cb) => {
         cb(null, {fieldName: 'Testing_metadata'});
       },
       key: function (req, file, cb) {
+        console.log("llego");
         console.log(file);
         cb(null, Date.now().toString())
       }
