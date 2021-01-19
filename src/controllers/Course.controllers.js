@@ -336,6 +336,7 @@ courseCtrl.uploadResourceTopic = async (req,res) => {
     }
 
     if(req.file){
+      console.log(req.file);
       model.keyDownloadResource = req.file.key;
       model.urlDownloadResource = req.file.location;
     }
