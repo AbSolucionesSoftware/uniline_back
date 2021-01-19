@@ -48,9 +48,6 @@ const fileFilter = (req, file, cb) => {
       },
       key: function (req, file, cb) {
         const type = file.originalname.split(".");
-        console.log("llego");
-        console.log(file);
-
         cb(null, Date.now().toString() + `.${type[1]}`)
       }
     }) 

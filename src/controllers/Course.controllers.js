@@ -339,8 +339,6 @@ courseCtrl.uploadResourceTopic = async (req,res) => {
       console.log(req.file);
       model.keyDownloadResource = req.file.key;
       model.urlDownloadResource = req.file.location;
-      const type = req.file.originalname.split(".");
-      model.typeFile = type[1];
     }
 
     if(urlExtern){

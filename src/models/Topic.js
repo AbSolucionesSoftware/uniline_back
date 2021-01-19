@@ -8,7 +8,6 @@ const topicSchema = new Schema({
         title: String,
         keyDownloadResource: String,
         urlDownloadResource: String,
-        typeFile: String,
         urlExtern: String
     }],
     idBlock: {
