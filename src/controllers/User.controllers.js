@@ -20,6 +20,7 @@ userCtrl.uploadFile = async (req, res, next) => {
 
 userCtrl.createUser = async (req, res) => {
   try {
+    console.log(req.body);
     const { name, email, password, repeatPassword, acceptPolicies } = req.body;
     const newUser = new modelUser();
 
