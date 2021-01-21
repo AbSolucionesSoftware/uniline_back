@@ -63,7 +63,7 @@ router.route('/topic/resource/:idTopic').post(uploadFile2,uploadResourceTopic);
 
 router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(deleteResoursceTopic);
 
-router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock)
+router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock);
 
 router.route('/topic/order').put(editOrderTopic);
 
