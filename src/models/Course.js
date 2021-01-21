@@ -9,7 +9,11 @@ const courseSchema = new mongoose.Schema(
     urlPromotionalImage: String,
     urlCourseVideo: String,
     hours: String,  
-    price: Float,
+    priceCourse: {
+      price: Float,
+      promotionPrice: Float,
+      persentagePromotion: String,
+  },
     idProfessor: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
@@ -39,7 +43,8 @@ const courseSchema = new mongoose.Schema(
     startMessage: String,
     finalMessage: String,
     inscriptionStudents: Number,
-    
+    idMassPromotion: String,
+    MassPromotionPercentage: String
   },
   {
     timestamps: true,

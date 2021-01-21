@@ -24,7 +24,9 @@ const {
     DeleteTopicBlock,
     getBlockAndTopicCourse,
     getListCourse,
-    registerTopicComplete
+    registerTopicComplete,
+    coursePrice,
+    coursePromotion
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -70,6 +72,13 @@ router.route('/topic/order').put(editOrderTopic);
 router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
 
 router.route('/complete/topic/').post(registerTopicComplete);
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+router.route('/price/:idCourse').put(coursePrice);
+
+router.route('/promotion/:idCourse').put(coursePromotion);
+
 
 
 module.exports = router;
