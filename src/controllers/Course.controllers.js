@@ -426,6 +426,7 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
       res.status(200).json({ message: "Tema eliminado" });
     } else {
       res.status(404).json({ message: "Error del servidor" });
+      
     }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
