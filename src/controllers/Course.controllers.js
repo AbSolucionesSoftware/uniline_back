@@ -444,6 +444,7 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
 
 courseCtrl.editOrderTopic = async (req, res) => {
   try {
+    console.log(req.body);
     res.status(200).json({message: "Cambios realizados"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });

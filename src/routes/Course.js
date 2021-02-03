@@ -68,7 +68,7 @@ router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(deleteRe
 
 router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock);
 
-router.route('/topic/order').put(editOrderTopic);
+router.route('/content/order').put(editOrderTopic);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
