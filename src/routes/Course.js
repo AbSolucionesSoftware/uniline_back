@@ -26,7 +26,6 @@ const {
     getListCourse,
     registerTopicComplete,
     coursePrice,
-    coursePromotion,
     getCourseUser
  } = require('../controllers/Course.controllers');
 
@@ -79,8 +78,6 @@ router.route('/complete/topic/').post(registerTopicComplete);
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/price-promotion/:idCourse').put(coursePrice);
-
-router.route('/promotion/:idCourse').put(coursePromotion);
 
 
 

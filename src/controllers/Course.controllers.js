@@ -444,11 +444,16 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
 
 courseCtrl.editOrderTopic = async (req, res) => {
   try {
-    console.log(req.body);
     const arrayOrder = req.body;
-/*     arrayOrder.map((block) => {
-        console.log(block);
-    }) */
+    arrayOrder.map(async (orderBlock,index) => {
+          await modelBlock.findByIdAndUpdate(orderBlock.block._id, {preference: index + 1 })
+          if(orderBlock.topics.length > 0){
+             orderBlock.topics.map(async (topic,index) => {
+              console.log(topic._id);
+                  await modelTopic.findByIdAndUpdate(topic._id,{preference: index + 1})
+             })
+          }
+    })
     res.status(200).json({message: "Cambios realizados"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -478,24 +483,6 @@ courseCtrl.coursePrice = async (req,res) => {
       res.status(200).json({message: "Precio agregado."});
     }else{
       res.status(404).json({message: "Este curso no existe."})
-    }
-  } catch (error) {
-    res.status(505).json({ message: "Error del servidor", error });
-    console.log(error);
-  }
-}
-
-courseCtrl.coursePromotion = async (req,res) => {
-  try {
-    const {promotionPrice, persentagePromotion} = req.body;
-    const course = await modelCourse.findById(req.params.idCourse);
-    if(course){
-      course.priceCourse.promotionPrice = promotionPrice;
-      course.priceCourse.persentagePromotion = persentagePromotion;
-      await modelCourse.findByIdAndUpdate(req.params.idCourse,course);
-      res.status(200).json({message: "Promocion agregada."});
-    }else{
-      res.status(404).json({message: "Este curso no existe."});
     }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
