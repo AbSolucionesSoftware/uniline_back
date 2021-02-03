@@ -10,10 +10,11 @@ const courseSchema = new mongoose.Schema(
     urlCourseVideo: String,
     hours: String,  
     priceCourse: {
+      free: Boolean,
       price: Float,
       promotionPrice: Float,
       persentagePromotion: String,
-  },
+    },
     idProfessor: {
       type: mongoose.Schema.ObjectId,
       ref: "user",

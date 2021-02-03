@@ -218,6 +218,16 @@ courseCtrl.getListCourse = async (req, res) => {
   }
 };
 
+courseCtrl.getCourseUser = async (req,res) => {
+  try {
+    const idUser = req.params.idUser;
+    res.status(200).json({message: "Si son"})
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.getBlockAndTopicCourse = async (req, res) => {
@@ -426,7 +436,6 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
       res.status(200).json({ message: "Tema eliminado" });
     } else {
       res.status(404).json({ message: "Error del servidor" });
-
     }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -457,12 +466,15 @@ courseCtrl.registerTopicComplete = async (req, res) => {
 
 courseCtrl.coursePrice = async (req,res) => {
   try {
-    const {price} = req.body;
+    const {price, free, promotionPrice, persentagePromotion} = req.body;
     const course = await modelCourse.findById(req.params.idCourse);
     if(course){
       const priceCourse = {
         priceCourse: {
-          price: price
+          price: price,
+          free: free,
+          promotionPrice: promotionPrice,
+          persentagePromotion: persentagePromotion
         }
       }
       await modelCourse.findByIdAndUpdate(req.params.idCourse,priceCourse);

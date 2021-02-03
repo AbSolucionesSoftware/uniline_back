@@ -26,7 +26,8 @@ const {
     getListCourse,
     registerTopicComplete,
     coursePrice,
-    coursePromotion
+    coursePromotion,
+    getCourseUser
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -40,6 +41,8 @@ router.route('/imagen/:idCourse').put(auth,uploadFile,uploadFileCourse);
 router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 
 router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
+
+router.route('/:idUser').get(getCourseUser);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
@@ -75,7 +78,7 @@ router.route('/complete/topic/').post(registerTopicComplete);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/price/:idCourse').put(coursePrice);
+router.route('/price-promotion/:idCourse').put(coursePrice);
 
 router.route('/promotion/:idCourse').put(coursePromotion);
 
