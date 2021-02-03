@@ -471,19 +471,10 @@ courseCtrl.registerTopicComplete = async (req, res) => {
 
 courseCtrl.coursePrice = async (req,res) => {
   try {
-    const {price, free, promotionPrice, persentagePromotion} = req.body;
     console.log(req.body);
     const course = await modelCourse.findById(req.params.idCourse);
     if(course){
-      const priceCourse = {
-        priceCourse: {
-          price: price,
-          free: free,
-          promotionPrice: promotionPrice,
-          persentagePromotion: persentagePromotion
-        }
-      }
-      await modelCourse.findByIdAndUpdate(req.params.idCourse,priceCourse);
+      await modelCourse.findByIdAndUpdate(req.params.idCourse,req.body);
       res.status(200).json({message: "Precio agregado."});
     }else{
       res.status(404).json({message: "Este curso no existe."})
