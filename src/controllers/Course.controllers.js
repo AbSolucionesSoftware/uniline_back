@@ -232,8 +232,7 @@ courseCtrl.getCourseUser = async (req,res) => {
 
 courseCtrl.getBlockAndTopicCourse = async (req, res) => {
   try {
-    await modelBlock.find(
-      { idCourse: req.params.idCourse },
+    await modelBlock.find({ idCourse: req.params.idCourse },
       async function (err, GroupBlocks) {
         const listCourseAdmin = [];
         for (i = 0; i < GroupBlocks.length; i++) {
@@ -259,7 +258,7 @@ courseCtrl.getBlockAndTopicCourse = async (req, res) => {
         }
         res.status(200).json(listCourseAdmin);
       }
-    );
+    ).sort({ preference: 1 });
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -445,6 +444,7 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
 
 courseCtrl.editOrderTopic = async (req, res) => {
   try {
+    res.status(200).json({message: "Cambios realizados"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
