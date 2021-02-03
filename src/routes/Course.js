@@ -54,7 +54,7 @@ router.route('/block/edit/:idBlock').put(editBlockCourse);
 
 router.route('/block/delete/:idBlock').delete(deleteBlockCourse);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/topic/:idBlock').post(createTopicBlock).put(EditTopicBlock);
 

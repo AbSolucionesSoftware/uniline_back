@@ -445,6 +445,10 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
 courseCtrl.editOrderTopic = async (req, res) => {
   try {
     console.log(req.body);
+    const arrayOrder = req.body;
+/*     arrayOrder.map((block) => {
+        console.log(block);
+    }) */
     res.status(200).json({message: "Cambios realizados"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -468,6 +472,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
 courseCtrl.coursePrice = async (req,res) => {
   try {
     const {price, free, promotionPrice, persentagePromotion} = req.body;
+    console.log(req.body);
     const course = await modelCourse.findById(req.params.idCourse);
     if(course){
       const priceCourse = {
