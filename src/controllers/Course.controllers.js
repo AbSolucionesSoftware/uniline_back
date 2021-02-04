@@ -4,6 +4,9 @@ const modelBlock = require("../models/Block");
 const modelTopic = require("../models/Topic");
 const uploadFileAws = require("../middleware/awsFile");
 const modelTopicComplete = require("../models/topicsCompleted");
+const reuserFunction = require("../middleware/reuser");
+const modelCoupon = require("../models/Coupon");
+const modelInscription = require("../models/Inscription");
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -211,7 +214,7 @@ courseCtrl.getListCourse = async (req, res) => {
         }
         res.status(200).json(listCourseAdmin);
       }
-    );
+    ).sort({ preference: 1 });
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -222,6 +225,17 @@ courseCtrl.getCourseUser = async (req,res) => {
   try {
     const idUser = req.params.idUser;
     res.status(200).json({message: "Si son"})
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.publicCourse = async (req,res) => {
+  try {
+    const course = await modelCourse.findById(req.params.idCourse);
+    console.log(course);
+    res.status(200).json({message: "Curso publicado"});
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -293,6 +307,13 @@ courseCtrl.editBlockCourse = async (req, res) => {
 
 courseCtrl.deleteBlockCourse = async (req, res) => {
   try {
+    const topicsBlock = await modelTopic.find({idBlock: req.params.idBlock});
+    if(topicsBlock.length > 0){
+      res.status(400).json({message: "Este bloque aun tiene temas."})
+    }else{
+      await modelBlock.findByIdAndDelete(req.params.idBlock);
+      res.status(200).json({message: "Bloque eliminado"});
+    }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -483,6 +504,75 @@ courseCtrl.coursePrice = async (req,res) => {
       res.status(200).json({message: "Precio agregado."});
     }else{
       res.status(404).json({message: "Este curso no existe."})
+    }
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.generateCoupon = async (req,res) => {
+  try {
+    const { coupon } = req.body;
+    for(i = 0; i < parseInt(coupon); i++){
+      const newCoupon = new modelCoupon({
+        code: reuserFunction.generateCode(10),
+        idCourse: req.params.idCourse,
+        exchange: false
+      })
+      await newCoupon.save();
+    }
+    res.status(200).json({message: "Cupones Creados"});
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.getCouponCourse = async (req,res) => {
+  try {
+    const { exchange = '' } = req.query;
+    if(exchange){
+      console.log("Existe");
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse, exchange: exchange});
+      res.status(200).json(couponBase);
+    }else{
+      console.log("No existe");
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse});
+      res.status(200).json(couponBase);
+    }
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.exchangeCouponCourse = async (req,res) => {
+  try {
+    const { idUser,idCourse,code } = req.body;
+    const courseCoup = await modelCoupon.findOne({code});
+    if(courseCoup){
+      console.log(courseCoup);
+      if(courseCoup.exchange === false){
+        await modelCoupon.findByIdAndUpdate(courseCoup._id,
+          {
+            exchange: true,
+            idUser: idUser
+          })
+        const newInscription = new modelInscription({
+          idCourse: idCourse,
+          idUser: idUser
+        });
+        newInscription.save();
+        res.status(200).json({message: "Codigo canjeado correctamente."});
+      }else{
+        res.status(400).json({message: "Este codigo ya fue canjeado."});
+      }
+    }else{
+      res.status(404).json({message: "Este codigo no existe."});
     }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });

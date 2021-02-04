@@ -26,7 +26,11 @@ const {
     getListCourse,
     registerTopicComplete,
     coursePrice,
-    getCourseUser
+    getCourseUser,
+    generateCoupon,
+    getCouponCourse,
+    exchangeCouponCourse,
+    publicCourse
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse);
@@ -42,6 +46,8 @@ router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 
 router.route('/:idUser').get(getCourseUser);
+
+router.route('/public/:idCourse').put(publicCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
@@ -78,6 +84,12 @@ router.route('/complete/topic/').post(registerTopicComplete);
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/price-promotion/:idCourse').put(coursePrice);
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+router.route('/coupon/:idCourse').post(generateCoupon).get(getCouponCourse);
+
+router.route('/coupon/exchange/').put(exchangeCouponCourse);
 
 
 

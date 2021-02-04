@@ -13,7 +13,8 @@ const inscriptionSchema = new Schema(
     ending: Boolean,
     endDate: Date,
     certificateKey: String, 
-    certificateUrl: String, 
+    certificateUrl: String,
+    code: Boolean
   },
   {
     timestamps: true,
