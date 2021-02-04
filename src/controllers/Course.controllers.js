@@ -233,9 +233,39 @@ courseCtrl.getCourseUser = async (req,res) => {
 
 courseCtrl.publicCourse = async (req,res) => {
   try {
-    const course = await modelCourse.findById(req.params.idCourse);
-    console.log(course);
-    res.status(200).json({message: "Curso publicado"});
+    const { publication } = req.body;
+    const courseBase = await modelCourse.findById(req.params.idCourse);
+    console.log(courseBase);
+    if(courseBase){
+        if(
+          !courseBase.title || 
+          !courseBase.category || 
+          !courseBase.keyPromotionalImage || 
+          !courseBase.urlPromotionalImage || 
+          !courseBase.promotionalVideo || 
+          !courseBase.subtitle || 
+          !courseBase.hours || 
+          !courseBase.priceCourse.price || 
+          !courseBase.priceCourse.free || 
+          !courseBase.subCategory || 
+          !courseBase.description || 
+          !courseBase.level ||
+          !courseBase.language ||
+          !courseBase.startMessage ||
+          !courseBase.finalMessage ||
+          !courseBase.level ||
+          courseBase.learnings.length === 0 ||
+          courseBase.requirements.length === 0 ||
+          courseBase.whoStudents.length === 0 
+          ){
+            res.status(500).json({message: "Curso incompleto"});
+          }else{
+            await modelCourse.findByIdAndUpdate(req.params.idCourse,{publication});
+            res.status(200).json({message: "Cambios realizados."})
+          }
+    }else{
+      res.status(404).json({message: "Este curso no existe."});
+    }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -452,6 +482,11 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
   try {
     const topic = await modelTopic.findById(req.params.idTopic);
     if (topic) {
+      topic.resources.map((resource) => {
+        if(resource.keyDownloadResource){
+          
+        }
+      })
       await modelTopic.findByIdAndDelete(req.params.idTopic);
       res.status(200).json({ message: "Tema eliminado" });
     } else {
@@ -503,7 +538,7 @@ courseCtrl.coursePrice = async (req,res) => {
       await modelCourse.findByIdAndUpdate(req.params.idCourse,req.body);
       res.status(200).json({message: "Precio agregado."});
     }else{
-      res.status(404).json({message: "Este curso no existe."})
+      res.status(404).json({message: "Este curso no existe."});
     }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
