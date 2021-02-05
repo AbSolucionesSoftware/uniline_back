@@ -480,9 +480,11 @@ courseCtrl.DeleteTopicBlock = async (req, res) => {
   try {
     const topic = await modelTopic.findById(req.params.idTopic);
     if (topic) {
-      topic.resources.map((resource) => {
+      topic.resources.map(async (resource) => {
         if(resource.keyDownloadResource){
-          
+            uploadFileAws.eliminarImagen(
+              resource.keyDownloadResource
+            );
         }
       })
       await modelTopic.findByIdAndDelete(req.params.idTopic);
@@ -597,9 +599,11 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           })
         const newInscription = new modelInscription({
           idCourse: idCourse,
-          idUser: idUser
+          idUser: idUser,
+          codeKey: code,
+          code: true
         });
-        newInscription.save();
+        await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
       }else{
         res.status(400).json({message: "Este codigo ya fue canjeado."});

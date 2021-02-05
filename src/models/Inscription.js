@@ -14,7 +14,8 @@ const inscriptionSchema = new Schema(
     endDate: Date,
     certificateKey: String, 
     certificateUrl: String,
-    code: Boolean
+    code: Boolean,
+    codeKey: String
   },
   {
     timestamps: true,
