@@ -62,6 +62,23 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
     });
+
+    /* const course = modelCourse.aggregate(
+      [
+        {
+          $match: {
+            idProfessor: req.params.idTeacher,
+          },
+        },
+        {
+          $lookup: {
+            from: ""
+          }
+        }
+      ]
+      ,async function (err, course){
+
+    }) */
     console.log(course);
     res.status(200).json(course);
   } catch (error) {
@@ -568,15 +585,20 @@ courseCtrl.generateCoupon = async (req,res) => {
 
 courseCtrl.getCouponCourse = async (req,res) => {
   try {
-    const { exchange = '' } = req.query;
+    const { exchange = '', code = '' } = req.query;
     if(exchange){
       const couponBase = await modelCoupon.find({idCourse: req.params.idCourse, exchange: exchange}).populate('idUser');
+      res.status(200).json(couponBase);
+    }else if(exchange && code){
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse ,code: code ,exchange: exchange}).populate('idUser');
+      res.status(200).json(couponBase);
+    }else if(!exchange && code){
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse ,code: code}).populate('idUser');
       res.status(200).json(couponBase);
     }else{
       const couponBase = await modelCoupon.find({idCourse: req.params.idCourse}).populate('idUser');
       res.status(200).json(couponBase);
     }
-    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
