@@ -245,8 +245,7 @@ courseCtrl.publicCourse = async (req,res) => {
           !courseBase.urlCourseVideo || 
           !courseBase.subtitle || 
           !courseBase.hours || 
-          !courseBase.priceCourse.price || 
-          !courseBase.priceCourse.free || 
+          !courseBase.priceCourse || 
           !courseBase.subCategory || 
           !courseBase.description || 
           !courseBase.level ||
