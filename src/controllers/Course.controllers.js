@@ -570,12 +570,10 @@ courseCtrl.getCouponCourse = async (req,res) => {
   try {
     const { exchange = '' } = req.query;
     if(exchange){
-      console.log("Existe");
-      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse, exchange: exchange});
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse, exchange: exchange}).populate('idUser');
       res.status(200).json(couponBase);
     }else{
-      console.log("No existe");
-      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse});
+      const couponBase = await modelCoupon.find({idCourse: req.params.idCourse}).populate('idUser');
       res.status(200).json(couponBase);
     }
     
