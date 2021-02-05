@@ -242,7 +242,7 @@ courseCtrl.publicCourse = async (req,res) => {
           !courseBase.category || 
           !courseBase.keyPromotionalImage || 
           !courseBase.urlPromotionalImage || 
-          !courseBase.promotionalVideo || 
+          !courseBase.urlCourseVideo || 
           !courseBase.subtitle || 
           !courseBase.hours || 
           !courseBase.priceCourse.price || 
@@ -253,7 +253,6 @@ courseCtrl.publicCourse = async (req,res) => {
           !courseBase.language ||
           !courseBase.startMessage ||
           !courseBase.finalMessage ||
-          !courseBase.level ||
           courseBase.learnings.length === 0 ||
           courseBase.requirements.length === 0 ||
           courseBase.whoStudents.length === 0 
