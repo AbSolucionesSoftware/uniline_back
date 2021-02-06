@@ -38,7 +38,7 @@ courseCtrl.uploadFile2 = async (req, res, next) => {
 
 courseCtrl.getCourses = async (req, res) => {
   try {
-    const courses = await modelCourse.find({});
+    const courses = await modelCourse.find({}).populate('idProfessor');
     res.status(200).json(courses);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -46,10 +46,51 @@ courseCtrl.getCourses = async (req, res) => {
   }
 };
 
+courseCtrl.getCourseView = async (req, res) => {
+  try {
+        await modelBlock.find({idCourse: req.params.idCourse}, async function(err, blocks){
+      let countCursos = 0;
+      const newArray = {
+        course,
+        totalTopics: "",
+        totalInscription: ""
+      };
+        for(i = 0; i < blocks.length; i++){
+          const topics = await modelTopic.find({idBlock: blocks[i]._id}).count();
+          countCursos+= topics;
+        }
+        console.log(countCursos);
+        newArray.totalTopics = countCursos;
+
+        const inscriptions = await modelInscription.find({idCourse: req.params.idCourse}).count();
+        newArray.totalInscription = inscriptions;
+
+        res.status(200).json(newArray);
+    });
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
 courseCtrl.getCourse = async (req, res) => {
   try {
-    const course = await modelCourse.findById(req.params.idCourse);
-    console.log(course);
+    const course = await modelCourse.findById(req.params.idCourse).populate('idProfessor');
+/*     await modelBlock.find({idCourse: req.params.idCourse}, async function(err, blocks){
+      let countCursos = 0;
+      const newArray = {
+        course,
+        totalTopics: "",
+        totalInscription: ""
+      };
+        for(i = 0; i < blocks.length; i++){
+          const topics = await modelTopic.find({idBlock: blocks[i]._id}).count();
+          countCursos+= topics;
+        }
+        console.log(countCursos);
+        newArray.totalTopics = countCursos;
+        res.status(200).json(newArray);
+    }); */
     res.status(200).json(course);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -608,6 +649,7 @@ courseCtrl.getCouponCourse = async (req,res) => {
 courseCtrl.exchangeCouponCourse = async (req,res) => {
   try {
     const { idUser,idCourse,code } = req.body;
+    const courseBase = await modelCourse.findById(idCourse);
     const courseCoup = await modelCoupon.findOne({code});
     if(courseCoup){
       console.log(courseCoup);
@@ -616,12 +658,16 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           {
             exchange: true,
             idUser: idUser
-          })
+          });
         const newInscription = new modelInscription({
           idCourse: idCourse,
           idUser: idUser,
           codeKey: code,
-          code: true
+          code: true,
+          priceCourse: courseBase.priceCourse.price,
+          freeCourse: false,
+          promotionCourse: courseBase.priceCourse.promotionPrice,
+          persentagePromotionCourse: courseBase.priceCourse.persentagePromotion
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});

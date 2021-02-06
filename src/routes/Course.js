@@ -30,14 +30,18 @@ const {
     generateCoupon,
     getCouponCourse,
     exchangeCouponCourse,
-    publicCourse
+    publicCourse,
+    getCourseView,
+    getCourses
  } = require('../controllers/Course.controllers');
 
-router.route('/').post(createCourse);
+router.route('/').post(createCourse).get(getCourses);
 
 router.route('/learnings/:idCourse').put(auth,editLerningsRequiredStudents);
 
 router.route('/:idCourse').put(auth,editCourse).get(getCourse);
+
+router.route('/view-course/:idCourse').get(getCourseView);
 
 router.route('/imagen/:idCourse').put(auth,uploadFile,uploadFileCourse);
 

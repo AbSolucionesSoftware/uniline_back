@@ -1,4 +1,6 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+var Float = require("mongoose-float").loadType(mongoose, 4);
+const {Schema,model} = mongoose;
 
 const inscriptionSchema = new Schema(
   {
@@ -15,7 +17,11 @@ const inscriptionSchema = new Schema(
     certificateKey: String, 
     certificateUrl: String,
     code: Boolean,
-    codeKey: String
+    codeKey: String,
+    priceCourse: Float,
+    freeCourse: Boolean,
+    promotionCourse: Float,
+    persentagePromotionCourse: String
   },
   {
     timestamps: true,
