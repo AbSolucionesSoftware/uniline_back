@@ -7,6 +7,7 @@ const modelTopicComplete = require("../models/topicsCompleted");
 const reuserFunction = require("../middleware/reuser");
 const modelCoupon = require("../models/Coupon");
 const modelInscription = require("../models/Inscription");
+const modelCommentCourse = require('../models/CommentCourse');
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -48,23 +49,42 @@ courseCtrl.getCourses = async (req, res) => {
 
 courseCtrl.getCourseView = async (req, res) => {
   try {
-        await modelBlock.find({idCourse: req.params.idCourse}, async function(err, blocks){
-      let countCursos = 0;
-      const newArray = {
-        course,
-        totalTopics: "",
-        totalInscription: ""
-      };
+      const course = await modelCourse.findById(req.params.idCourse).populate('idProfessor');
+      await modelBlock.find({idCourse: req.params.idCourse}, async function(err, blocks){
+        let countCursos = 0;
+        const newArray = {
+          course,
+          totalTopics: "",
+          totalInscription: "",
+          commentCourse: [],
+          qualificationCourse: ""
+        };
         for(i = 0; i < blocks.length; i++){
-          const topics = await modelTopic.find({idBlock: blocks[i]._id}).count();
+          const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
           countCursos+= topics;
         }
         console.log(countCursos);
         newArray.totalTopics = countCursos;
 
-        const inscriptions = await modelInscription.find({idCourse: req.params.idCourse}).count();
+        const inscriptions = await modelInscription.countDocuments({idCourse: req.params.idCourse});
         newArray.totalInscription = inscriptions;
 
+        const commentCourse = await modelCommentCourse.find({idCourse: req.params.idCourse}).populate('idUser');
+        newArray.commentCourse = commentCourse;
+
+        const countCommentCourse = await modelCommentCourse.countDocuments({idCourse: req.params.idCourse});
+
+        const sumComment = await modelCommentCourse.find({idCourse: req.params.idCourse});
+
+        let sumQualification = 0;
+        for(i = 0; i < sumComment.length; i++){
+          sumQualification+= sumComment[i].qualification;
+        }
+
+        let qualificationEnd = Math.round(sumQualification / countCommentCourse);
+        console.log(qualificationEnd);
+        newArray.qualificationCourse = qualificationEnd;
+        
         res.status(200).json(newArray);
     });
   } catch (error) {
@@ -143,6 +163,7 @@ courseCtrl.createCourse = async (req, res) => {
   try {
     const newCourse = new modelCourse(req.body);
     newCourse.publication = false;
+    newCourse.qualification = 5;
     newCourse.save((err, userStored) => {
       if (err) {
         res
@@ -325,6 +346,27 @@ courseCtrl.publicCourse = async (req,res) => {
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
+  }
+}
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.moreBuyCourse = async (req,res) => {
+  try {
+    const cursos = await modelInscription.aggregate(
+       [
+          {
+             $group:{ _id:"$idCourse", Total:{$sum: 1}}
+          },
+          {
+            $sort: {Total: -1}
+          }
+       ]
+       ).limit(10);
+       console.log(cursos);
+       res.status(200).json(cursos)
+  } catch (error) {
+    
   }
 }
 
@@ -682,5 +724,45 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
     console.log(error);
   }
 }
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentarios del curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.aggregateCommentCourse = async (req,res) => {
+  try {
+    
+    const {comment = "",qualification = ""} = req.body;
+
+    if(!comment || !qualification){
+      res.status(404).json({message: "Datos no completos"});
+    }else{
+      const newComment = new modelCommentCourse({
+        idUser: req.params.idUser,
+        idCourse: req.params.idCourse,
+        comment: comment,
+        qualification: qualification
+      });
+      await newComment.save();
+      res.status(200).json({message: "Cometario agregado"});
+
+      const countCommentCourse = await modelCommentCourse.countDocuments({idCourse: req.params.idCourse});
+
+        const sumComment = await modelCommentCourse.find({idCourse: req.params.idCourse});
+
+        let sumQualification = 0;
+        for(i = 0; i < sumComment.length; i++){
+          sumQualification+= sumComment[i].qualification;
+        }
+
+        let qualificationEnd = Math.round(sumQualification / countCommentCourse);
+        await modelCourse.findByIdAndUpdate(req.params.idCourse,{qualification: qualificationEnd})
+    }
+
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+
 
 module.exports = courseCtrl;

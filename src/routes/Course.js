@@ -32,7 +32,9 @@ const {
     exchangeCouponCourse,
     publicCourse,
     getCourseView,
-    getCourses
+    getCourses,
+    aggregateCommentCourse,
+    moreBuyCourse
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse).get(getCourses);
@@ -52,6 +54,10 @@ router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 router.route('/:idUser').get(getCourseUser);
 
 router.route('/public/:idCourse').put(publicCourse);
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+router.route('/more/buy/').get(moreBuyCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
@@ -95,6 +101,8 @@ router.route('/coupon/:idCourse').post(generateCoupon).get(getCouponCourse);
 
 router.route('/coupon/exchange/').put(exchangeCouponCourse);
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
+router.route('/comment/:idUser/course/:idCourse').post(aggregateCommentCourse);
 
 module.exports = router;
