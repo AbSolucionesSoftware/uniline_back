@@ -87,8 +87,6 @@ router.route('/content/order').put(editOrderTopic);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
-
 router.route('/complete/topic/').post(registerTopicComplete);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
@@ -101,7 +99,14 @@ router.route('/coupon/:idCourse').post(generateCoupon).get(getCouponCourse);
 
 router.route('/coupon/exchange/').put(exchangeCouponCourse);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Dashboard del usuario >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+//<<<<<<<<<<< Lista del curso >>>>>>>>>>//
+
+router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
+
+
+//<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 
 router.route('/comment/:idUser/course/:idCourse').post(aggregateCommentCourse);
 

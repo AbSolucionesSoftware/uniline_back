@@ -21,7 +21,8 @@ const inscriptionSchema = new Schema(
     priceCourse: Float,
     freeCourse: Boolean,
     promotionCourse: Float,
-    persentagePromotionCourse: String
+    persentagePromotionCourse: String,
+    studentAdvance: String
   },
   {
     timestamps: true,

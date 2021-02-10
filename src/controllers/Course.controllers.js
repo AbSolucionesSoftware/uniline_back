@@ -39,7 +39,7 @@ courseCtrl.uploadFile2 = async (req, res, next) => {
 
 courseCtrl.getCourses = async (req, res) => {
   try {
-    const courses = await modelCourse.find({}).populate('idProfessor');
+    const courses = await modelCourse.find({publication: true}).populate('idProfessor');
     res.status(200).json(courses);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -288,8 +288,8 @@ courseCtrl.getListCourse = async (req, res) => {
 
 courseCtrl.getCourseUser = async (req,res) => {
   try {
-    const idUser = req.params.idUser;
-    res.status(200).json({message: "Si son"})
+    const course = await modelInscription.find({idUser: req.params.idUser}).populate('idCourse');
+    res.status(200).json(course)
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -335,11 +335,13 @@ courseCtrl.publicCourse = async (req,res) => {
   }
 }
 
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.moreBuyCourse = async (req,res) => {
   try {
-    const cursos = await modelInscription.aggregate(
+    let apiCourses = [];
+    const course = await modelInscription.aggregate(
        [
           {
              $group:{ _id:"$idCourse", Total:{$sum: 1}}
@@ -349,8 +351,11 @@ courseCtrl.moreBuyCourse = async (req,res) => {
           }
        ]
        ).limit(10);
-       console.log(cursos);
-       res.status(200).json(cursos)
+       console.log(course);
+       for(i = 0; i < course.length; i++){
+        apiCourses.push(await modelCourse.findById(course[i]._id));
+       }
+       res.status(200).json(apiCourses)
   } catch (error) {
     
   }
@@ -695,7 +700,8 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           priceCourse: courseBase.priceCourse.price,
           freeCourse: false,
           promotionCourse: courseBase.priceCourse.promotionPrice,
-          persentagePromotionCourse: courseBase.priceCourse.persentagePromotion
+          persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
+          studentAdvance: "0",
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
