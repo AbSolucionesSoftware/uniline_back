@@ -57,7 +57,6 @@ courseCtrl.getCourseView = async (req, res) => {
           totalTopics: "",
           totalInscription: "",
           commentCourse: [],
-          qualificationCourse: ""
         };
         for(i = 0; i < blocks.length; i++){
           const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
@@ -71,19 +70,6 @@ courseCtrl.getCourseView = async (req, res) => {
 
         const commentCourse = await modelCommentCourse.find({idCourse: req.params.idCourse}).populate('idUser');
         newArray.commentCourse = commentCourse;
-
-        const countCommentCourse = await modelCommentCourse.countDocuments({idCourse: req.params.idCourse});
-
-        const sumComment = await modelCommentCourse.find({idCourse: req.params.idCourse});
-
-        let sumQualification = 0;
-        for(i = 0; i < sumComment.length; i++){
-          sumQualification+= sumComment[i].qualification;
-        }
-
-        let qualificationEnd = Math.round(sumQualification / countCommentCourse);
-        console.log(qualificationEnd);
-        newArray.qualificationCourse = qualificationEnd;
         
         res.status(200).json(newArray);
     });
