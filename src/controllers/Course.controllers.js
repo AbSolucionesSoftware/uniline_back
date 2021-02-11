@@ -57,6 +57,7 @@ courseCtrl.getCourseView = async (req, res) => {
           totalTopics: "",
           totalInscription: "",
           commentCourse: [],
+          contentCourse: []
         };
         for(i = 0; i < blocks.length; i++){
           const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
@@ -70,9 +71,45 @@ courseCtrl.getCourseView = async (req, res) => {
 
         const commentCourse = await modelCommentCourse.find({idCourse: req.params.idCourse}).populate('idUser');
         newArray.commentCourse = commentCourse;
-        
-        res.status(200).json(newArray);
+
+        await modelBlock.find(
+          { idCourse: req.params.idCourse },
+          async function (err, GroupBlocks) {
+            const listCourseAdmin = [];
+            for (i = 0; i < GroupBlocks.length; i++) {
+              console.log(GroupBlocks[i]._id);
+              const topics = await modelTopic.aggregate(
+                [
+                  {
+                    $sort: { preference: 1 },
+                  },
+                  {
+                    $match: {
+                      idBlock: GroupBlocks[i]._id,
+                    },
+                  },
+                ],
+                async function (err, topicsBase) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log(topicsBase);
+                    return topicsBase;
+                  }
+                }
+              );
+              listCourseAdmin.push({
+                block: GroupBlocks[i],
+                topics: topics,
+              });
+            }
+            newArray.contentCourse = listCourseAdmin
+            //res.status(200).json(listCourseAdmin);
+            res.status(200).json(newArray);
+          }
+        ).sort({ preference: 1 });
     });
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -335,7 +372,6 @@ courseCtrl.publicCourse = async (req,res) => {
   }
 }
 
-
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.moreBuyCourse = async (req,res) => {
@@ -361,7 +397,7 @@ courseCtrl.moreBuyCourse = async (req,res) => {
   }
 }
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.getBlockAndTopicCourse = async (req, res) => {
   try {
