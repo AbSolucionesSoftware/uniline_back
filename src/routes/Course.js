@@ -51,7 +51,7 @@ router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 
 router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 
-router.route('/:idUser').get(getCourseUser);
+router.route('/user/:idUser').get(getCourseUser);
 
 router.route('/public/:idCourse').put(publicCourse);
 
