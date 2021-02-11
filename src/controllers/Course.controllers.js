@@ -109,7 +109,7 @@ courseCtrl.getCourseView = async (req, res) => {
           }
         ).sort({ preference: 1 });
     });
-    
+
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -325,7 +325,9 @@ courseCtrl.getListCourse = async (req, res) => {
 
 courseCtrl.getCourseUser = async (req,res) => {
   try {
+    console.log(req.params.idUser);
     const course = await modelInscription.find({idUser: req.params.idUser}).populate('idCourse');
+    console.log(course);
     res.status(200).json(course)
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
