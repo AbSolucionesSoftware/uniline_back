@@ -722,6 +722,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
     const { idUser,idCourse,code } = req.body;
     const courseBase = await modelCourse.findById(idCourse);
     const courseCoup = await modelCoupon.findOne({code});
+    console.log(req.body);
     if(courseCoup){
       console.log(courseCoup);
       if(courseCoup.exchange === false){
