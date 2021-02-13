@@ -800,7 +800,7 @@ courseCtrl.searchCourse = async (req,res) => {
   try {
     console.log(req.params.search);
     const  search  = req.params.search;
-    
+    console.log(search);
     await modelCourse.aggregate(
       [
 				{
