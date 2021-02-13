@@ -61,7 +61,7 @@ router.route('/public/:idCourse').put(publicCourse);
 
 router.route('/more/buy/').get(moreBuyCourse);
 
-router.route('/search').get(searchCourse);
+router.route('/search/:search').get(searchCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 

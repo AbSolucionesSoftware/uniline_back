@@ -798,8 +798,8 @@ courseCtrl.aggregateCommentCourse = async (req,res) => {
 
 courseCtrl.searchCourse = async (req,res) => {
   try {
-    console.log(req.body);
-    const { search } = req.body;
+    console.log(req.params.search);
+    const  search  = req.params.search;
     
     await modelCourse.aggregate(
       [
