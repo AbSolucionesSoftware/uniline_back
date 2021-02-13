@@ -812,7 +812,7 @@ courseCtrl.searchCourse = async (req,res) => {
 							{ category: { $regex: '.*' + search + '.*', $options: 'i' } },
 							{ subCategory: { $regex: '.*' + search + '.*', $options: 'i' } }
 						],
-						$and: { publication: true }
+						$and: [ { $or: [ { publication: false } ] } ]
 					}
 				}
 			],
