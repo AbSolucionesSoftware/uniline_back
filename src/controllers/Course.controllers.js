@@ -806,8 +806,8 @@ courseCtrl.searchCourse = async (req,res) => {
         {
 					$lookup: {
 						from: 'user',
-						localField: 'idProfessor',
-						foreignField: '_id',
+						localField: '_id',
+						foreignField: 'idProfessor',
 						as: 'teacher'
 					}
         },
