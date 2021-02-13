@@ -808,7 +808,7 @@ courseCtrl.searchCourse = async (req,res) => {
 						from: 'user',
 						localField: '_id',
 						foreignField: 'idProfessor',
-						as: 'teacher'
+						as: 'idProfessor'
 					}
         },
 				{
@@ -839,6 +839,7 @@ courseCtrl.searchCourse = async (req,res) => {
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
+    
   }
 }
 
