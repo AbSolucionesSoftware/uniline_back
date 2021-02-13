@@ -803,14 +803,6 @@ courseCtrl.searchCourse = async (req,res) => {
     console.log(search);
     await modelCourse.aggregate(
       [
-        {
-					$lookup: {
-						from: 'user',
-						localField: '_id',
-						foreignField: 'idProfessor',
-						as: 'idProfessor'
-					}
-        },
 				{
 					$match: {
 						$or: [
@@ -831,7 +823,16 @@ courseCtrl.searchCourse = async (req,res) => {
 					if (!postStored) {
 						res.status(404).json({ message: 'Error al mostrar cursos' });
 					} else {
-						res.status(200).json({ posts: postStored });
+
+            await modelCourse.populate(postStored, {path: 'idProfessor'}, function(err, populatedTransactions) {
+              // Your populated translactions are inside populatedTransactions
+              if(err){
+                res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
+              }else{
+                console.log(populatedTransactions)
+                res.status(200).json({posts: populatedTransactions});
+              }
+            });
 					}
 				}
 			}
@@ -839,7 +840,7 @@ courseCtrl.searchCourse = async (req,res) => {
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
-    
+
   }
 }
 
