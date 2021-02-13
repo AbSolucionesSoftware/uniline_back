@@ -719,6 +719,8 @@ courseCtrl.getCouponCourse = async (req,res) => {
 
 courseCtrl.exchangeCouponCourse = async (req,res) => {
   try {
+
+    //agregar conicion de curso yt cupon que sea el mismo curso
     const { idUser,idCourse,code } = req.body;
     const courseBase = await modelCourse.findById(idCourse);
     const courseCoup = await modelCoupon.findOne({code});
@@ -788,6 +790,42 @@ courseCtrl.aggregateCommentCourse = async (req,res) => {
         await modelCourse.findByIdAndUpdate(req.params.idCourse,{qualification: qualificationEnd})
     }
 
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.searchCourse = async (req,res) => {
+  try {
+    const { search } = req.query;
+    await modelCourse.aggregate(
+      [
+				{
+					$match: {
+						$or: [
+							{ title: { $regex: '.*' + search + '.*', $options: 'i' } },
+							{ subtitle: { $regex: '.*' + search + '.*', $options: 'i' } },
+							{ hours: { $regex: '.*' + search + '.*', $options: 'i' } },
+							{ category: { $regex: '.*' + search + '.*', $options: 'i' } },
+							{ subCategory: { $regex: '.*' + search + '.*', $options: 'i' } }
+						],
+						$and: { publication: true }
+					}
+				}
+			],
+			(err, postStored) => {
+				if (err) {
+					res.status(500).json({ message: 'Error en el servidor', err });
+				} else {
+					if (!postStored) {
+						res.status(404).json({ message: 'Error al mostrar cursos' });
+					} else {
+						res.status(200).json({ posts: postStored });
+					}
+				}
+			}
+    )
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);

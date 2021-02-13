@@ -34,7 +34,9 @@ const {
     getCourseView,
     getCourses,
     aggregateCommentCourse,
-    moreBuyCourse
+    moreBuyCourse,
+    searchCourse
+
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(createCourse).get(getCourses);
@@ -58,6 +60,8 @@ router.route('/public/:idCourse').put(publicCourse);
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/more/buy/').get(moreBuyCourse);
+
+router.route('/search').get(searchCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
