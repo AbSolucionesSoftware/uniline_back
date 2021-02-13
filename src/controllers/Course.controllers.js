@@ -803,6 +803,14 @@ courseCtrl.searchCourse = async (req,res) => {
     console.log(search);
     await modelCourse.aggregate(
       [
+        {
+					$lookup: {
+						from: 'user',
+						localField: 'idProfessor',
+						foreignField: '_id',
+						as: 'teacher'
+					}
+        },
 				{
 					$match: {
 						$or: [
@@ -812,7 +820,7 @@ courseCtrl.searchCourse = async (req,res) => {
 							{ category: { $regex: '.*' + search + '.*', $options: 'i' } },
 							{ subCategory: { $regex: '.*' + search + '.*', $options: 'i' } }
 						],
-						/* $and: [ { $or: [ { publication: false } ] } ] */
+						$and: [ { $or: [ { publication: true } ] } ]
 					}
 				}
 			],
