@@ -816,7 +816,7 @@ courseCtrl.searchCourse = async (req,res) => {
 					}
 				}
 			],
-			(err, postStored) => {
+			async (err, postStored) => {
 				if (err) {
 					res.status(500).json({ message: 'Error en el servidor', err });
 				} else {
@@ -827,7 +827,7 @@ courseCtrl.searchCourse = async (req,res) => {
             await modelCourse.populate(postStored, {path: 'idProfessor'}, function(err, populatedTransactions) {
               // Your populated translactions are inside populatedTransactions
               if(err){
-                res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
+                res.send({ message: 'Ups, algo paso', err });
               }else{
                 console.log(populatedTransactions)
                 res.status(200).json({posts: populatedTransactions});
