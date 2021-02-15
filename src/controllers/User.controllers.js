@@ -281,7 +281,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
           newUser.type = "Estudiante";
           newUser.sessiontype = "Firebase";
           newUser.password = hash;
-          newUser.save((err, userStored) => {
+          newUser.save(async (err, userStored) => {
             if (err) {
               res.status(404).json({
                 message: "Ups, algo paso al registrar el usuario",
