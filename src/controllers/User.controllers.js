@@ -3,6 +3,7 @@ const modelUser = require("../models/User");
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
 const uploadFile = require("../middleware/awsFile");
+const modelCart = require("../models/Cart");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -41,7 +42,7 @@ userCtrl.createUser = async (req, res) => {
               newUser.type = "Estudiante";
               newUser.sessiontype = "ApiRest";
               newUser.password = hash;
-              newUser.save((err, userStored) => {
+              newUser.save(async (err, userStored) => {
                 if (err) {
                   res.status(500).json({
                     message: "Ups, algo paso al registrar el usuario",
@@ -53,6 +54,10 @@ userCtrl.createUser = async (req, res) => {
                       .status(404)
                       .json({ message: "Error al crear el usuario" });
                   } else {
+                    const cart = new modelCart({
+                      idUser: userStored._id
+                    });
+                    await cart.save();
                     const token = jwt.sign(
                       {
                         email: newUser.email,

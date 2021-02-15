@@ -39,7 +39,7 @@ const {
 
  } = require('../controllers/Course.controllers');
 
-router.route('/').post(createCourse).get(getCourses);
+router.route('/').post(auth,createCourse).get(getCourses);
 
 router.route('/learnings/:idCourse').put(auth,editLerningsRequiredStudents);
 
@@ -53,9 +53,9 @@ router.route('/video/:idCourse').put(auth,uploadVideoCourse);
 
 router.route('/teacher/:idTeacher').get(auth,getCourseTeacher);
 
-router.route('/user/:idUser').get(getCourseUser);
+router.route('/user/:idUser').get(auth,getCourseUser);
 
-router.route('/public/:idCourse').put(publicCourse);
+router.route('/public/:idCourse').put(auth,publicCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Filtros curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
@@ -65,53 +65,53 @@ router.route('/search/:search').get(searchCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/data/:idCourse').get(getBlockAndTopicCourse)
+router.route('/data/:idCourse').get(auth,getBlockAndTopicCourse)
 
-router.route('/block/:idCourse').post(addBlockCourse);
+router.route('/block/:idCourse').post(auth,addBlockCourse);
 
-router.route('/block/edit/:idBlock').put(editBlockCourse);
+router.route('/block/edit/:idBlock').put(auth,editBlockCourse);
 
-router.route('/block/delete/:idBlock').delete(deleteBlockCourse);
+router.route('/block/delete/:idBlock').delete(auth,deleteBlockCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/topic/:idBlock').post(createTopicBlock).put(EditTopicBlock);
+router.route('/topic/:idBlock').post(auth,createTopicBlock).put(auth,EditTopicBlock);
 
-router.route('/topic/edit/:idTopic').put(EditTopicBlock);
+router.route('/topic/edit/:idTopic').put(auth,EditTopicBlock);
 
-router.route('/topic/video/:idTopic').put(VideoTopicBlock);
+router.route('/topic/video/:idTopic').put(auth,VideoTopicBlock);
 
-router.route('/topic/resource/:idTopic').post(uploadFile2,uploadResourceTopic);
+router.route('/topic/resource/:idTopic').post(auth,uploadFile2,uploadResourceTopic);
 
-router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(deleteResoursceTopic);
+router.route('/topic/:idTopic/delete/resource/:idResourceTopic').delete(auth,deleteResoursceTopic);
 
-router.route('/topic/delete/:idTopic').delete(DeleteTopicBlock);
+router.route('/topic/delete/:idTopic').delete(auth,DeleteTopicBlock);
 
-router.route('/content/order').put(editOrderTopic);
+router.route('/content/order').put(auth,editOrderTopic);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/complete/topic/').post(registerTopicComplete);
+router.route('/complete/topic/').post(auth,registerTopicComplete);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/price-promotion/:idCourse').put(coursePrice);
+router.route('/price-promotion/:idCourse').put(auth,coursePrice);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/coupon/:idCourse').post(generateCoupon).get(getCouponCourse);
+router.route('/coupon/:idCourse').post(auth,generateCoupon).get(auth,getCouponCourse);
 
-router.route('/coupon/exchange/').put(exchangeCouponCourse);
+router.route('/coupon/exchange/').put(auth,exchangeCouponCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Dashboard del usuario >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 //<<<<<<<<<<< Lista del curso >>>>>>>>>>//
 
-router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
+router.route('/datalist/:idCourse/user/:idUser').get(auth,getListCourse);
 
 
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 
-router.route('/comment/:idUser/course/:idCourse').post(aggregateCommentCourse);
+router.route('/comment/:idUser/course/:idCourse').post(auth,aggregateCommentCourse);
 
 module.exports = router;
