@@ -291,6 +291,10 @@ userCtrl.userFirebaseSign = async (req, res) => {
               if (!userStored) {
                 res.status(404).json({ message: "Error al crear el usuario" });
               } else {
+                const cart = new modelCart({
+                  idUser: userStored._id
+                });
+                await cart.save();
                 const token = jwt.sign(
                   {
                     email: newUser.email,
