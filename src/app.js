@@ -37,7 +37,6 @@ app.use('/api/categories', require('./routes/Categories'));
 app.use('/api/cart', require('./routes/Cart'));
 
 
-
 //carpeta publica
 app.use(express.static('uploads'));
 
