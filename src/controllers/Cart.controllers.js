@@ -92,7 +92,12 @@ cartCtrl.getCartCourse = async (req, res) => {
 
 cartCtrl.deleteCart = async (req,res) => {
     try {
-        const userBase = await modelCart.findOne()
+        const userBase = await modelCart.findOne({idUser: req.params.idUser});
+        if(userBase){
+            
+        }else{
+            req.status(404).json({message: "Usuario no encontrado."})
+        }
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);

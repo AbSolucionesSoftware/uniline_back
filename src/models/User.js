@@ -15,7 +15,8 @@ const userSchema = new Schema(
     password: String,
     type: String,
     sessiontype: String,
-    policies: Boolean
+    policies: Boolean,
+    profession: String
   },
   {
     timestamps: true,
