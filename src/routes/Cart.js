@@ -4,8 +4,6 @@ const auth = require('../middleware/auth');
 
 const { aggregateCourse,getCartCourse,deleteCourse } = require('../controllers/Cart.controllers');
 
-router.route('/:idUser').get(getCartCourse);
-
-router.route('/add/:idUser').post(auth,aggregateCourse);
+router.route('/:idUser').post(auth,aggregateCourse).get(getCartCourse);
 
 module.exports = router;
