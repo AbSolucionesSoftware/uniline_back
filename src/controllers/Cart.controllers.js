@@ -93,7 +93,7 @@ cartCtrl.getCartCourse = async (req, res) => {
             courses.push(courseNew);
         }
         //console.log(newCart);
-        newCart.courses = courses;
+        newCart.coursess = courses;
         console.log(newCart);
         res.status(200).json(newCart);
     } catch (error) {
