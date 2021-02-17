@@ -87,15 +87,14 @@ cartCtrl.getCartCourse = async (req, res) => {
         let courses = [];
         let courseNew = {};
         for(i = 0; i < cartUser.courses.length; i++ ){
-            console.log(cartUser.courses.length);
             courseNew = cartUser.courses[i].course;
             const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
             courseNew.idProfessor = user;
-            console.log(courseNew);
             courses.push(courseNew);
         }
+        console.log(courses);
         newCart.courses = courses;
-        console.log(newCart);
+        //console.log(newCart);
         res.status(200).json(newCart);
     } catch (error) {
         res.status(500).json({ message: error });
