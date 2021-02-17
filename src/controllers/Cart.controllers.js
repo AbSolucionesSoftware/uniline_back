@@ -91,6 +91,7 @@ cartCtrl.getCartCourse = async (req, res) => {
             courseNew = cartUser.courses[i].course;
             const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
             courseNew.idProfessor = user;
+            console.log(courseNew);
             courses.push(courseNew);
         }
         newCart.courses = courses;
