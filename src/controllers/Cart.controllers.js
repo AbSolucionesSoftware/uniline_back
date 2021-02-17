@@ -1,5 +1,6 @@
 const cartCtrl = {};
 const modelCart = require('../models/Cart');
+const modelUser = require('../models/User');
 
 cartCtrl.aggregateCourse = async (req, res) => {
     try {
@@ -81,18 +82,19 @@ cartCtrl.deleteCourse = async (req, res) => {
 
 cartCtrl.getCartCourse = async (req, res) => {
     try {
-        const cartUser = await modelCart.findOne({idUser: req.params.idUser}).populate('idUser').populate({ path: 'courses.course', model: "course" }
-        , async (err, response) => {
-            await modelCart.populate(response, {path: 'courses.course.idProfessor'}, function(err, populatedTransactions) {
-                // Your populated translactions are inside populatedTransactions
-                if(err){
-                  res.send({ message: 'Ups, algo paso', err });
-                }else{
-                  res.status(200).json({posts: populatedTransactions});
-                }
-              });
-            }
-        );
+        const cartUser = await modelCart.findOne({idUser: req.params.idUser}).populate('idUser').populate({ path: 'courses.course', model: "course" });
+        let newCart = cartUser;
+        let courses = [];
+        let courseNew = {};
+        for(i = 0; i < cartUser.courses.length; i++ ){
+            courseNew = cartUser.courses[i].course;
+            const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
+            courseNew.idProfessor = user;
+            courses.push(courseNew);
+        }
+        newCart.courses = courses;
+        console.log(newCart);
+        res.status(200).json(newCart);
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -116,7 +118,7 @@ cartCtrl.deleteCart = async (req,res) => {
                         }
                     },
                 );
-            });
+            })
             res.status(200).json({message: "Carrito eliminado."})
         }else{
             req.status(404).json({message: "Usuario no encontrado."})
