@@ -6,6 +6,6 @@ const { aggregateCourse,getCartCourse,deleteCourse } = require('../controllers/C
 
 router.route('/:idUser').get(getCartCourse);
 
-router.route('/aggregate/:idUser').post(auth,aggregateCourse)
+router.route('/add/:idUser').post(auth,aggregateCourse)
 
 module.exports = router;
