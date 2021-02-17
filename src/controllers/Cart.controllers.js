@@ -5,6 +5,7 @@ const modelUser = require("../models/User");
 cartCtrl.aggregateCourse = async (req, res) => {
     try {
         const { idCourse } = req.body;
+        console.log(req.body);
         const userBase = await modelUser.findOne({idUser: req.params.idUser});
         if(userBase){
             await modelCart.updateOne(
