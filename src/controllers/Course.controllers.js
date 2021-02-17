@@ -829,7 +829,6 @@ courseCtrl.searchCourse = async (req,res) => {
               if(err){
                 res.send({ message: 'Ups, algo paso', err });
               }else{
-                console.log(populatedTransactions)
                 res.status(200).json({posts: populatedTransactions});
               }
             });

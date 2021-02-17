@@ -81,9 +81,18 @@ cartCtrl.deleteCourse = async (req, res) => {
 
 cartCtrl.getCartCourse = async (req, res) => {
     try {
-        const cartUser = await modelCart.findOne({idUser: req.params.idUser}).populate('idUser').populate({ path: 'courses.course', model: "course" });
-        console.log(cartUser);
-        res.status(200).json(cartUser);
+        const cartUser = await modelCart.findOne({idUser: req.params.idUser}).populate('idUser').populate({ path: 'courses.course', model: "course" }
+        , async (err, response) => {
+            await modelCart.populate(response, {path: 'courses.course.idProfessor'}, function(err, populatedTransactions) {
+                // Your populated translactions are inside populatedTransactions
+                if(err){
+                  res.send({ message: 'Ups, algo paso', err });
+                }else{
+                  res.status(200).json({posts: populatedTransactions});
+                }
+              });
+            }
+        );
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -94,7 +103,21 @@ cartCtrl.deleteCart = async (req,res) => {
     try {
         const userBase = await modelCart.findOne({idUser: req.params.idUser});
         if(userBase){
-            
+            userBase.courses.map( async (course) => {
+                await modelCart.updateOne(
+                    {
+                        _id: userBase._id
+                    },
+                    {
+                        $pull: {
+                            courses: {
+                                _id: course._id
+                            }
+                        }
+                    },
+                );
+            });
+            res.status(200).json({message: "Carrito eliminado."})
         }else{
             req.status(404).json({message: "Usuario no encontrado."})
         }
