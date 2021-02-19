@@ -107,7 +107,7 @@ router.route('/coupon/exchange/').put(auth,exchangeCouponCourse);
 
 //<<<<<<<<<<< Lista del curso >>>>>>>>>>//
 
-router.route('/datalist/:idCourse/user/:idUser').get(auth,getListCourse);
+router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
 
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 

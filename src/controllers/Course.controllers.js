@@ -261,77 +261,63 @@ courseCtrl.uploadVideoCourse = async (req, res) => {
   }
 };
 
-function traerTemas(bloques,idUser,callback){
-  const listCourseAdmin = [];
-  bloques.map(async (blockBase) => {
-    console.log(blockBase._id);
-    const topics = await modelTopic.aggregate(
-      [
-        {
-          $sort: { preference: 1 },
-        },
-        {
-          $match: {
-            idBlock: blockBase._id,
-          },
-        },
-        {
-          $lookup: {
-            from: "topicscompleteds",
-            let: { id: "$_id", user: `${idUser}` },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [
-                      { $eq: ["$idTopic", { $toObjectId: "$$id" }] },
-                      { $eq: ["$idUser", { $toObjectId: "$$user" }] },
-                    ],
-                  },
-                },
-              },
-            ],
-            as: "topicCompleted",
-          },
-        },
-      ],
-      async function (err, topicsBase) {
-        if (err) {
-          console.log(err);
-        } else {
-          return topicsBase;
-        }
-      }
-    );
-    console.log(listCourseAdmin.length);
-    listCourseAdmin.push({
-      block: blockBase,
-      topics: topics,
-    });
-  })
-  callback(listCourseAdmin)
-}
-
 courseCtrl.getListCourse = async (req, res) => {
   try {
     const idUser = req.params.idUser;
     
-    const brup = await modelBlock.find(
-      { idCourse: req.params.idCourse }/* ,
+    await modelBlock.find(
+      { idCourse: req.params.idCourse },
       async function (err, GroupBlocks) {
-        console.log(GroupBlocks);
+        const listCourseAdmin = [];
+        for(i = 0; i < GroupBlocks.length; i++){
+          console.log(GroupBlocks[i]);
+          const topics = await modelTopic.aggregate(
+            [
+              {
+                $sort: { preference: 1 },
+              },
+              {
+                $match: {
+                  idBlock: GroupBlocks[i]._id,
+                },
+              },
+              {
+                $lookup: {
+                  from: "topicscompleteds",
+                  let: { id: "$_id", user: `${idUser}` },
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            { $eq: ["$idTopic", { $toObjectId: "$$id" }] },
+                            { $eq: ["$idUser", { $toObjectId: "$$user" }] },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                  as: "topicCompleted",
+                },
+              },
+            ],
+            async function (err, topicsBase) {
+              if (err) {
+                console.log(err);
+              } else {
+                return topicsBase;
+              }
+            }
+          );
 
-        
-        for (i = 0; i < GroupBlocks.length; i++) {
-
+          listCourseAdmin.push({
+              block: GroupBlocks[i],
+              topics: topics,
+          });
         }
-      } */
+        res.status(200).json(listCourseAdmin)
+      }
     ).sort({ preference: 1 });
-    traerTemas(brup,idUser,function(temas, err) {
-      console.log("Temas: ",temas);
-      console.log(err);
-      res.status(200).json(temas);
-    })
     
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
