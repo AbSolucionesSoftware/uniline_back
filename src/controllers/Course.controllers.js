@@ -270,7 +270,7 @@ courseCtrl.getListCourse = async (req, res) => {
         const listCourseAdmin = [];
         console.log(GroupBlocks);
 
-        GroupBlocks.map((blockBase) => {
+        GroupBlocks.map(async (blockBase) => {
           console.log(blockBase._id);
           const topics = await modelTopic.aggregate(
             [
