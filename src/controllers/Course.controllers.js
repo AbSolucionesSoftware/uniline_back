@@ -312,7 +312,7 @@ courseCtrl.getListCourse = async (req, res) => {
           );
           console.log(listCourseAdmin.length);
           listCourseAdmin.push({
-            block: GroupBlocks[i],
+            block: blockBase,
             topics: topics,
           });
         })
