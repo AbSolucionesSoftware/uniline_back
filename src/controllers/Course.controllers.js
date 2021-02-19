@@ -264,10 +264,11 @@ courseCtrl.uploadVideoCourse = async (req, res) => {
 courseCtrl.getListCourse = async (req, res) => {
   try {
     const idUser = req.params.idUser;
+    const listCourseAdmin = [];
     await modelBlock.find(
       { idCourse: req.params.idCourse },
       async function (err, GroupBlocks) {
-        const listCourseAdmin = [];
+        
         console.log(GroupBlocks);
 
         GroupBlocks.map(async (blockBase) => {
@@ -319,9 +320,9 @@ courseCtrl.getListCourse = async (req, res) => {
         /* for (i = 0; i < GroupBlocks.length; i++) {
 
         } */
-        res.status(200).json(listCourseAdmin);
       }
     ).sort({ preference: 1 });
+    res.status(200).json(listCourseAdmin);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
