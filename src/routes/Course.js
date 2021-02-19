@@ -91,7 +91,7 @@ router.route('/content/order').put(auth,editOrderTopic);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/complete/topic/').post(auth,registerTopicComplete);
+router.route('/complete/topic/').post(registerTopicComplete);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
