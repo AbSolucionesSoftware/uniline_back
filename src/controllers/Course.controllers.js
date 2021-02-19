@@ -269,8 +269,9 @@ courseCtrl.getListCourse = async (req, res) => {
       async function (err, GroupBlocks) {
         const listCourseAdmin = [];
         console.log(GroupBlocks);
-        for (i = 0; i < GroupBlocks.length; i++) {
-          console.log(GroupBlocks[i]._id);
+
+        GroupBlocks.map((blockBase) => {
+          console.log(blockBase._id);
           const topics = await modelTopic.aggregate(
             [
               {
@@ -278,7 +279,7 @@ courseCtrl.getListCourse = async (req, res) => {
               },
               {
                 $match: {
-                  idBlock: GroupBlocks[i]._id,
+                  idBlock: blockBase._id,
                 },
               },
               {
@@ -314,7 +315,10 @@ courseCtrl.getListCourse = async (req, res) => {
             block: GroupBlocks[i],
             topics: topics,
           });
-        }
+        })
+        /* for (i = 0; i < GroupBlocks.length; i++) {
+
+        } */
         res.status(200).json(listCourseAdmin);
       }
     ).sort({ preference: 1 });
