@@ -261,7 +261,7 @@ courseCtrl.uploadVideoCourse = async (req, res) => {
   }
 };
 
-function traerTemas(bloques,callback){
+function traerTemas(bloques,idUser,callback){
   const listCourseAdmin = [];
   bloques.map(async (blockBase) => {
     console.log(blockBase._id);
@@ -327,7 +327,7 @@ courseCtrl.getListCourse = async (req, res) => {
         }
       } */
     ).sort({ preference: 1 });
-    traerTemas(brup,function(temas, err) {
+    traerTemas(brup,idUser,function(temas, err) {
       res.status(200).json(temas);
       console.log(temas);
       console.log(err);
