@@ -328,10 +328,11 @@ courseCtrl.getListCourse = async (req, res) => {
       } */
     ).sort({ preference: 1 });
     traerTemas(brup,function(temas, err) {
+      res.status(200).json(temas);
       console.log(temas);
       console.log(err);
     })
-    res.status(200).json(listCourseAdmin);
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
