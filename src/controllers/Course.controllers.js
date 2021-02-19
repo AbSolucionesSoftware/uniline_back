@@ -267,8 +267,6 @@ courseCtrl.getListCourse = async (req, res) => {
     await modelBlock.find(
       { idCourse: req.params.idCourse },
       async function (err, GroupBlocks) {
-        console.log( req.params.idUser);
-        console.log(GroupBlocks);
         const listCourseAdmin = [];
         for (i = 0; i < GroupBlocks.length; i++) {
           console.log(GroupBlocks[i]._id);
@@ -306,7 +304,6 @@ courseCtrl.getListCourse = async (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                console.log(topicsBase);
                 return topicsBase;
               }
             }
@@ -316,6 +313,7 @@ courseCtrl.getListCourse = async (req, res) => {
             topics: topics,
           });
         }
+        console.log(listCourseAdmin);
         res.status(200).json(listCourseAdmin);
       }
     ).sort({ preference: 1 });
