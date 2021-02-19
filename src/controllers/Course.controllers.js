@@ -328,9 +328,9 @@ courseCtrl.getListCourse = async (req, res) => {
       } */
     ).sort({ preference: 1 });
     traerTemas(brup,idUser,function(temas, err) {
-      res.status(200).json(temas);
-      console.log(temas);
+      console.log("Temas: ",temas);
       console.log(err);
+      res.status(200).json(temas);
     })
     
   } catch (error) {
