@@ -109,7 +109,6 @@ router.route('/coupon/exchange/').put(auth,exchangeCouponCourse);
 
 router.route('/datalist/:idCourse/user/:idUser').get(auth,getListCourse);
 
-
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 
 router.route('/comment/:idUser/course/:idCourse').post(auth,aggregateCommentCourse);

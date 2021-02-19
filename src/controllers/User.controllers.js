@@ -223,6 +223,17 @@ userCtrl.signInUser = async (req, res) => {
   }
 };
 
+//Esta no esta
+userCtrl.generateCodeResetPassword = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(500).json({ message: error });
+    console.log(error);
+  }
+}
+
+//Esta no esta
 userCtrl.resetPassword = async (req, res) => {
   try {
   } catch (error) {
@@ -231,6 +242,7 @@ userCtrl.resetPassword = async (req, res) => {
   }
 };
 
+//Esta no esta
 userCtrl.verifyResetPassword = async (req, res) => {
   try {
   } catch (error) {

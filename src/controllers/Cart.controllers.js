@@ -119,7 +119,7 @@ cartCtrl.deleteCart = async (req,res) => {
                         }
                     },
                 );
-            })
+            });
             res.status(200).json({message: "Carrito eliminado."})
         }else{
             req.status(404).json({message: "Usuario no encontrado."})
