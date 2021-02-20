@@ -280,7 +280,7 @@ courseCtrl.getListCourse = async (req, res) => {
                 $match: {
                   idBlock: GroupBlocks[i]._id,
                 },
-              }/* ,
+              },
               {
                 $lookup: {
                   from: "topicscompleteds",
@@ -299,7 +299,7 @@ courseCtrl.getListCourse = async (req, res) => {
                   ],
                   as: "topicCompleted",
                 },
-              }, */
+              },
             ],
             async function (err, topicsBase) {
               if (err) {
