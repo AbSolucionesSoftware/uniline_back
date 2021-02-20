@@ -420,8 +420,8 @@ courseCtrl.getBlockAndTopicCourse = async (req, res) => {
                 },
               },
             ],
-            async function (err, subCategoriasBase) {
-              return subCategoriasBase;
+            async function (err, topics) {
+              return topics;
             }
           );
           listCourseAdmin.push({
