@@ -112,7 +112,7 @@ router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
 
 //<<<<<<<<<<< Informacion del curso >>>>>>>>>>//
 
-router.route('/view/:slugCourse/user-progress/:idUser').get(getCourseDashUser);
+router.route('/view/:slugCourse/user-progress/:idUser').get(auth,getCourseDashUser);
 
 
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
