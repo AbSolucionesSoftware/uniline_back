@@ -46,7 +46,10 @@ const courseSchema = new mongoose.Schema(
     inscriptionStudents: Number,
     idMassPromotion: String,
     MassPromotionPercentage: String,
-    slug: String
+    slug: {
+      type: String,
+      unique: true
+    }
   },
   {
     timestamps: true,

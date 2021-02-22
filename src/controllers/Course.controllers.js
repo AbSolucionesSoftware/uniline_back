@@ -49,8 +49,8 @@ courseCtrl.getCourses = async (req, res) => {
 
 courseCtrl.getCourseView = async (req, res) => {
   try {
-      const course = await modelCourse.findById(req.params.idCourse).populate('idProfessor');
-      await modelBlock.find({idCourse: req.params.idCourse}, async function(err, blocks){
+      const course = await modelCourse.findById({slug: req.params.idCourse}).populate('idProfessor');
+      await modelBlock.find({idCourse: course._id}, async function(err, blocks){
         let countCursos = 0;
         const newArray = {
           course,
@@ -66,14 +66,14 @@ courseCtrl.getCourseView = async (req, res) => {
         console.log(countCursos);
         newArray.totalTopics = countCursos;
 
-        const inscriptions = await modelInscription.countDocuments({idCourse: req.params.idCourse});
+        const inscriptions = await modelInscription.countDocuments({idCourse: course._id});
         newArray.totalInscription = inscriptions;
 
-        const commentCourse = await modelCommentCourse.find({idCourse: req.params.idCourse}).populate('idUser');
+        const commentCourse = await modelCommentCourse.find({idCourse: course._id}).populate('idUser');
         newArray.commentCourse = commentCourse;
 
         await modelBlock.find(
-          { idCourse: req.params.idCourse },
+          { idCourse: course._id },
           async function (err, GroupBlocks) {
             const listCourseAdmin = [];
             for (i = 0; i < GroupBlocks.length; i++) {
