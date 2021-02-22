@@ -35,7 +35,8 @@ const {
     getCourses,
     aggregateCommentCourse,
     moreBuyCourse,
-    searchCourse
+    searchCourse,
+    getCourseDashUser
 
  } = require('../controllers/Course.controllers');
 
@@ -111,7 +112,7 @@ router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
 
 //<<<<<<<<<<< Informacion del curso >>>>>>>>>>//
 
-router.route('/view/:slugCourse/user-progress/:idUser').get();
+router.route('/view/:slugCourse/user-progress/:idUser').get(getCourseDashUser);
 
 
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
