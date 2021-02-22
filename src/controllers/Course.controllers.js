@@ -8,6 +8,7 @@ const reuserFunction = require("../middleware/reuser");
 const modelCoupon = require("../models/Coupon");
 const modelInscription = require("../models/Inscription");
 const modelCommentCourse = require('../models/CommentCourse');
+const modelComentDashCourse = require('../models/Comment');
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -49,7 +50,7 @@ courseCtrl.getCourses = async (req, res) => {
 
 courseCtrl.getCourseView = async (req, res) => {
   try {
-      const course = await modelCourse.findOne({slug: req.params.idCourse}).populate('idProfessor');
+      const course = await modelCourse.findOne({slug: req.params.slugCourse}).populate('idProfessor');
       await modelBlock.find({idCourse: course._id}, async function(err, blocks){
         let countCursos = 0;
         const newArray = {
@@ -114,6 +115,53 @@ courseCtrl.getCourseView = async (req, res) => {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
+}
+
+courseCtrl.getCourseDashUser = async (req, res) => {
+  try {
+    const course = await modelCourse.findOne({slug: req.params.slugCourse}).populate('idProfessor');
+    await modelBlock.find({idCourse: course._id}, async function(err, blocks){
+      let countCursos = 0;
+      const newArray = {
+        course,
+        totalTopics: "",
+        totalInscription: "",
+        commentCourse: [],
+        contentCourse: [],
+        inscriptionStudent: {},
+        endTopicView: ""
+      };
+      for(i = 0; i < blocks.length; i++){
+        const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
+        countCursos+= topics;
+      }
+      console.log(countCursos);
+      newArray.totalTopics = countCursos;
+
+      const inscriptions = await modelInscription.countDocuments({idCourse: course._id});
+      newArray.totalInscription = inscriptions;
+
+      const inscriptionUser = await modelInscription.findOne({idCourse: course._id, idUser: req.params.idUser});
+      newArray.inscriptionStudent = inscriptionUser;
+
+      const commentCourse = await modelComentDashCourse.find({idCourse: course._id}).populate('idUser');
+      newArray.commentCourse = commentCourse;
+
+      const endTopic = await modelTopicComplete.find({idCourse: course._id, idUser: req.params.idUser}).sort({createdAt: -1});
+      if(endTopic.length > 0){
+        newArray.endTopicView = endTopic[0].idTopic;
+      }else{
+        const blocks = await modelBlock.find({ idCourse: course._id });
+        const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id});
+        newArray.endTopicView = topicsCourse[0]._id;
+      }
+      res.status(200).json(newArray);
+  });
+
+} catch (error) {
+  res.status(505).json({ message: "Error del servidor", error });
+  console.log(error);
+}
 }
 
 courseCtrl.getCourse = async (req, res) => {

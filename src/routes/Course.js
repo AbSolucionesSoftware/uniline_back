@@ -45,7 +45,7 @@ router.route('/learnings/:idCourse').put(auth,editLerningsRequiredStudents);
 
 router.route('/:idCourse').put(auth,editCourse).get(getCourse);
 
-router.route('/view-course/:idCourse').get(getCourseView);
+router.route('/view-course/:slugCourse').get(getCourseView);
 
 router.route('/imagen/:idCourse').put(auth,uploadFile,uploadFileCourse);
 
@@ -108,6 +108,11 @@ router.route('/coupon/exchange/').put(auth,exchangeCouponCourse);
 //<<<<<<<<<<< Lista del curso >>>>>>>>>>//
 
 router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
+
+//<<<<<<<<<<< Informacion del curso >>>>>>>>>>//
+
+router.route('/view/:slugCourse/user-progress/:idUser').get();
+
 
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 
