@@ -49,7 +49,7 @@ courseCtrl.getCourses = async (req, res) => {
 
 courseCtrl.getCourseView = async (req, res) => {
   try {
-      const course = await modelCourse.find({slug: req.params.idCourse}).populate('idProfessor');
+      const course = await modelCourse.findOne({slug: req.params.idCourse}).populate('idProfessor');
       await modelBlock.find({idCourse: course._id}, async function(err, blocks){
         let countCursos = 0;
         const newArray = {
