@@ -65,7 +65,7 @@ router.route('/search/:search').get(searchCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
-router.route('/data/:idCourse').get(getBlockAndTopicCourse)
+router.route('/data/:idCourse').get(auth,getBlockAndTopicCourse)
 
 router.route('/block/:idCourse').post(auth,addBlockCourse);
 
