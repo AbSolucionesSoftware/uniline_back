@@ -701,7 +701,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     const { idUser, idCourse } = req.body;
     const newTopicComplete = new modelTopicComplete(req.body);
     await newTopicComplete.save();
-    const blockBase = await modelBlock.find({idCourse: course._id});
+    const blockBase = await modelBlock.find({idCourse: idCourse});
     const totalTopicsComplete = await newTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
     let countCursos = 0;
     for(i = 0; i < blockBase.length; i++){
