@@ -698,9 +698,19 @@ courseCtrl.editOrderTopic = async (req, res) => {
 
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
+    const { idUser, idCourse } = req.body;
     const newTopicComplete = new modelTopicComplete(req.body);
     await newTopicComplete.save();
-    res.status(200).json({ message: "Tema completado" });
+    const blockBase = await modelBlock.find({idCourse: course._id});
+    const totalTopicsComplete = await newTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
+    let countCursos = 0;
+    for(i = 0; i < blockBase.length; i++){
+      const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
+      countCursos+= topics;
+    }
+    const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
+    await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+    res.status(200).json({message: Math.round(avance)})
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
