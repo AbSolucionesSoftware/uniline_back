@@ -705,7 +705,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     const totalTopicsComplete = await modelTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
     let countCursos = 0;
     for(i = 0; i < blockBase.length; i++){
-      const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
+      const topics = await modelTopic.countDocuments({idBlock: blockBase[i]._id});
       countCursos+= topics;
     }
     const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
