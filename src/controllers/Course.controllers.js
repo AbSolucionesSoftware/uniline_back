@@ -700,7 +700,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
   try {
     const {idTopic, idUser, idCourse } = req.body;
     console.log(req.body);
-    const topicBase = modelTopicComplete.find({idTopic: idTopic, idUser: idUser, idCourse: idCourse});
+    const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
     console.log(topicBase);
     if(!topicBase){
       const newTopicComplete = new modelTopicComplete(req.body);
