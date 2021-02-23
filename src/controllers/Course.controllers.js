@@ -699,7 +699,9 @@ courseCtrl.editOrderTopic = async (req, res) => {
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
     const {idTopic, idUser, idCourse } = req.body;
+    console.log(req.body);
     const topicBase = modelTopicComplete.find({idTopic: idTopic, idUser: idUser, idCourse: idCourse});
+    console.log(topicBase);
     if(!topicBase){
       const newTopicComplete = new modelTopicComplete(req.body);
       await newTopicComplete.save();
