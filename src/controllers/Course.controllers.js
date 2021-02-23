@@ -702,7 +702,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     console.log(req.body);
     const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
     console.log(topicBase);
-    if(!topicBase){
+    if(topicBase.length === 0){
       const newTopicComplete = new modelTopicComplete(req.body);
       await newTopicComplete.save();
     }
