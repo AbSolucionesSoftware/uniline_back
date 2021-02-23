@@ -698,13 +698,18 @@ courseCtrl.editOrderTopic = async (req, res) => {
 
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
-    const {idTopic, idUser, idCourse } = req.body;
-    console.log(req.body);
-    const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
-    console.log(topicBase);
-    if(topicBase.length === 0){
-      const newTopicComplete = new modelTopicComplete(req.body);
-      await newTopicComplete.save();
+    const {idTopic, idUser, idCourse, public } = req.body;
+    if(public == false){
+      const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
+      if(deleteTopicComplete){
+        await modelCommentCourse.findByIdAndDelete(deleteTopicComplete._id);
+      }
+    }else{
+      const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
+      if(topicBase.length === 0){
+        const newTopicComplete = new modelTopicComplete(req.body);
+        await newTopicComplete.save();
+      }
     }
     const blockBase = await modelBlock.find({idCourse: idCourse});
     const totalTopicsComplete = await modelTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
