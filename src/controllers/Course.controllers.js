@@ -149,11 +149,16 @@ courseCtrl.getCourseDashUser = async (req, res) => {
 
       const endTopic = await modelTopicComplete.find({idCourse: course._id, idUser: req.params.idUser}).sort({createdAt: -1});
       if(endTopic.length > 0){
+        console.log("tema end entre complete");
         newArray.endTopicView = endTopic[0].idTopic;
+        console.log(endTopic[0].idTopic);
       }else{
+        console.log("tema end topic");
         const blocks = await modelBlock.find({ idCourse: course._id }).sort({preference: 1});
         const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
         newArray.endTopicView = topicsCourse[0]._id;
+        console.log(topicsCourse[0]._id);
+
       }
       res.status(200).json(newArray);
   });
@@ -828,7 +833,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
   }
 }
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentarios del curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Calificacion del cuerso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.aggregateCommentCourse = async (req,res) => {
   try {
@@ -909,7 +914,32 @@ courseCtrl.searchCourse = async (req,res) => {
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
+  }
+}
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentario del curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+
+courseCtrl.createComentCourseTopic = async (req,res) => {
+  try {
+    /* const { idUser, idCourse, comment, idTopic } = req.body; */
+    const newComment = new modelComentDashCourse(req.body);
+    newComment.likes = 0;
+    newComment.dislikes = 0;
+    await newComment.save();
+    res.status(200).json({message: "Comentario agregado"});
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+courseCtrl.ContLikesComentCourseTopic = async (req,res) => {
+  try {
+    /* const { idCommentTopic } = req.body; */
+    const {} = req.body;
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
   }
 }
 
