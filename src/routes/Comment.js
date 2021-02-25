@@ -7,9 +7,9 @@ const { route } = require('./User');
 
 router.route('/:idCourse/user/:idUser').post(auth,createCommentCourse);
 
-router.route('/api/comment/course/:idCourse').get(getCommentsCourse);
+router.route('/course/:idCourse').get(getCommentsCourse);
 
-router.route('/api/comment/:idComment').put(editCommentCourse);
+router.route('/:idComment').put(editCommentCourse);
 
 /* router.route(); */
 
