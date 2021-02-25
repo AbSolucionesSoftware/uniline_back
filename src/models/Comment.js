@@ -19,7 +19,7 @@ const commentSchema = new Schema(
     },
     answers: [
       {
-        answer: String,
+        comment: String,
         idUser: {
           type: Schema.ObjectId,
           ref: "user",

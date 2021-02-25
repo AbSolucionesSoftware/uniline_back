@@ -88,7 +88,35 @@ commentCtrl.deleteCommentCourse = async (req,res) => {
 
 commentCtrl.createAnswerCommentCourse = async (req,res) => {
     try {
-        const {  } = req.body;
+        const { comment,idUser } = req.body;
+        await modelComment(
+            {
+                _id: req.params.idComment
+            },
+            {
+                $addToSet: {
+                    answers: [
+                        {
+                            comment: comment,
+                            idUser: idUser,
+                            createComment: new Date(),
+                            editComment: new Date()
+                        }
+                    ]
+                }
+            },
+			async (err, response) => {
+				if (err) {
+					res.status(500).json({ message: 'Ups, algo al agregar respuesta.', err });
+				} else {
+					if (!response) {
+						res.status(404).json({ message: 'Error al guardar' });
+					} else {
+						res.status(200).json({ message: 'Comentario agregado.' });
+					}
+				}
+			}
+        )
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -97,7 +125,12 @@ commentCtrl.createAnswerCommentCourse = async (req,res) => {
 
 commentCtrl.editAnswerCommentCourse = async (req,res) => {
     try {
-        
+        const commentBase = await modelComment.findById(req.params.idComment);
+        const answer = commentBase.answers.filter((x) => x._id == req.params.idAnswer);
+        answer.map((answer) => {
+            const {comment} = req.body;
+            await modelComment.updateOne();
+        })
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
