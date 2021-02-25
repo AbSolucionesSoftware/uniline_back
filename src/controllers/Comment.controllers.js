@@ -44,6 +44,7 @@ commentCtrl.createCommentCourse = async (req,res) => {
     try {
         /* const {comment, idTopic} = req.body; */
         const newComment = new modelComment(req.body);
+        newComment.idCourse = req.params.idCourse;
         newComment.likes = 0;
         newComment.dislikes = 0;
         await newComment.save();
