@@ -246,7 +246,7 @@ courseCtrl.createCourse = async (req, res) => {
           idCourse: userStored._id,
           idUser: userStored.idProfessor,
           codeKey: "",
-          code: flase,
+          code: false,
           priceCourse: 0,
           freeCourse: false,
           promotionCourse: 0,
