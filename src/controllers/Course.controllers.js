@@ -240,8 +240,20 @@ courseCtrl.createCourse = async (req, res) => {
     const newCourse = new modelCourse(req.body);
     newCourse.publication = false;
     newCourse.qualification = 5;
-    newCourse.save((err, userStored) => {
+    newCourse.save( async(err, userStored) => {
       if (err) {
+        const newInscription = new modelInscription({
+          idCourse: userStored._id,
+          idUser: userStored.idProfessor,
+          codeKey: "",
+          code: flase,
+          priceCourse: 0,
+          freeCourse: false,
+          promotionCourse: 0,
+          persentagePromotionCourse: 0,
+          studentAdvance: "0",
+        });
+        await newInscription.save();
         res
           .status(500)
           .json({ message: "Ups, algo paso al crear el curso.", err });
