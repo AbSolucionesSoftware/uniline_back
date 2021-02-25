@@ -7,9 +7,11 @@ commentCtrl.getCommentsCourse = async (req,res) => {
     try {
         const { idTopic = '' } = req.query;
         console.log(req.params.idCourse );
-        var match = { idCourse: req.params.idCourse };
+        var match = {  };
         if(idTopic){
-            match.idTopic = idTopic;
+            match = { idCourse: req.params.idCourse, idTopic: idTopic }
+        }else{
+            match = { idCourse: req.params.idCourse}
         }
 
         await modelComment.aggregate(
