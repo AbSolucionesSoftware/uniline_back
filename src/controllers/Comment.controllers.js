@@ -6,7 +6,8 @@ const modelComment = require('../models/Comment');
 commentCtrl.getCommentsCourse = async (req,res) => {
     try {
         const { idTopic = '' } = req.query;
-        var match = { idCourse: req.params.idCourse, };
+        console.log(req.params.idCourse );
+        var match = { idCourse: req.params.idCourse };
         if(idTopic){
             match.idTopic = idTopic;
         }
