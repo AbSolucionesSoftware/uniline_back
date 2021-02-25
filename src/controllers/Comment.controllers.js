@@ -127,9 +127,18 @@ commentCtrl.editAnswerCommentCourse = async (req,res) => {
     try {
         const commentBase = await modelComment.findById(req.params.idComment);
         const answer = commentBase.answers.filter((x) => x._id == req.params.idAnswer);
-        answer.map((answer) => {
+        answer.map(async (answer) => {
             const {comment} = req.body;
-            await modelComment.updateOne();
+            await modelComment.updateOne(
+                {
+                    'answers._id': req.params.idAnswer
+                },
+                {
+                    $set: { 'answers.$': {
+
+                    } }
+                }
+            );
         })
     } catch (error) {
         res.status(500).json({ message: error });
