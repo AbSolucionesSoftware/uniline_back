@@ -135,9 +135,25 @@ commentCtrl.editAnswerCommentCourse = async (req,res) => {
                 },
                 {
                     $set: { 'answers.$': {
-
+                        comment: comment,
+                        idUser: answer.idUser,
+                        likes: answer.likes,
+                        dislikes: answer.dislikes,
+                        createComment: answer.createComment,
+                        editComment: new Date()
                     } }
-                }
+                },
+				async (err, response) => {
+					if (err) {
+						res.status(500).json({ message: 'Ups algo paso al actualizar', err });
+					} else {
+						if (!response) {
+							res.status(404).json({ message: 'Ups, algo paso al actualizar.' });
+						} else {
+							res.status(200).json({ message: 'Se actualizo con exito' });
+						}
+					}
+				}
             );
         })
     } catch (error) {
