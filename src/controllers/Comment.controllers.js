@@ -13,8 +13,11 @@ commentCtrl.getCommentsCourse = async (req,res) => {
         }else{
             match = { idCourse: req.params.idCourse}
         }
+        console.log(match);
 
-        await modelComment.aggregate(
+        const comment = await modelComment.find(match);
+        res.status(200).json(comment);
+        /* await modelComment.aggregate(
             [
                 {
                     $match: match
@@ -30,11 +33,11 @@ commentCtrl.getCommentsCourse = async (req,res) => {
 					if (!postStored) {
 						res.status(404).json({ message: 'Error al mostrar comentarios' });
 					} else {
-						res.status(200).json(postStored);
+						
 					}
 				}
 			}
-        );
+        ); */
 
     } catch (error) {
         res.status(500).json({ message: error });
