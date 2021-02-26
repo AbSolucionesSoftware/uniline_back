@@ -70,7 +70,7 @@ commentCtrl.createAnswerCommentCourse = async (req,res) => {
         console.log(req.body);
         console.log(req.params.idComment);
         console.log(req.params.idUser);
-        await modelComment(
+        await modelComment.updateOne(
             {
                 _id: req.params.idComment
             },
