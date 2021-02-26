@@ -14,7 +14,8 @@ commentCtrl.getCommentsCourse = async (req,res) => {
         }
         console.log(match);
 
-        const comment = await modelComment.find(match);
+        const comment = await modelComment.find(match).populate('idUser idCourse').populate({path: 'answers.idUser', model: 'user'})
+        ;
         res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -66,7 +67,7 @@ commentCtrl.deleteCommentCourse = async (req,res) => {
 
 commentCtrl.createAnswerCommentCourse = async (req,res) => {
     try {
-        const { comment,idUser } = req.body;
+        const { comment } = req.body;
         await modelComment(
             {
                 _id: req.params.idComment
@@ -76,7 +77,7 @@ commentCtrl.createAnswerCommentCourse = async (req,res) => {
                     answers: [
                         {
                             comment: comment,
-                            idUser: idUser,
+                            idUser: req.params.idUser,
                             createComment: new Date(),
                             editComment: new Date()
                         }
