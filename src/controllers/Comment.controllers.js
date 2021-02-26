@@ -14,8 +14,7 @@ commentCtrl.getCommentsCourse = async (req,res) => {
         }
         console.log(match);
 
-        const comment = await modelComment.find(match).populate('idUser idCourse').populate({path: 'answers.idUser', model: 'user'})
-        ;
+        const comment = await modelComment.find(match).populate('idUser idCourse').populate({path: 'answers.idUser', model: 'user'}).sort({createdAt: 1});
         res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -143,7 +142,30 @@ commentCtrl.editAnswerCommentCourse = async (req,res) => {
 
 commentCtrl.deleteAnswerCommentCourse = async (req,res) => {
     try {
-        
+        await modelComment(
+            {
+                _id: req.params.idComment
+            },
+            {
+
+                $pull: {
+                    answers: {
+                        _id: req.params.idAnswer
+                    }
+                }
+            },
+            (err, response) => {
+				if (err) {
+					res.status(500).json({ message: 'Ups, algo paso en la base', err });
+				} else {
+					if (!response) {
+						res.status(404).json({ message: 'Algo paso al eliminar' });
+					} else {
+						res.status(200).json({ message: 'Comentario eliminado.' });
+					}
+				}
+			}
+        )
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -152,7 +174,10 @@ commentCtrl.deleteAnswerCommentCourse = async (req,res) => {
 
 commentCtrl.aggregateLikesComment = async (req,res) => {
     try {
-        
+        const commentBase = await modelComment.findById(req.params.idComment);
+        var likesBase = parseInt(commentBase.likes);
+        await modelComment(req.params.idComment,{likes: likesBase + 1});
+        res.status(200).json({message: "Like agregado."});
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -161,7 +186,10 @@ commentCtrl.aggregateLikesComment = async (req,res) => {
 
 commentCtrl.aggregateDislikesComment = async (req,res) => {
     try {
-        
+        const commentBase = await modelComment.findById(req.params.idComment);
+        var likesBase = parseInt(commentBase.likes);
+        await modelComment(req.params.idComment,{likes: likesBase - 1});
+        res.status(200).json({message: "Like agregado."});
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
