@@ -1,5 +1,4 @@
 const commentCtrl = {};
-const { json } = require('express');
 const modelComment = require('../models/Comment');  
 
 
@@ -17,28 +16,6 @@ commentCtrl.getCommentsCourse = async (req,res) => {
 
         const comment = await modelComment.find(match);
         res.status(200).json(comment);
-        /* await modelComment.aggregate(
-            [
-                {
-                    $match: match
-                },
-                { 
-					$sort: { createdAt: 1 } 
-				}
-            ],
-			async (err, postStored) => {
-				if (err) {
-					res.status(500).json({ message: 'Error en el servidor', err });
-				} else {
-					if (!postStored) {
-						res.status(404).json({ message: 'Error al mostrar comentarios' });
-					} else {
-						
-					}
-				}
-			}
-        ); */
-
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -50,6 +27,7 @@ commentCtrl.createCommentCourse = async (req,res) => {
         /* const {comment, idTopic} = req.body; */
         const newComment = new modelComment(req.body);
         newComment.idCourse = req.params.idCourse;
+        newComment.idUser = req.params.idUser;
         newComment.likes = 0;
         newComment.dislikes = 0;
         await newComment.save();
@@ -150,7 +128,7 @@ commentCtrl.editAnswerCommentCourse = async (req,res) => {
 						if (!response) {
 							res.status(404).json({ message: 'Ups, algo paso al actualizar.' });
 						} else {
-							res.status(200).json({ message: 'Se actualizo con exito' });
+							res.status(200).json({ message: 'Comentario actualizado.' });
 						}
 					}
 				}
