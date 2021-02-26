@@ -203,7 +203,37 @@ commentCtrl.aggregateDislikesComment = async (req,res) => {
 
 commentCtrl.aggregateLikesCommentAnswer = async (req,res) => {
     try {
-        
+        const commentBase = await modelComment.findById(req.params.idComment);
+        const answer = commentBase.answers.filter((x) => x._id == req.params.idAnswer);
+        answer.map(async (answer) => {
+            var likeMore = parseInt(answer.likes) + 1;
+            await modelComment.updateOne(
+                {
+                    'answers._id': req.params.idAnswer
+                },
+                {
+                    $set: { 'answers.$': {
+                        comment: comment,
+                        idUser: answer.idUser,
+                        likes: likeMore,
+                        dislikes: answer.dislikes,
+                        createComment: answer.createComment,
+                        editComment: new Date()
+                    } }
+                },
+				async (err, response) => {
+					if (err) {
+						res.status(500).json({ message: 'Ups algo paso al actualizar', err });
+					} else {
+						if (!response) {
+							res.status(404).json({ message: 'Ups, algo paso al actualizar.' });
+						} else {
+							res.status(200).json({ message: 'Comentario actualizado.' });
+						}
+					}
+				}
+            );
+        })
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
@@ -212,7 +242,37 @@ commentCtrl.aggregateLikesCommentAnswer = async (req,res) => {
 
 commentCtrl.aggregateDislikesCommentAnswer = async (req,res) => {
     try {
-        
+        const commentBase = await modelComment.findById(req.params.idComment);
+        const answer = commentBase.answers.filter((x) => x._id == req.params.idAnswer);
+        answer.map(async (answer) => {
+            var disLikeMore = parseInt(answer.dislikes) - 1;
+            await modelComment.updateOne(
+                {
+                    'answers._id': req.params.idAnswer
+                },
+                {
+                    $set: { 'answers.$': {
+                        comment: comment,
+                        idUser: answer.idUser,
+                        likes: answer.likes,
+                        dislikes: disLikeMore,
+                        createComment: answer.createComment,
+                        editComment: new Date()
+                    } }
+                },
+				async (err, response) => {
+					if (err) {
+						res.status(500).json({ message: 'Ups algo paso al actualizar', err });
+					} else {
+						if (!response) {
+							res.status(404).json({ message: 'Ups, algo paso al actualizar.' });
+						} else {
+							res.status(200).json({ message: 'Comentario actualizado.' });
+						}
+					}
+				}
+            );
+        })
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
