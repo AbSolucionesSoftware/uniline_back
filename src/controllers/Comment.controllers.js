@@ -145,7 +145,7 @@ commentCtrl.editAnswerCommentCourse = async (req,res) => {
 
 commentCtrl.deleteAnswerCommentCourse = async (req,res) => {
     try {
-        await modelComment(
+        await modelComment.updateOne(
             {
                 _id: req.params.idComment
             },
