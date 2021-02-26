@@ -68,6 +68,8 @@ commentCtrl.createAnswerCommentCourse = async (req,res) => {
     try {
         const { comment } = req.body;
         console.log(req.body);
+        console.log(req.params.idComment);
+        console.log(req.params.idUser);
         await modelComment(
             {
                 _id: req.params.idComment
