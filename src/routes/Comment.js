@@ -23,9 +23,9 @@ router.route("/course/:idCourse").get(getCommentsCourse);
 
 router.route("/:idComment").put(editCommentCourse).delete(deleteCommentCourse);
 
-router.route('/:idComment/answer/:idUser').post(createAnswerCommentCourse);
+router.route('/:idComment/answer/:idUser/new-answer/').post(createAnswerCommentCourse);
 
-router.route('/:idComment/user/answer/:idAnswer').put(editAnswerCommentCourse).delete(deleteAnswerCommentCourse);
+router.route('/:idComment/user/answer/:idAnswer/new-answer/').put(editAnswerCommentCourse).delete(deleteAnswerCommentCourse);
 
 router.route('/:idComment/like').put(aggregateLikesComment);
 
