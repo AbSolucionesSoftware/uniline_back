@@ -81,7 +81,9 @@ commentCtrl.createAnswerCommentCourse = async (req,res) => {
                             comment: comment,
                             idUser: req.params.idUser,
                             createComment: new Date(),
-                            editComment: new Date()
+                            editComment: new Date(),
+                            likes: 0,
+                            dislikes: 0
                         }
                     ]
                 }
