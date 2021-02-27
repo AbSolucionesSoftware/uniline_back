@@ -720,7 +720,7 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     if(public == false){
       const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
       if(deleteTopicComplete){
-        await modelCommentCourse.findByIdAndDelete(deleteTopicComplete._id);
+        await modelTopicComplete.findByIdAndDelete(deleteTopicComplete._id);
       }
     }else{
       const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
