@@ -31,8 +31,8 @@ router.route('/:idComment/like').put(aggregateLikesComment);
 
 router.route('/:idComment/dislike').put(aggregateDislikesComment);
 
-router.route('/:idComment/answar/:idAnswer/like').put(aggregateLikesCommentAnswer);
+router.route('/:idComment/answer/:idAnswer/like').put(aggregateLikesCommentAnswer);
 
-router.route('/:idComment/answar/:idAnswer/dislike').put(aggregateDislikesCommentAnswer);
+router.route('/:idComment/answer/:idAnswer/dislike').put(aggregateDislikesCommentAnswer);
 
 module.exports = router;
