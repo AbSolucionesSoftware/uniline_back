@@ -716,6 +716,7 @@ courseCtrl.editOrderTopic = async (req, res) => {
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
     const {idTopic, idUser, idCourse, public } = req.body;
+    console.log(req.body);
     if(public == false){
       const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
       if(deleteTopicComplete){
@@ -737,7 +738,8 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     }
     const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
     await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
-    res.status(200).json({message: Math.round(avance)})
+    res.status(200).json({message: Math.round(avance)});
+
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
