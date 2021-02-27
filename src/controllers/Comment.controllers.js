@@ -181,7 +181,7 @@ commentCtrl.aggregateLikesComment = async (req,res) => {
     try {
         const commentBase = await modelComment.findById(req.params.idComment);
         var likesBase = parseInt(commentBase.likes);
-        await modelComment(req.params.idComment,{likes: likesBase + 1});
+        await modelComment.findByIdAndUpdate(req.params.idComment,{likes: likesBase + 1});
         res.status(200).json({message: "Like agregado."});
     } catch (error) {
         res.status(500).json({ message: error });
@@ -193,7 +193,7 @@ commentCtrl.aggregateDislikesComment = async (req,res) => {
     try {
         const commentBase = await modelComment.findById(req.params.idComment);
         var likesBase = parseInt(commentBase.likes);
-        await modelComment(req.params.idComment,{likes: likesBase - 1});
+        await modelComment.findByIdAndUpdate(req.params.idComment,{likes: likesBase - 1});
         res.status(200).json({message: "Like agregado."});
     } catch (error) {
         res.status(500).json({ message: error });
