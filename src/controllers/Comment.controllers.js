@@ -213,7 +213,7 @@ commentCtrl.aggregateLikesCommentAnswer = async (req,res) => {
                 },
                 {
                     $set: { 'answers.$': {
-                        comment: comment,
+                        comment: answer.comment,
                         idUser: answer.idUser,
                         likes: likeMore,
                         dislikes: answer.dislikes,
@@ -245,14 +245,14 @@ commentCtrl.aggregateDislikesCommentAnswer = async (req,res) => {
         const commentBase = await modelComment.findById(req.params.idComment);
         const answer = commentBase.answers.filter((x) => x._id == req.params.idAnswer);
         answer.map(async (answer) => {
-            var disLikeMore = parseInt(answer.dislikes) - 1;
+            var disLikeMore = parseInt(answer.dislikes) + 1;
             await modelComment.updateOne(
                 {
                     'answers._id': req.params.idAnswer
                 },
                 {
                     $set: { 'answers.$': {
-                        comment: comment,
+                        comment: answer.comment,
                         idUser: answer.idUser,
                         likes: answer.likes,
                         dislikes: disLikeMore,
