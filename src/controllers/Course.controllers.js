@@ -129,7 +129,8 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         commentCourse: [],
         contentCourse: [],
         inscriptionStudent: {},
-        endTopicView: ""
+        endTopicView: "",
+        commentStudentQualification: ""
       };
       for(i = 0; i < blocks.length; i++){
         const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
@@ -158,8 +159,9 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
         newArray.endTopicView = topicsCourse[0]._id;
         console.log(topicsCourse[0]._id);
-
       }
+      const commentCalification = await modelCommentCourse.findOne({idUser: req.params.idUser, idCourse: course._id});
+      newArray.commentStudentQualification = commentCalification;
       res.status(200).json(newArray);
   });
 

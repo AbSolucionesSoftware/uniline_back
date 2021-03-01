@@ -13,7 +13,12 @@ const homeWorkSchema = new Schema(
     qualificationHomework: Number,
     homeworkDileKey: String,
     homeworkDileUrl: String,
-
+    comments: [
+        {
+            comment: String,
+            
+        }
+    ]
   },
   {
     timestamps: true,
