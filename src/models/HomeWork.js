@@ -1,4 +1,6 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+var Float = require("mongoose-float").loadType(mongoose, 4);
+const { Schema, model } = mongoose;
 
 const homeWorkSchema = new Schema(
   {
@@ -10,13 +12,20 @@ const homeWorkSchema = new Schema(
         type: Schema.ObjectId,
         ref: "course",
     },
-    qualificationHomework: Number,
+    qualificationHomework: {
+      type: Float
+    },
     homeworkDileKey: String,
     homeworkDileUrl: String,
     comments: [
         {
             comment: String,
-            
+            idUser: {
+              type: Schema.ObjectId,
+              ref: "user",
+            },
+            createComment: Date,
+            editComment: Date,
         }
     ]
   },
