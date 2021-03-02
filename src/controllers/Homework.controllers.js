@@ -68,4 +68,19 @@ homeworkCtrl.getHomeworks = async (req,res) => {
     }
 }
 
+homeworkCtrl.deleteHomeworks = async (req,res) => {
+    try {
+        const homework = await modelHomework.findById(req.params.idHomework);
+        if(homework){
+            await modelHomework.findByIdAndDelete(req.params.idHomework);
+            res.status(200).json({message: "Tarea eliminada."})
+        }else{
+            res.status(404).json({message: "Esta tarea no existe."})
+        }
+    } catch (error) {
+        res.status(505).json({ message: "Error del servidor", error });
+        console.log(error);
+    }
+}
+
 module.exports = homeworkCtrl;
