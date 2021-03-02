@@ -22,8 +22,8 @@ homeworkCtrl.createHomework = async (req,res) => {
         /* const { qualificationHomework } = req.body;  */
         const createHomework = new modelHomework();
         if(req.file){
-            createHomework.homeworkDileKey = req.file.key;
-            createHomework.homeworkDileUrl = req.file.location;
+            createHomework.homeworkFileKey = req.file.key;
+            createHomework.homeworkFileUrl = req.file.location;
             createHomework.idUser = req.params.idUser;
             createHomework.idCourse = req.params.idCourse;
             await createHomework.save(async function(err, HomeWork){

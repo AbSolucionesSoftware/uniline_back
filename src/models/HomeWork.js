@@ -15,8 +15,8 @@ const homeWorkSchema = new Schema(
     qualificationHomework: {
       type: Float
     },
-    homeworkDileKey: String,
-    homeworkDileUrl: String,
+    homeworkFileKey: String,
+    homeworkFileUrl: String,
     comments: [
         {
             comment: String,
