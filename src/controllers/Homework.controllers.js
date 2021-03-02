@@ -26,8 +26,18 @@ homeworkCtrl.createHomework = async (req,res) => {
             createHomework.homeworkDileUrl = req.file.location;
             createHomework.idUser = req.params.idUser;
             createHomework.idCourse = req.params.idCourse;
-            await createHomework.save();
-            res.status(200).json({message: "Tarea subida correctamente."})
+            await createHomework.save(async function(err, HomeWork){
+                if(err){
+                    res.status(404).json({message: "Error de registro.",err})
+                }else{
+                    if(!HomeWork){
+                        res.status(404).json({message: "La tarea no fue encontrada."})
+                    }else{
+                        res.status(200).json({message: "Tarea subida correctamente.", HomeWork})
+                    }
+                }
+            });
+           
         }else{
             res.status(404).json({message: "La tarea no fue encontrada."})
         }
