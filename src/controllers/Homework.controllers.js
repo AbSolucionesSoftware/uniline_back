@@ -20,7 +20,7 @@ homeworkCtrl.createHomework = async (req,res) => {
     try {
         /* const { qualificationHomework } = req.body; */
         /* const { qualificationHomework } = req.body;  */
-        const createHomework = new modelHomework({qualificationHomework: qualificationHomework});
+        const createHomework = new modelHomework();
         if(req.file){
             createHomework.homeworkDileKey = req.file.key;
             createHomework.homeworkDileUrl = req.file.location;
