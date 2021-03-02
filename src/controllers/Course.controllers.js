@@ -9,6 +9,7 @@ const modelCoupon = require("../models/Coupon");
 const modelInscription = require("../models/Inscription");
 const modelCommentCourse = require('../models/CommentCourse');
 const modelComentDashCourse = require('../models/Comment');
+const modelHomework = require('../models/HomeWork');
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -130,7 +131,8 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         contentCourse: [],
         inscriptionStudent: {},
         endTopicView: "",
-        commentStudentQualification: ""
+        commentStudentQualification: "",
+        homeworkUser: "", 
       };
       for(i = 0; i < blocks.length; i++){
         const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});

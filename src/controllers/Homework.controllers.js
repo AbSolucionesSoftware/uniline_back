@@ -19,21 +19,18 @@ homeworkCtrl.uploadFile = (req,res) => {
 homeworkCtrl.createHomework = async (req,res) => {
     try {
         /* const { qualificationHomework } = req.body; */
-        const { qualificationHomework } = req.body; 
+        /* const { qualificationHomework } = req.body;  */
         const createHomework = new modelHomework({qualificationHomework: qualificationHomework});
-
         if(req.file){
             createHomework.homeworkDileKey = req.file.key;
             createHomework.homeworkDileUrl = req.file.location;
+            createHomework.idUser = req.params.idUser;
+            createHomework.idCourse = req.params.idCourse;
+            await createHomework.save();
+            res.status(200).json({message: "Tarea subida correctamente."})
         }else{
             res.status(404).json({message: "La tarea no fue encontrada."})
         }
-        createHomework.idUser = req.params.idUser;
-        createHomework.idCourse = req.params.idCourse;
-
-        await createHomework.save();
-        res.status(200).json({message: "Tarea subida correctamente."})
-
     } catch (error) {
         res.status(505).json({ message: "Error del servidor", error });
         console.log(error);
