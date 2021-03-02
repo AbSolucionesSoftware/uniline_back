@@ -2,7 +2,7 @@ const homeworkCtrl = {};
 const modelHomework = require('../models/HomeWork');
 const uploadFileAws = require('../middleware/awsFile');
 
-homeworkCtrl.uploadFile = (req,res) => {
+homeworkCtrl.uploadFile = async (req,res) => {
     try {
         await uploadFileAws.uploadFile(req, res, function (err) {
             if (err) {
