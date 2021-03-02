@@ -9,7 +9,6 @@ const modelCoupon = require("../models/Coupon");
 const modelInscription = require("../models/Inscription");
 const modelCommentCourse = require('../models/CommentCourse');
 const modelComentDashCourse = require('../models/Comment');
-const modelHomework = require('../models/HomeWork');
 
 courseCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -132,7 +131,6 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         inscriptionStudent: {},
         endTopicView: "",
         commentStudentQualification: "",
-        homeworkUser: "", 
       };
       for(i = 0; i < blocks.length; i++){
         const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
@@ -164,8 +162,7 @@ courseCtrl.getCourseDashUser = async (req, res) => {
       }
       const commentCalification = await modelCommentCourse.findOne({idUser: req.params.idUser, idCourse: course._id});
       newArray.commentStudentQualification = commentCalification;
-      const homeworkUserBase = await modelHomework.findOne({idUser: req.params.idUser, idCourse: course._id});
-      newArray.homeworkUser = homeworkUserBase;
+
       res.status(200).json(newArray);
   });
 
