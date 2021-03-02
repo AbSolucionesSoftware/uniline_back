@@ -71,7 +71,7 @@ homeworkCtrl.getHomeworks = async (req,res) => {
 
 homeworkCtrl.getHomeworkUser = async (req,res) => {
     try {
-        const homeworks = await modelHomework.findById(req.params.idHomework);
+        const homeworks = await modelHomework.findById({idUser: req.params.idUser, idCourse: req.params.idCourse});
         res.status(200).json(homeworks);
     } catch (error) {
         res.status(505).json({ message: "Error del servidor", error });
