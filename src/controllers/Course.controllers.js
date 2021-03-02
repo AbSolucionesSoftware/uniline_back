@@ -164,7 +164,8 @@ courseCtrl.getCourseDashUser = async (req, res) => {
       }
       const commentCalification = await modelCommentCourse.findOne({idUser: req.params.idUser, idCourse: course._id});
       newArray.commentStudentQualification = commentCalification;
-      const homeworkUserBase = await modelHomework.findOne({idUser: req.params.idUser, idCourse: course._id})
+      const homeworkUserBase = await modelHomework.findOne({idUser: req.params.idUser, idCourse: course._id});
+      newArray.homeworkUser = homeworkUserBase;
       res.status(200).json(newArray);
   });
 
