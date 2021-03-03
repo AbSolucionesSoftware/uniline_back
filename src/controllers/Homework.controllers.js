@@ -51,7 +51,7 @@ homeworkCtrl.qualificationHomeworkteacher = async (req,res) => {
     try {
         const {qualificationHomework} = req.body;
         await modelHomework.findByIdAndUpdate(req.params.idHomework,{qualificationHomework});
-        req.status(200).json({message: "Tarea calificada."})
+        res.status(200).json({message: "Tarea calificada."})
     } catch (error) {
         res.status(505).json({ message: "Error del servidor", error });
         console.log(error);
