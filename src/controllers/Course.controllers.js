@@ -158,8 +158,12 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         const blocks = await modelBlock.find({ idCourse: course._id }).sort({preference: 1});
         if(blocks.length > 0){
           const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
-          newArray.endTopicView = topicsCourse[0]._id;
-          console.log(topicsCourse[0]._id);
+          if(topicsCourse.length > 0){
+            newArray.endTopicView = topicsCourse[0]._id;
+            console.log(topicsCourse[0]._id);
+          }else{
+            newArray.endTopicView = null;
+          }
         }else{
           newArray.endTopicView = null;
         }
