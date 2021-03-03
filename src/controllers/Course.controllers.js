@@ -156,9 +156,13 @@ courseCtrl.getCourseDashUser = async (req, res) => {
       }else{
         console.log("tema end topic");
         const blocks = await modelBlock.find({ idCourse: course._id }).sort({preference: 1});
-        const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
-        newArray.endTopicView = topicsCourse[0]._id;
-        console.log(topicsCourse[0]._id);
+        if(blocks.length > 0){
+          const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
+          newArray.endTopicView = topicsCourse[0]._id;
+          console.log(topicsCourse[0]._id);
+        }else{
+          newArray.endTopicView = null;
+        }
       }
       const commentCalification = await modelCommentCourse.findOne({idUser: req.params.idUser, idCourse: course._id});
       newArray.commentStudentQualification = commentCalification;
