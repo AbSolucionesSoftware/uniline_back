@@ -60,14 +60,13 @@ homeworkCtrl.qualificationHomeworkteacher = async (req,res) => {
 
 homeworkCtrl.getHomeworks = async (req,res) => {
     try {
-        const homeworks = await modelHomework.find({idCourse: req.params.idCourse});
+        const homeworks = await modelHomework.find({idCourse: req.params.idCourse}).populate('idUser idCourse');
         res.status(200).json(homeworks);
     } catch (error) {
         res.status(505).json({ message: "Error del servidor", error });
         console.log(error);
     }
 }
-
 
 homeworkCtrl.getHomeworkUser = async (req,res) => {
     try {
@@ -93,5 +92,6 @@ homeworkCtrl.deleteHomeworks = async (req,res) => {
         console.log(error);
     }
 }
+
 
 module.exports = homeworkCtrl;
