@@ -249,7 +249,7 @@ courseCtrl.createCourse = async (req, res) => {
     const newCourse = new modelCourse(req.body);
     newCourse.publication = false;
     newCourse.qualification = 5;
-    newCourse.save( async(err, userStored) => {
+    await newCourse.save( async(err, userStored) => {
       if (err) {
         const newInscription = new modelInscription({
           idCourse: userStored._id,
@@ -874,9 +874,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
 
 courseCtrl.aggregateCommentCourse = async (req,res) => {
   try {
-    
     const {comment = "",qualification = ""} = req.body;
-
     if(!comment || !qualification){
       res.status(404).json({message: "Datos no completos"});
     }else{
