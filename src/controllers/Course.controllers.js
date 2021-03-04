@@ -749,8 +749,8 @@ courseCtrl.registerTopicComplete = async (req, res) => {
     const inscriptionUserBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
     if(avance >= 100){
       if(inscriptionUserBase){
-        if(inscriptionUserBase.endDate === false){
-          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance),ending: new Date(),endDate: true});
+        if(inscriptionUserBase.ending === false){
+          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance),endDate: new Date(),ending: true});
         }else{
           await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
         }
@@ -854,6 +854,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           promotionCourse: courseBase.priceCourse.promotionPrice,
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
+          ending: false,
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
