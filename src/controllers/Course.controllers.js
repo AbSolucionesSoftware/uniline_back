@@ -127,7 +127,6 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         totalTopics: "",
         totalInscription: "",
         commentCourse: [],
-        contentCourse: [],
         inscriptionStudent: {},
         endTopicView: "",
         commentStudentQualification: "",
@@ -170,7 +169,6 @@ courseCtrl.getCourseDashUser = async (req, res) => {
       }
       const commentCalification = await modelCommentCourse.findOne({idUser: req.params.idUser, idCourse: course._id});
       newArray.commentStudentQualification = commentCalification;
-
       res.status(200).json(newArray);
   });
 
@@ -748,7 +746,21 @@ courseCtrl.registerTopicComplete = async (req, res) => {
       countCursos+= topics;
     }
     const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
-    await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+    const inscriptionUserBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
+    if(avance >= 100){
+      if(inscriptionUserBase){
+        if(inscriptionUserBase.endDate === false){
+          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance),ending: new Date(),endDate: true});
+        }else{
+          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+        }
+      }else{
+        res.status(404).json({ message: "Este usuario no a comprado el curso"});
+      }
+    }else{
+      await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+    }
+    
     res.status(200).json({message: Math.round(avance)});
 
   } catch (error) {
@@ -819,7 +831,6 @@ courseCtrl.getCouponCourse = async (req,res) => {
 
 courseCtrl.exchangeCouponCourse = async (req,res) => {
   try {
-
     //agregar conicion de curso yt cupon que sea el mismo curso
     const { idUser,idCourse,code } = req.body;
     const courseBase = await modelCourse.findById(idCourse);
@@ -957,17 +968,5 @@ courseCtrl.createComentCourseTopic = async (req,res) => {
     console.log(error);
   }
 }
-
-courseCtrl.ContLikesComentCourseTopic = async (req,res) => {
-  try {
-    /* const { idCommentTopic } = req.body; */
-    const {} = req.body;
-  } catch (error) {
-    res.status(505).json({ message: "Error del servidor", error });
-    console.log(error);
-  }
-}
-
-
 
 module.exports = courseCtrl;
