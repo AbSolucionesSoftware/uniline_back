@@ -286,7 +286,7 @@ courseCtrl.createCourse = async (req, res) => {
             persentagePromotionCourse: 0,
             studentAdvance: "0",
             ending: false,
-            numCertificate: generateNumCertifictate.generateNumCertifictate()
+            numCertificate: reuserFunction.generateNumCertifictate.generateNumCertifictate()
           });
           await newInscription.save();
           res.status(200).json({ message: "Curso creado", userStored });
@@ -883,7 +883,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
           ending: false,
-          numCertificate: generateNumCertifictate.generateNumCertifictate()
+          numCertificate: reuserFunction.generateNumCertifictate.generateNumCertifictate()
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
