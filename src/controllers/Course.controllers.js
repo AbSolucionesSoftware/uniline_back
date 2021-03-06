@@ -809,21 +809,26 @@ courseCtrl.coursePrice = async (req,res) => {
 courseCtrl.courseFreeInscription = async (req,res) => {
   try {
     const courseBase = await modelCourse.findById(req.params.idCourse);
-    const newInscription = new modelInscription({
-      idCourse: re.params.idCourse,
-      idUser: req.params.idUser,
-      codeKey: "",
-      code: false,
-      priceCourse: courseBase.priceCourse.price,
-      freeCourse: true,
-      promotionCourse: courseBase.priceCourse.promotionPrice,
-      persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
-      studentAdvance: "0",
-      ending: false,
-      numCertificate: reuserFunction.generateNumCertifictate(10)
-    });
-    await newInscription.save();
-    res.status(200).json({message: "Curso adquirido."})
+    if(courseBase.priceCourse.free === true){
+      const newInscription = new modelInscription({
+        idCourse: re.params.idCourse,
+        idUser: req.params.idUser,
+        codeKey: "",
+        code: false,
+        priceCourse: courseBase.priceCourse.price,
+        freeCourse: true,
+        promotionCourse: courseBase.priceCourse.promotionPrice,
+        persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
+        studentAdvance: "0",
+        ending: false,
+        numCertificate: reuserFunction.generateNumCertifictate(10)
+      });
+      await newInscription.save();
+      res.status(200).json({message: "Curso adquirido."})
+    }else{
+      res.status(404).json({message: "Este curso no se puede adquirir"})
+    }
+
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
