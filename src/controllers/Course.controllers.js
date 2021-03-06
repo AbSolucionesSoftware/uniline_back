@@ -219,7 +219,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         };
         const numScription = await modelInscription.countDocuments({idCourse: courses[i]._id});
         courseActual.numInscription = numScription;
-        const Suminscription = await modelInscription.find({idCourse: [i]._id}, async);
+        const Suminscription = await modelInscription.find({idCourse: [i]._id});
         let sumTotal = 0;
         for(i=0; i < Suminscription.length; i++){
           if(Suminscription[i].promotionCourse > 0){
