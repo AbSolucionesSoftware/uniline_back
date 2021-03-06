@@ -222,10 +222,12 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         const Suminscription = await modelInscription.find({idCourse: [i]._id});
         let sumTotal = 0;
         for(y=0; y < Suminscription.length; y++){
-          if(Suminscription[y].promotionCourse > 0){
-            sumTotal+= Suminscription[y].promotionCourse;
-          }else{
-            sumTotal+= Suminscription[y].priceCourse;
+          if(Suminscription[y].code !== true){
+            if(Suminscription[y].promotionCourse > 0){
+              sumTotal+= Suminscription[y].promotionCourse;
+            }else{
+              sumTotal+= Suminscription[y].priceCourse;
+            }
           }
         }
         courseActual.sales = sumTotal;
