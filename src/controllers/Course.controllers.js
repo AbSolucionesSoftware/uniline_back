@@ -68,7 +68,7 @@ courseCtrl.getCourseView = async (req, res) => {
         newArray.totalTopics = countCursos;
 
         const inscriptions = await modelInscription.countDocuments({idCourse: course._id});
-        newArray.totalInscription = inscriptions;
+        newArray.totalInscription = inscriptions - 1;
 
         const commentCourse = await modelCommentCourse.find({idCourse: course._id}).populate('idUser');
         newArray.commentCourse = commentCourse;
