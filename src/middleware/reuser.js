@@ -15,7 +15,7 @@ ctrlFuncticon.generateNumCertifictate = async (length) => {
   for (var i = 0; i < length; i++) {
     result += Math.random(10)
   }
-  return result;
+  return toString(result);
 }
 
   module.exports = ctrlFuncticon;
