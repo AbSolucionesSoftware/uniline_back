@@ -11,11 +11,9 @@ ctrlFuncticon.generateCode = (length) => {
   }
 
 ctrlFuncticon.generateNumCertifictate = async (length) => {
-  var result = "";
-  var characters = "0123456789";
-  var charactersLength = characters.length;
+  var result = 0;
   for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += Math.random(10)
   }
   return result;
 }
