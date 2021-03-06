@@ -221,11 +221,11 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         courseActual.numInscription = numScription;
         const Suminscription = await modelInscription.find({idCourse: [i]._id});
         let sumTotal = 0;
-        for(i=0; i < Suminscription.length; i++){
-          if(Suminscription[i].promotionCourse > 0){
-            sumTotal+= Suminscription[i].promotionCourse;
+        for(y=0; y < Suminscription.length; y++){
+          if(Suminscription[y].promotionCourse > 0){
+            sumTotal+= Suminscription[y].promotionCourse;
           }else{
-            sumTotal+= Suminscription[i].priceCourse;
+            sumTotal+= Suminscription[y].priceCourse;
           }
         }
         courseActual.sales = sumTotal;
@@ -233,9 +233,10 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         courseActual.numCalification = numCalificationCourse;
         coursesFinal.push(courseActual);
       }
+
       console.log("linea final");
       res.status(200).json(coursesFinal);
-      
+
     });
     //console.log(course);
     
