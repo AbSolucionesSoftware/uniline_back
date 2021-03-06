@@ -208,9 +208,11 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
     });
-    console.log(course);
+    //console.log(course);
+    console.log(course.length);
     let coursesFinal = [];
     for( i=0; i< course.length; i++){
+      console.log(i);
       let courseActual = {
         course: course[i],
         numInscription: "",
