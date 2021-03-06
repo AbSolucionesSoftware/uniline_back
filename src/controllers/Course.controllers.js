@@ -235,6 +235,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
       }
       console.log("linea final");
       res.status(200).json(coursesFinal);
+      
     });
     //console.log(course);
     
