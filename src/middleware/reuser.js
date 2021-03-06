@@ -10,7 +10,7 @@ ctrlFuncticon.generateCode = (length) => {
     return result;
   }
 
-ctrlFuncticon.generateNumCertifictate = async (req,res) => {
+ctrlFuncticon.generateNumCertifictate = async (length) => {
   var result = 0;
   var character = "1234567890";
   var charactersLength = character.length;
