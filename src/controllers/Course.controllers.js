@@ -885,7 +885,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
           ending: false,
-          numCertificate: toString(num);
+          numCertificate: toString(num)
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
