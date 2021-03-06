@@ -873,7 +873,6 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
             exchange: true,
             idUser: idUser
           });
-          let num = reuserFunction.generateNumCertifictate(10);
         const newInscription = new modelInscription({
           idCourse: idCourse,
           idUser: idUser,
@@ -885,7 +884,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
           ending: false,
-          numCertificate: toString(num)
+          numCertificate: reuserFunction.generateNumCertifictate(10)
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
