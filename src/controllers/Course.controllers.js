@@ -212,7 +212,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
       for( i=0; i< courses.length; i++){
         console.log(i);
         let courseActual = {
-          course: course[i],
+          course: courses[i],
           numInscription: "",
           sales: "",
           numCalification: ""
