@@ -13,7 +13,7 @@ ctrlFuncticon.generateCode = (length) => {
 ctrlFuncticon.generateNumCertifictate = async (length) => {
   var result = "";
   for (var i = 0; i < length; i++) {
-    result += Math.floor(Math.random() * Math.floor(length)
+    result += Math.floor(Math.random() * Math.floor(length))
   }
   return result;
 }
