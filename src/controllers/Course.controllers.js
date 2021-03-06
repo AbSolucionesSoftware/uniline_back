@@ -275,6 +275,7 @@ courseCtrl.createCourse = async (req, res) => {
         if (!userStored) {
           res.status(404).json({ message: "Error al crear el curso." });
         } else {
+          let num = reuserFunction.generateNumCertifictate(10);
           const newInscription = new modelInscription({
             idCourse: userStored._id,
             idUser: userStored.idProfessor,
@@ -286,7 +287,7 @@ courseCtrl.createCourse = async (req, res) => {
             persentagePromotionCourse: 0,
             studentAdvance: "0",
             ending: false,
-            numCertificate: reuserFunction.generateNumCertifictate(10)
+            numCertificate: toString(num)
           });
           await newInscription.save();
           res.status(200).json({ message: "Curso creado", userStored });
@@ -872,6 +873,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
             exchange: true,
             idUser: idUser
           });
+          let num = reuserFunction.generateNumCertifictate(10);
         const newInscription = new modelInscription({
           idCourse: idCourse,
           idUser: idUser,
@@ -883,7 +885,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
           ending: false,
-          numCertificate: reuserFunction.generateNumCertifictate(10)
+          numCertificate: toString(num);
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
