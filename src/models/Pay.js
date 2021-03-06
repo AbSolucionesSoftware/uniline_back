@@ -1,16 +1,22 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+var Float = require("mongoose-float").loadType(mongoose, 4);
+const { Schema, model } = mongoose;
 
 const paySchema = new Schema(
   {
     stripeObject: String,
     triedPayment: String,
-    idCourse: {
-        type: Schema.ObjectId,
-        ref: 'course'
-    },
     idUser: {
        type: Schema.ObjectId,
        ref: 'user' 
+    },
+    priceCourse: Float,
+    pricePromotionCourse: Float,
+    promotion: Boolean,
+    persentagePromotionCourse: String,
+    idCourse: {
+      type: Schema.ObjectId,
+      ref: 'course'
     }
   },
   {

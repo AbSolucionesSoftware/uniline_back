@@ -208,23 +208,38 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
     });
-
-    /* const course = modelCourse.aggregate(
-      [
-        {
-          $match: {
-            idProfessor: req.params.idTeacher,
+    
+    /* let coursesFinal = [];
+    for( i=0; i< course.length; i++){
+      let courseActual = {
+        course: course[i],
+        numInscription: "",
+        sales: "",
+        numCafilification: ""
+      };
+      const numScription = await modelInscription.countDocuments({idCourse: course[i]._id});
+      courseActual.numInscription = numScription;
+      const numScription = await modelInscription.aggregate(
+        [
+          {
+            $match: {
+              idCourse: course[i]._id
+            }
           },
-        },
-        {
-          $lookup: {
-            from: ""
+          {
+            $group:
+              {
+                _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
+                totalAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } },
+                count: { $sum: 1 }
+              }
           }
-        }
-      ]
-      ,async function (err, course){
+        ]
+      )
+      courseActual.sales = 0;
+      const numScription = await modelCommentCourse.countDocuments({idCourse: course[i]._id});
+    } */
 
-    }) */
     console.log(course);
     res.status(200).json(course);
   } catch (error) {
