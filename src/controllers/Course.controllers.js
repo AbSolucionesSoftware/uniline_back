@@ -235,6 +235,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
       courseActual.numCalification = numCalificationCourse;
       coursesFinal.push(courseActual);
     }
+    console.log("linea final");
     res.status(200).json(coursesFinal);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
