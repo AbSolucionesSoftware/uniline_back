@@ -208,8 +208,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
     });
-    
-    /* let coursesFinal = [];
+    let coursesFinal = [];
     for( i=0; i< course.length; i++){
       let courseActual = {
         course: course[i],
@@ -219,29 +218,21 @@ courseCtrl.getCourseTeacher = async (req, res) => {
       };
       const numScription = await modelInscription.countDocuments({idCourse: course[i]._id});
       courseActual.numInscription = numScription;
-      const numScription = await modelInscription.aggregate(
-        [
-          {
-            $match: {
-              idCourse: course[i]._id
-            }
-          },
-          {
-            $group:
-              {
-                _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
-                totalAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } },
-                count: { $sum: 1 }
-              }
-          }
-        ]
-      )
-      courseActual.sales = 0;
-      const numScription = await modelCommentCourse.countDocuments({idCourse: course[i]._id});
-    } */
-
-    console.log(course);
-    res.status(200).json(course);
+      const Suminscription = await modelInscription.find({idCourse: course[i]._id});
+      let sumTotal = 0;
+      for(i=0; i < Suminscription.length; i++){
+        if(Suminscription[i].promotionCourse > 0){
+          sumTotal+= Suminscription[i].promotionCourse;
+        }else{
+          sumTotal+= Suminscription[i].priceCourse;
+        }
+      }
+      courseActual.sales = sumTotal;
+      const numCalificationCourse = await modelCommentCourse.countDocuments({idCourse: course[i]._id});
+      courseActual.numCafilification = numCalificationCourse;
+      coursesFinal.push(courseActual);
+    }
+    res.status(200).json(coursesFinal);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -283,6 +274,7 @@ courseCtrl.createCourse = async (req, res) => {
             promotionCourse: 0,
             persentagePromotionCourse: 0,
             studentAdvance: "0",
+            ending: false,
           });
           await newInscription.save();
           res.status(200).json({ message: "Curso creado", userStored });
