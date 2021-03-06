@@ -811,7 +811,7 @@ courseCtrl.courseFreeInscription = async (req,res) => {
     const courseBase = await modelCourse.findById(req.params.idCourse);
     if(courseBase.priceCourse.free === true){
       const newInscription = new modelInscription({
-        idCourse: re.params.idCourse,
+        idCourse: req.params.idCourse,
         idUser: req.params.idUser,
         codeKey: "",
         code: false,
