@@ -11,11 +11,11 @@ ctrlFuncticon.generateCode = (length) => {
   }
 
 ctrlFuncticon.generateNumCertifictate = async (length) => {
-  var result = 0;
+  var result = "";
   for (var i = 0; i < length; i++) {
     result += Math.random(10)
   }
-  return toString(result);
+  return result;
 }
 
   module.exports = ctrlFuncticon;
