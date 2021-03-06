@@ -10,7 +10,7 @@ ctrlFuncticon.generateCode = (length) => {
     return result;
   }
 
-ctrlFuncticon.generateNumCertifictate = async (length) => {
+ctrlFuncticon.generateNumCertifictate = (length) => {
   var result = "";
   for (var i = 0; i < length; i++) {
     result += Math.floor(Math.random() * Math.floor(length))
