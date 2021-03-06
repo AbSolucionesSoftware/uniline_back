@@ -234,11 +234,11 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         coursesFinal.push(courseActual);
       }
       console.log("linea final");
-      return coursesFinal
+      res.status(200).json(coursesFinal);
     });
     //console.log(course);
     
-    res.status(200).json(course);
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
