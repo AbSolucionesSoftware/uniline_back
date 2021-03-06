@@ -207,35 +207,37 @@ courseCtrl.getCourseTeacher = async (req, res) => {
   try {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
+    }, async ( err,courses ) => {
+      let coursesFinal = [];
+      for( i=0; i< courses.length; i++){
+        console.log(i);
+        let courseActual = {
+          course: course[i],
+          numInscription: "",
+          sales: "",
+          numCalification: ""
+        };
+        const numScription = await modelInscription.countDocuments({idCourse: courses[i]._id});
+        courseActual.numInscription = numScription;
+        const Suminscription = await modelInscription.find({idCourse: courses[i]._id}, async);
+        let sumTotal = 0;
+        for(i=0; i < Suminscription.length; i++){
+          if(Suminscription[i].promotionCourse > 0){
+            sumTotal+= Suminscription[i].promotionCourse;
+          }else{
+            sumTotal+= Suminscription[i].priceCourse;
+          }
+        }
+        courseActual.sales = sumTotal;
+        const numCalificationCourse = await modelCommentCourse.countDocuments({idCourse: courses[i]._id});
+        courseActual.numCalification = numCalificationCourse;
+        coursesFinal.push(courseActual);
+      }
+      console.log("linea final");
+      return coursesFinal
     });
     //console.log(course);
-    console.log(course.length);
-    let coursesFinal = [];
-    for( i=0; i< course.length; i++){
-      console.log(i);
-      let courseActual = {
-        course: course[i],
-        numInscription: "",
-        sales: "",
-        numCalification: ""
-      };
-      const numScription = await modelInscription.countDocuments({idCourse: course[i]._id});
-      courseActual.numInscription = numScription;
-      const Suminscription = await modelInscription.find({idCourse: course[i]._id});
-      let sumTotal = 0;
-      for(i=0; i < Suminscription.length; i++){
-        if(Suminscription[i].promotionCourse > 0){
-          sumTotal+= Suminscription[i].promotionCourse;
-        }else{
-          sumTotal+= Suminscription[i].priceCourse;
-        }
-      }
-      courseActual.sales = sumTotal;
-      const numCalificationCourse = await modelCommentCourse.countDocuments({idCourse: course[i]._id});
-      courseActual.numCalification = numCalificationCourse;
-      coursesFinal.push(courseActual);
-    }
-    console.log("linea final");
+    
     res.status(200).json(coursesFinal);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
