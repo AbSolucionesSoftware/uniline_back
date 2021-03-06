@@ -208,13 +208,14 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     const course = await modelCourse.find({
       idProfessor: req.params.idTeacher,
     });
+    console.log(course);
     let coursesFinal = [];
     for( i=0; i< course.length; i++){
       let courseActual = {
         course: course[i],
         numInscription: "",
         sales: "",
-        numCafilification: ""
+        numCalification: ""
       };
       const numScription = await modelInscription.countDocuments({idCourse: course[i]._id});
       courseActual.numInscription = numScription;
@@ -229,7 +230,7 @@ courseCtrl.getCourseTeacher = async (req, res) => {
       }
       courseActual.sales = sumTotal;
       const numCalificationCourse = await modelCommentCourse.countDocuments({idCourse: course[i]._id});
-      courseActual.numCafilification = numCalificationCourse;
+      courseActual.numCalification = numCalificationCourse;
       coursesFinal.push(courseActual);
     }
     res.status(200).json(coursesFinal);
@@ -792,6 +793,10 @@ courseCtrl.coursePrice = async (req,res) => {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
+}
+
+courseCtrl.courseFreeInscription = async (req,res) => {
+
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
