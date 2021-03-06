@@ -36,8 +36,8 @@ const {
     aggregateCommentCourse,
     moreBuyCourse,
     searchCourse,
-    getCourseDashUser
-
+    getCourseDashUser,
+    courseFreeInscription
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(auth,createCourse).get(getCourses);
@@ -118,5 +118,7 @@ router.route('/view/:slugCourse/user-progress/:idUser').get(auth,getCourseDashUs
 //<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
 
 router.route('/comment/:idUser/course/:idCourse').post(auth,aggregateCommentCourse);
+
+router.route('/:idCourse/inscription/course/free/user/:idUser').post(auth,courseFreeInscription);
 
 module.exports = router;
