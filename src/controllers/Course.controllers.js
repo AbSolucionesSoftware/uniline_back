@@ -286,6 +286,7 @@ courseCtrl.createCourse = async (req, res) => {
             persentagePromotionCourse: 0,
             studentAdvance: "0",
             ending: false,
+            numCertificate: generateNumCertifictate.generateNumCertifictate()
           });
           await newInscription.save();
           res.status(200).json({ message: "Curso creado", userStored });
@@ -806,7 +807,12 @@ courseCtrl.coursePrice = async (req,res) => {
 }
 
 courseCtrl.courseFreeInscription = async (req,res) => {
-
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
@@ -877,6 +883,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
           studentAdvance: "0",
           ending: false,
+          numCertificate: generateNumCertifictate.generateNumCertifictate()
         });
         await newInscription.save();
         res.status(200).json({message: "Codigo canjeado correctamente."});
