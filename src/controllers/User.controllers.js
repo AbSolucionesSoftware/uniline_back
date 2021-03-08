@@ -4,6 +4,9 @@ const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
 const uploadFile = require("../middleware/awsFile");
 const modelCart = require("../models/Cart");
+const blackListPass = require("../models/BlackListPassword");
+const reuserfunction = require("../middleware/reuser");
+const sendEmail = require("../middleware/sendEmail");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -226,7 +229,32 @@ userCtrl.signInUser = async (req, res) => {
 //Esta no esta
 userCtrl.generateCodeResetPassword = async (req,res) => {
   try {
-    
+    const { email } = req.body;
+    const newRecuperacion = new blackListPass({
+      email: email,
+      code: reuserfunction.generateCode(20),
+      verify: false
+    });
+
+    await newRecuperacion.save();
+    const urlReset = `https://www.cursosuniline.com/user/reset/password/${newRecuperacion.codigoVerificacion}`;
+    const htmlContentUser = `
+                <div>                    
+                    <h3 style="font-family: sans-serif; margin: 15px 15px;">Escuchamos que perdió su contraseña. ¡Lo siento por eso!</h3>
+                    <h4 style="font-family: sans-serif; margin: 15px 15px;">¡Pero no se preocupe! Se puede utilizar el siguiente enlace para restablecer la contraseña:</h4>
+					              <a href="${urlReset}">${urlReset}</a>
+                    <div style=" max-width: 550px; height: 100px;">
+                        <p style="padding: 10px 0px;">Al utilizar este codigo ya no podra volverse a usar.</p>
+                    </div>
+				</div>`;
+
+    await sendEmail.sendEmail(
+      email,
+      "Recuperacion",
+      htmlContentUser,
+      "uniline.course@gmail.com"
+    );
+    res.status(200).json({ message: "Correo enviado." });
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);
@@ -237,7 +265,7 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
 userCtrl.resetPassword = async (req, res) => {
   try {
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(505).json({message: "Error del servidor", error});
     console.log(error);
   }
 };
@@ -326,6 +354,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
       });
     }
   } catch (error) {
+    res.status(505).json({message: "Error del servidor", error});
     console.log(error);
   }
 };
@@ -379,7 +408,10 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
     } else {
       res.status(504).json({ message: "Este usuario no existe." });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.status(505).json({message: "Error del servidor", error});
+    console.log(error);
+  }
 };
 
 module.exports = userCtrl;

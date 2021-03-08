@@ -58,7 +58,6 @@ courseCtrl.getCourseView = async (req, res) => {
           totalTopics: "",
           totalInscription: "",
           commentCourse: [],
-          contentCourse: []
         };
         for(i = 0; i < blocks.length; i++){
           const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
