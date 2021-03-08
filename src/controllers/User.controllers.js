@@ -344,7 +344,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
             res.status(404).json({ message: "Contraseña incorrecta" });
           } else {
             console.log("Entro a cambiarla");
-            bcrypt.hash(currentPassword, null, null, function (err, hash) {
+            bcrypt.hash(password, null, null, function (err, hash) {
               if (err) {
                 res
                   .status(500)
