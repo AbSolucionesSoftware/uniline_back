@@ -296,7 +296,18 @@ userCtrl.verifyResetPassword = async (req, res) => {
                   await modelBlackList.findByIdAndUpdate(blackListBase._id, {
                     verify: true,
                   });
-                  res.status(200).json({message: "Actualizacion realizada."})
+                  const token = jwt.sign(
+                    {
+                      email: userBase.email,
+                      name: userBase.name,
+                      imagen: userBase.urlImage ? userBase.urlImage : null,
+                      _id: userBase._id,
+                      sessiontype: userBase.sessiontype,
+                      rol: userBase.type,
+                    },
+                    process.env.AUTH_KEY
+                  );
+                  res.status(200).json(token);
                 }
               });
             }else{

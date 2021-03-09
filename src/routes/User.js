@@ -12,7 +12,6 @@ const {
   userFirebaseSign,
   resetPasswordUserSession,
   generateCodeResetPassword,
-  resetPassword,
   verifyResetPassword
 } = require("../controllers/User.controllers");
 
