@@ -294,7 +294,7 @@ userCtrl.verifyResetPassword = async (req, res) => {
                   if (err) {
                     res.status(500).json({ message: "Error al encriptar la contraseña.", err });
                   } else {
-                    await modelUser.findByIdAndUpdate(userBase._id,{password: repeatPassword});
+                    await modelUser.findByIdAndUpdate(userBase._id,{password: hash});
                     await modelBlackList.findByIdAndUpdate(blackListBase._id, {
                       verify: true,
                     });
