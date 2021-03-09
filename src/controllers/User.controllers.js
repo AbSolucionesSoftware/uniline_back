@@ -237,7 +237,7 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
     });
 
     await newRecuperacion.save();
-    const urlReset = `https://www.uniline.online/user/reset/password/${newRecuperacion.code}`;
+    const urlReset = `https://www.uniline.online/reset_password/${newRecuperacion.code}`;
     const htmlContentUser = `
                 <div>                    
                     <h3 style="font-family: sans-serif; margin: 15px 15px;">Escuchamos que perdió su contraseña. ¡Lo siento por eso!</h3>
