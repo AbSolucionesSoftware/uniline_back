@@ -269,7 +269,6 @@ userCtrl.resetPassword = async (req, res) => {
   }
 };
 
-//Esta no esta
 userCtrl.verifyResetPassword = async (req, res) => {
   try {
     const blackListBase = await modelBlackList.findOne({
@@ -284,34 +283,38 @@ userCtrl.verifyResetPassword = async (req, res) => {
         const { password, repeatPassword } = req.body;
         const userBase = await modelUser.findOne({email: blackListBase.email});
         if(userBase){
-          if(!password && !repeatPassword){
-            res.status(500).json({message: "Las contasenas no existen."});
+          if(userBase.sessiontype === "Firebase"){
+            res.status(500).json({message: "Este usuario no tiene este privilegio."});
           }else{
-            if (password === repeatPassword) {
-              bcrypt.hash(password, null, null, async function (err, hash) {
-                if (err) {
-                  res.status(500).json({ message: "Error al encriptar la contraseña.", err });
-                } else {
-                  await modelUser.findByIdAndUpdate(userBase._id,{password: repeatPassword});
-                  await modelBlackList.findByIdAndUpdate(blackListBase._id, {
-                    verify: true,
-                  });
-                  const token = jwt.sign(
-                    {
-                      email: userBase.email,
-                      name: userBase.name,
-                      imagen: userBase.urlImage ? userBase.urlImage : null,
-                      _id: userBase._id,
-                      sessiontype: userBase.sessiontype,
-                      rol: userBase.type,
-                    },
-                    process.env.AUTH_KEY
-                  );
-                  res.status(200).json(token);
-                }
-              });
+            if(!password && !repeatPassword){
+              res.status(500).json({message: "Las contasenas no existen."});
             }else{
-                res.status(404).json({message: "Las constrasenas no son iguales."})
+              if (password === repeatPassword) {
+                bcrypt.hash(password, null, null, async function (err, hash) {
+                  if (err) {
+                    res.status(500).json({ message: "Error al encriptar la contraseña.", err });
+                  } else {
+                    await modelUser.findByIdAndUpdate(userBase._id,{password: repeatPassword});
+                    await modelBlackList.findByIdAndUpdate(blackListBase._id, {
+                      verify: true,
+                    });
+                    const token = jwt.sign(
+                      {
+                        email: userBase.email,
+                        name: userBase.name,
+                        imagen: userBase.urlImage ? userBase.urlImage : null,
+                        _id: userBase._id,
+                        sessiontype: userBase.sessiontype,
+                        rol: userBase.type,
+                      },
+                      process.env.AUTH_KEY
+                    );
+                    res.status(200).json(token);
+                  }
+                });
+              }else{
+                  res.status(404).json({message: "Las constrasenas no son iguales."})
+              }
             }
           }
         }else{
