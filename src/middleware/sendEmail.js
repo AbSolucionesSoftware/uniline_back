@@ -17,7 +17,7 @@ sendEmail.sendEmail = (emailAdmin,action,htmlContent,service) => {
 	})
 
 	const info = transporter.sendMail({
-		from:` '${service}' <${process.env.USER_EMAIL}>`,
+		from:` ${service} <${process.env.USER_EMAIL}>`,
 		to: emailAdmin,
 		subject: action,
 		html: htmlContent,

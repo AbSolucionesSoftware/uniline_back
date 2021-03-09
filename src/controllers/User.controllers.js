@@ -7,6 +7,7 @@ const modelCart = require("../models/Cart");
 const blackListPass = require("../models/BlackListPassword");
 const reuserfunction = require("../middleware/reuser");
 const sendEmail = require("../middleware/sendEmail");
+const modelBlackList = require("../models/BlackListPassword");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -58,7 +59,7 @@ userCtrl.createUser = async (req, res) => {
                       .json({ message: "Error al crear el usuario" });
                   } else {
                     const cart = new modelCart({
-                      idUser: userStored._id
+                      idUser: userStored._id,
                     });
                     await cart.save();
                     const token = jwt.sign(
@@ -135,9 +136,9 @@ userCtrl.getUser = async (req, res) => {
 
 userCtrl.editUser = async (req, res) => {
   try {
-    if(req.body.password){
+    if (req.body.password) {
       res.status(500).json({ message: "Error de datos enviados." });
-    }else{
+    } else {
       const userBase = await modelUser.findById(req.params.idUser);
       const updateUser = req.body;
       console.log(req.body);
@@ -156,7 +157,7 @@ userCtrl.editUser = async (req, res) => {
           }
         }
         await modelUser.findByIdAndUpdate(req.params.idUser, updateUser);
-  
+
         const userUpdate = await modelUser.findById(req.params.idUser);
         const token = jwt.sign(
           {
@@ -174,7 +175,6 @@ userCtrl.editUser = async (req, res) => {
         res.status(500).json({ message: "Este usuario no existe" });
       }
     }
-
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);
@@ -226,14 +226,13 @@ userCtrl.signInUser = async (req, res) => {
   }
 };
 
-//Esta no esta
-userCtrl.generateCodeResetPassword = async (req,res) => {
+userCtrl.generateCodeResetPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const newRecuperacion = new blackListPass({
       email: email,
       code: reuserfunction.generateCode(30),
-      verify: false
+      verify: false,
     });
 
     await newRecuperacion.save();
@@ -244,7 +243,7 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
                     <h4 style="font-family: sans-serif; margin: 15px 15px;">¡Pero no se preocupe! Se puede utilizar el siguiente enlace para restablecer la contraseña:</h4>
 					              <a href="${urlReset}">${urlReset}</a>
                     <div style=" max-width: 550px; height: 100px;">
-                        <p style="padding: 10px 0px;">Al utilizar este codigo ya no podra volverse a usar.</p>
+                        <p style="padding: 10px 0px;">Al utilizar este codigo ya no podra utilizarse de nuevo.</p>
                     </div>
 				</div>`;
 
@@ -259,13 +258,13 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
     res.status(500).json({ message: error });
     console.log(error);
   }
-}
+};
 
 //Esta no esta
 userCtrl.resetPassword = async (req, res) => {
   try {
   } catch (error) {
-    res.status(505).json({message: "Error del servidor", error});
+    res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
 };
@@ -273,6 +272,44 @@ userCtrl.resetPassword = async (req, res) => {
 //Esta no esta
 userCtrl.verifyResetPassword = async (req, res) => {
   try {
+    const blackListBase = await modelBlackList.findOne({
+      code: req.params.keyBlackList,
+    });
+    if (blackListBase) {
+      if (blackListBase.verify) {
+        res.status(505).json({
+            message: "Este codigo ya fue usado para cambiar la contrasena.",
+          });
+      } else {
+        const { password, repeatPassword } = req.body;
+        const userBase = await modelUser.findOne({email: blackListBase.email});
+        if(userBase){
+          if(!password && !repeatPassword){
+            res.status(500).json({message: "Las contasenas no existen."});
+          }else{
+            if (password === repeatPassword) {
+              bcrypt.hash(password, null, null, async function (err, hash) {
+                if (err) {
+                  res.status(500).json({ message: "Error al encriptar la contraseña.", err });
+                } else {
+                  await modelUser.findByIdAndUpdate(userBase._id,{password: repeatPassword});
+                  await modelBlackList.findByIdAndUpdate(blackListBase._id, {
+                    verify: true,
+                  });
+                  res.status(200).json({message: "Actualizacion realizada."})
+                }
+              });
+            }else{
+                res.status(404).json({message: "Las constrasenas no son iguales."})
+            }
+          }
+        }else{
+          res.status(404).json({message: "Este usuario no existe."});
+        }
+      }
+    } else {
+      req.status(404).json({ message: "Este codigo no existe." });
+    }
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);
@@ -332,7 +369,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
                 res.status(404).json({ message: "Error al crear el usuario" });
               } else {
                 const cart = new modelCart({
-                  idUser: userStored._id
+                  idUser: userStored._id,
                 });
                 await cart.save();
                 const token = jwt.sign(
@@ -354,7 +391,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(505).json({message: "Error del servidor", error});
+    res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
 };
@@ -382,19 +419,19 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
                 newUser.password = hash;
                 newUser.save(async (err, userStored) => {
                   if (err) {
-                    res
-                      .status(500)
-                      .json({
-                        message: "Ups, algo paso al registrar el usuario.",
-                        err,
-                      });
+                    res.status(500).json({
+                      message: "Ups, algo paso al registrar el usuario.",
+                      err,
+                    });
                   } else {
                     if (!userStored) {
                       res
                         .status(404)
                         .json({ message: "Error al crear el usuario" });
                     } else {
-                      res.status(200).json({ message: "Contraseña actualizada." });
+                      res
+                        .status(200)
+                        .json({ message: "Contraseña actualizada." });
                     }
                   }
                 });
@@ -409,7 +446,7 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
       res.status(504).json({ message: "Este usuario no existe." });
     }
   } catch (error) {
-    res.status(505).json({message: "Error del servidor", error});
+    res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
   }
 };
