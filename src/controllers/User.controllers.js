@@ -232,12 +232,12 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
     const { email } = req.body;
     const newRecuperacion = new blackListPass({
       email: email,
-      code: reuserfunction.generateCode(20),
+      code: reuserfunction.generateCode(30),
       verify: false
     });
 
     await newRecuperacion.save();
-    const urlReset = `https://www.cursosuniline.com/user/reset/password/${newRecuperacion.codigoVerificacion}`;
+    const urlReset = `https://www.uniline.online/user/reset/password/${newRecuperacion.code}`;
     const htmlContentUser = `
                 <div>                    
                     <h3 style="font-family: sans-serif; margin: 15px 15px;">Escuchamos que perdió su contraseña. ¡Lo siento por eso!</h3>
@@ -252,7 +252,7 @@ userCtrl.generateCodeResetPassword = async (req,res) => {
       email,
       "Recuperacion",
       htmlContentUser,
-      "uniline.course@gmail.com"
+      "Uniline"
     );
     res.status(200).json({ message: "Correo enviado." });
   } catch (error) {
