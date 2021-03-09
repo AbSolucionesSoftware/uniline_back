@@ -309,7 +309,7 @@ userCtrl.verifyResetPassword = async (req, res) => {
                       },
                       process.env.AUTH_KEY
                     );
-                    res.status(200).json(token);
+                    res.status(200).json({token});
                   }
                 });
               }else{
