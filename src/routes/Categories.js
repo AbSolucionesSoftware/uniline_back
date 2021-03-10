@@ -7,7 +7,7 @@ const {agregateCategorie,getCategories,editCategories,deleteCategories} = requir
 
 router.route('/').post(agregateCategorie).get(getCategories);
 
-router.route('/:idCategorie').put(auth,editCategories).delete(auth,deleteCategories);
+router.route('/:idCategorie').put(editCategories).delete(auth,deleteCategories);
 
 
 module.exports = router;
