@@ -19,9 +19,9 @@ const paySchema = new Schema(
     courses: [
       {
         priceCourse: Float,
-        pricePromotion: Float,
+        pricePromotionCourse: Float,
         promotion: Boolean,
-        persentagePromotionCourse: String,
+        persentagePromotion: String,
         idCourse: {
           type: Schema.ObjectId,
           ref: 'course'
