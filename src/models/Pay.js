@@ -19,7 +19,7 @@ const paySchema = new Schema(
     courses: [
       {
         priceCourse: Float,
-        pricePromotionCourse: Float,
+        pricePromotion: Float,
         promotion: Boolean,
         persentagePromotionCourse: String,
         idCourse: {
