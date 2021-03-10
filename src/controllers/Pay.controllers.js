@@ -23,7 +23,7 @@ payCtrl.createPay = async (req,res) => {
 				if (!userStored) {
 					res.status(404).json({ message: 'Error' });
 				} else {
-					res.status(200).json({ message: 'Todo correcto', userStored: userStored._id });
+					res.status(200).json({ message: 'Todo correcto', idPay: userStored._id });
 				}
 			}
 		});
