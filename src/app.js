@@ -37,6 +37,7 @@ app.use('/api/categories', require('./routes/Categories'));
 app.use('/api/cart', require('./routes/Cart'));
 app.use('/api/comment',require('./routes/Comment'));
 app.use('/api/homework',require('./routes/Homework'));
+app.use('/api/pay',require('./routes/Pay'));
 
 
 //carpeta publica

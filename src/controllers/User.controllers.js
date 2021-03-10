@@ -260,15 +260,6 @@ userCtrl.generateCodeResetPassword = async (req, res) => {
   }
 };
 
-//Esta no esta
-userCtrl.resetPassword = async (req, res) => {
-  try {
-  } catch (error) {
-    res.status(505).json({ message: "Error del servidor", error });
-    console.log(error);
-  }
-};
-
 userCtrl.verifyResetPassword = async (req, res) => {
   try {
     const blackListBase = await modelBlackList.findOne({

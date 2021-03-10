@@ -5,19 +5,29 @@ const { Schema, model } = mongoose;
 const paySchema = new Schema(
   {
     stripeObject: String,
+    payPalPayment: String,
     triedPayment: String,
     idUser: {
        type: Schema.ObjectId,
        ref: 'user' 
     },
-    priceCourse: Float,
-    pricePromotionCourse: Float,
-    promotion: Boolean,
-    persentagePromotionCourse: String,
-    idCourse: {
-      type: Schema.ObjectId,
-      ref: 'course'
-    }
+    nameUser: String,
+    typePay: String,
+    statusPay: Boolean,
+    total: String,
+    amount: String,
+    courses: [
+      {
+        priceCourse: Float,
+        pricePromotionCourse: Float,
+        promotion: Boolean,
+        persentagePromotionCourse: String,
+        idCourse: {
+          type: Schema.ObjectId,
+          ref: 'course'
+        },
+      }
+    ]
   },
   {
     timestamps: true,
