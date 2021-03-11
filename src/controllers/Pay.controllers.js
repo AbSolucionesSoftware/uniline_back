@@ -57,7 +57,7 @@ payCtrl.confirmPay = async (req, res) => {
       const payment = await stripe.paymentIntents.create({
         amount: payBase.amount,
         currency: "MXN",
-        description: toString(payBase._id),
+        description: payBase._id,
         payment_method_types: ["card"],
         payment_method: payBase.stripeObject,
         confirm: true,
