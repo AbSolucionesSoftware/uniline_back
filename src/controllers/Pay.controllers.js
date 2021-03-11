@@ -97,7 +97,7 @@ payCtrl.confirmPay = async (req, res) => {
                     idUser: payBase.idUser,
                   });
                   console.log(cartUser);
-                  cartUser.courses.map((courseCart) => {
+                  cartUser.courses.map(async(courseCart) => {
                     for(i=0; i < payBase.courses.length; i++){
                       if (toString(courseCart.course) === toString(payBase.courses[i].idCourse)) {
                         await modelCart.updateOne(
