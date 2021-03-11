@@ -5,6 +5,6 @@ const { createPay, confirmPay } = require("../controllers/Pay.controllers");
 
 router.route("/generate/").post(createPay);
 
-router.route("/comfirm/:idPay").put(confirmPay);
+router.route("/confirm/:idPay").put(confirmPay);
 
 module.exports = router;
