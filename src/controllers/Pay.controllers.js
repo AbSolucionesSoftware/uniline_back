@@ -92,11 +92,10 @@ payCtrl.confirmPay = async (req, res) => {
                     numCertificate: reuserFunction.generateNumCertifictate(10),
                   });
                   await newInscription.save(); */
-
+                });
+                for(z=0; z < payBase.courses.length; z++){
                   for(i=0; i < cartUser.courses.length; i++){
-                    console.log(cartUser.courses.length);
-                    console.log(cartUser.courses[i].course);
-                    if (course.idCourse == cartUser.courses[i].course) {
+                    if (payBase.courses[z].idCourse == cartUser.courses[i].course) {
                       console.log("llego");
                       await modelCart.updateOne(
                         {
@@ -112,8 +111,7 @@ payCtrl.confirmPay = async (req, res) => {
                       );
                     }
                   }
-                });
-
+                }
                 res.status(200).json({ message: "Pago realizado" });
               }
             }
