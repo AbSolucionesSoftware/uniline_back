@@ -2,10 +2,11 @@ const payCtrl = {};
 const { model } = require("../models/Pay");
 const modelPay = require("../models/Pay");
 const Stripe = require("stripe");
-const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
 const modelInscription = require("../models/Inscription");
 const reuserFunction = require("../middleware/reuser");
 const modelCart = require("../models/Cart");
+
+const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
 
 payCtrl.createPay = async (req, res) => {
   try {
@@ -20,7 +21,7 @@ payCtrl.createPay = async (req, res) => {
       cart,
     } = req.body;
     const newPay = new modelPay({
-      stripeObject: idStripe._id,
+      stripeObject: idStripe.id,
       idUser: idUser,
       nameUser: username,
       typePay: typePay,
