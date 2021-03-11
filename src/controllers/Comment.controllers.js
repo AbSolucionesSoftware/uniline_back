@@ -12,8 +12,6 @@ commentCtrl.getCommentsCourse = async (req,res) => {
         }else{
             match = { idCourse: req.params.idCourse}
         }
-        console.log(match);
-
         const comment = await modelComment.find(match).populate('idUser idCourse').populate({path: 'answers.idUser', model: 'user'}).sort({createdAt: 1});
         res.status(200).json(comment);
     } catch (error) {
@@ -24,7 +22,6 @@ commentCtrl.getCommentsCourse = async (req,res) => {
 
 commentCtrl.createCommentCourse = async (req,res) => {
     try {
-        /* const {comment, idTopic} = req.body; */
         const newComment = new modelComment(req.body);
         newComment.idCourse = req.params.idCourse;
         newComment.idUser = req.params.idUser;
@@ -67,9 +64,6 @@ commentCtrl.deleteCommentCourse = async (req,res) => {
 commentCtrl.createAnswerCommentCourse = async (req,res) => {
     try {
         const { comment } = req.body;
-        console.log(req.body);
-        console.log(req.params.idComment);
-        console.log(req.params.idUser);
         await modelComment.updateOne(
             {
                 _id: req.params.idComment

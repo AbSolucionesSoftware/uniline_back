@@ -25,7 +25,6 @@ userCtrl.uploadFile = async (req, res, next) => {
 
 userCtrl.createUser = async (req, res) => {
   try {
-    console.log(req.body);
     const { name, email, password, repeatPassword, acceptPolicies } = req.body;
     const newUser = new modelUser();
 
@@ -73,7 +72,6 @@ userCtrl.createUser = async (req, res) => {
                       },
                       process.env.AUTH_KEY
                     );
-                    console.log("Token: " + token);
                     res.json({ token });
                   }
                 }
@@ -141,10 +139,8 @@ userCtrl.editUser = async (req, res) => {
     } else {
       const userBase = await modelUser.findById(req.params.idUser);
       const updateUser = req.body;
-      console.log(req.body);
       if (userBase) {
         if (req.file) {
-          console.log(req.file);
           updateUser.keyImage = req.file.key;
           updateUser.urlImage = req.file.location;
           if (userBase.keyImage) {
@@ -192,7 +188,6 @@ userCtrl.courseUser = async (req, res) => {
 userCtrl.signInUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     const userBase = await modelUser.findOne({ email: email });
 
     if (userBase) {
@@ -324,11 +319,8 @@ userCtrl.verifyResetPassword = async (req, res) => {
 userCtrl.userFirebaseSign = async (req, res) => {
   try {
     const { email, name } = req.body;
-    console.log(req.body);
     const userBase = await modelUser.findOne({ email: email });
     if (userBase) {
-      console.log("entro a existente");
-
       if (userBase.sessiontype === "Firebase") {
         if (!bcrypt.compareSync(email, userBase.password)) {
           res.status(500).json({ message: "Contraseña incorrecta" });
@@ -351,7 +343,6 @@ userCtrl.userFirebaseSign = async (req, res) => {
         res.status(500).json({ message: "Este usuario es invalido invalido." });
       }
     } else {
-      console.log("Entro a registro");
       const newUser = new modelUser();
       bcrypt.hash(email, null, null, function (err, hash) {
         if (err) {
@@ -414,7 +405,6 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
           if (!bcrypt.compareSync(currentPassword, userBase.password)) {
             res.status(404).json({ message: "Contraseña incorrecta" });
           } else {
-            console.log("Entro a cambiarla");
             bcrypt.hash(password, null, null, function (err, hash) {
               if (err) {
                 res

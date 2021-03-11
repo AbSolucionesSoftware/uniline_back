@@ -203,7 +203,6 @@ courseCtrl.getCourseTeacher = async (req, res) => {
     }, async ( err,courses ) => {
       let coursesFinal = [];
       for( i=0; i< courses.length; i++){
-        console.log(i);
         let courseActual = {
           course: courses[i],
           numInscription: "",
@@ -228,9 +227,6 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         courseActual.numCalification = numCalificationCourse;
         coursesFinal.push(courseActual);
       }
-
-      console.log("linea final");
-      console.log(coursesFinal);
       res.status(200).json(coursesFinal);
 
     });
@@ -245,7 +241,6 @@ courseCtrl.getCourseTeacher = async (req, res) => {
 
 courseCtrl.editLerningsRequiredStudents = async (req, res) => {
   try {
-    console.log(req.body);
     await modelCourse.findByIdAndUpdate(req.params.idCourse, req.body);
     res.status(200).json({ message: "Curso actualizado" });
   } catch (error) {
@@ -294,7 +289,6 @@ courseCtrl.createCourse = async (req, res) => {
 
 courseCtrl.editCourse = async (req, res) => {
   try {
-    console.log(req.body);
     const courseBase = await modelCourse.findById(req.params.idCourse);
     if (courseBase) {
       const editCourse = req.body;
@@ -315,7 +309,6 @@ courseCtrl.uploadFileCourse = async (req, res) => {
     const editImagen = {};
     if (courseBase) {
       if (req.file) {
-        console.log(req.file);
         if (courseBase.keyPromotionalImage) {
           uploadFileAws.eliminarImagen(courseBase.keyPromotionalImage);
         }
@@ -337,7 +330,6 @@ courseCtrl.uploadFileCourse = async (req, res) => {
 
 courseCtrl.uploadVideoCourse = async (req, res) => {
   try {
-    console.log(req.body);
     const video = req.body;
     await modelCourse.findByIdAndUpdate(req.params.idCourse, video);
     res.status(200).json({ message: "Video subido correctamente" });
@@ -356,7 +348,6 @@ courseCtrl.getListCourse = async (req, res) => {
       async function (err, GroupBlocks) {
         const listCourseAdmin = [];
         for(i = 0; i < GroupBlocks.length; i++){
-          console.log(GroupBlocks[i]);
           const topics = await modelTopic.aggregate(
             [
               {
@@ -413,9 +404,7 @@ courseCtrl.getListCourse = async (req, res) => {
 
 courseCtrl.getCourseUser = async (req,res) => {
   try {
-    console.log(req.params.idUser);
     const course = await modelInscription.find({idUser: req.params.idUser}).populate('idCourse');
-    console.log(course);
     res.status(200).json(course)
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
@@ -427,7 +416,6 @@ courseCtrl.publicCourse = async (req,res) => {
   try {
     const { publication } = req.body;
     const courseBase = await modelCourse.findById(req.params.idCourse);
-    console.log(courseBase);
     if(courseBase){
         if(
           !courseBase.title || 
@@ -477,7 +465,6 @@ courseCtrl.moreBuyCourse = async (req,res) => {
           }
        ]
        ).limit(10);
-       console.log(course);
        for(i = 0; i < course.length; i++){
         apiCourses.push(await modelCourse.findById(course[i]._id));
        }
@@ -585,7 +572,6 @@ courseCtrl.createTopicBlock = async (req, res) => {
 
 courseCtrl.VideoTopicBlock = async (req, res) => {
   try {
-    console.log(req.body);
     const newUploadVideo = req.body;
     await modelTopic.findByIdAndUpdate(req.params.idTopic, newUploadVideo);
     res.status(200).json({ message: "Video agregado" });
@@ -603,7 +589,6 @@ courseCtrl.uploadResourceTopic = async (req, res) => {
     };
 
     if (req.file) {
-      console.log(req.file);
       model.keyDownloadResource = req.file.key;
       model.urlDownloadResource = req.file.location;
     }
@@ -643,7 +628,6 @@ courseCtrl.deleteResoursceTopic = async (req, res) => {
     if (topicBase.resources.length) {
       for (i = 0; i < topicBase.resources.length; i++) {
         if (topicBase.resources[i]._id == req.params.idResourceTopic) {
-          console.log(req.params.idResourceTopic);
           if (topicBase.resources[i].keyDownloadResource) {
             uploadFileAws.eliminarImagen(
               topicBase.resources[i].keyDownloadResource
@@ -722,7 +706,6 @@ courseCtrl.editOrderTopic = async (req, res) => {
           await modelBlock.findByIdAndUpdate(orderBlock.block._id, {preference: index + 1 })
           if(orderBlock.topics.length > 0){
              orderBlock.topics.map(async (topic,index) => {
-              console.log(topic._id);
                   await modelTopic.findByIdAndUpdate(topic._id,{preference: index + 1})
              })
           }
@@ -737,7 +720,6 @@ courseCtrl.editOrderTopic = async (req, res) => {
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
     const {idTopic, idUser, idCourse, public } = req.body;
-    console.log(req.body);
     if(public == false){
       const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
       if(deleteTopicComplete){
@@ -785,7 +767,6 @@ courseCtrl.registerTopicComplete = async (req, res) => {
 
 courseCtrl.coursePrice = async (req,res) => {
   try {
-    console.log(req.body);
     const course = await modelCourse.findById(req.params.idCourse);
     if(course){
       await modelCourse.findByIdAndUpdate(req.params.idCourse,req.body);
@@ -876,9 +857,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
     const { idUser,idCourse,code } = req.body;
     const courseBase = await modelCourse.findById(idCourse);
     const courseCoup = await modelCoupon.findOne({code});
-    console.log(req.body);
     if(courseCoup){
-      console.log(courseCoup);
       if(courseCoup.exchange === false){
         await modelCoupon.findByIdAndUpdate(courseCoup._id,
           {
@@ -950,9 +929,7 @@ courseCtrl.aggregateCommentCourse = async (req,res) => {
 
 courseCtrl.searchCourse = async (req,res) => {
   try {
-    console.log(req.params.search);
     const  search  = req.params.search;
-    console.log(search);
     await modelCourse.aggregate(
       [
 				{

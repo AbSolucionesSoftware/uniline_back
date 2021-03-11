@@ -59,9 +59,10 @@ payCtrl.confirmPay = async (req, res) => {
         currency: "MXN",
         description: toString(payBase._id),
         payment_method_types: ["card"],
-        payment_method: null,
+        payment_method: payBase.stripeObject,
         confirm: true,
       });
+
       console.log(payBase);
 
       if (payment) {

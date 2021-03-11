@@ -5,7 +5,6 @@ const modelUser = require('../models/User');
 cartCtrl.aggregateCourse = async (req, res) => {
     try {
         const { idCourse } = req.body;
-        console.log(req.body);
         const userBase = await modelCart.findOne({idUser: req.params.idUser});
         if(userBase){
             await modelCart.updateOne(
@@ -90,11 +89,8 @@ cartCtrl.getCartCourse = async (req, res) => {
             courseNew = cartUser.courses[i].course;
             const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
             courseNew.idProfessor = user;
-            courses.push(courseNew);
         }
-        //console.log(newCart);
         newCart.coursess = courses;
-        console.log(newCart);
         res.status(200).json(newCart);
     } catch (error) {
         res.status(500).json({ message: error });
