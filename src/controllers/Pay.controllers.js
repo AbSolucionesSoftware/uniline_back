@@ -94,7 +94,7 @@ payCtrl.confirmPay = async (req, res) => {
                   await newInscription.save(); */
 
                   for(i=0; i < cartUser.courses.length; i++){
-                    if (course.idCourse === cartUser.courses[i].course) {\
+                    if (course.idCourse === cartUser.courses[i].course) {
                       console.log("llego");
                       await modelCart.updateOne(
                         {
