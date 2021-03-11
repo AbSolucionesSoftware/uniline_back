@@ -18,7 +18,6 @@ payCtrl.createPay = async (req, res) => {
       idUser,
       total,
       typePay,
-      cart,
     } = req.body;
     const newPay = new modelPay({
       stripeObject: idStripe.id,
@@ -28,8 +27,7 @@ payCtrl.createPay = async (req, res) => {
       statusPay: false,
       total: total,
       amount: Math.round(100 * parseFloat(total)),
-      courses: courses,
-      cart: cart,
+      courses: courses
     });
     await newPay.save((err, userStored) => {
       if (err) {
@@ -92,33 +90,28 @@ payCtrl.confirmPay = async (req, res) => {
                   });
                   await newInscription.save();
                 });
-                if (payBase.cart) {
-                  const cartUser = await modelCart.findOne({
-                    idUser: payBase.idUser,
-                  });
-                  console.log(cartUser);
-                  cartUser.courses.map(async(courseCart) => {
-                    for(i=0; i < payBase.courses.length; i++){
-                      if (toString(courseCart.course) === toString(payBase.courses[i].idCourse)) {
-                        await modelCart.updateOne(
-                          {
-                            _id: cartUser._id,
-                          },
-                          {
-                            $pull: {
-                              courses: {
-                                _id: courseCart._id,
-                              },
+                const cartUser = await modelCart.findOne({
+                  idUser: payBase.idUser,
+                });
+                console.log(cartUser);
+                cartUser.courses.map(async(courseCart) => {
+                  for(i=0; i < payBase.courses.length; i++){
+                    if (toString(courseCart.course) === toString(payBase.courses[i].idCourse)) {
+                      await modelCart.updateOne(
+                        {
+                          _id: cartUser._id,
+                        },
+                        {
+                          $pull: {
+                            courses: {
+                              _id: courseCart._id,
                             },
-                          }
-                        );
-                      }
+                          },
+                        }
+                      );
                     }
-                    payBase.courses.map(async (courseCompra) => {
-                      
-                    });
-                  });
-                }
+                  }
+                });
                 res.status(200).json({ message: "Pago realizado" });
               }
             }

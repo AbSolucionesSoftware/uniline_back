@@ -16,7 +16,6 @@ const paySchema = new Schema(
     statusPay: Boolean,
     total: String,
     amount: String,
-    cart: Boolean,
     courses: [
       {
         priceCourse: Float,
