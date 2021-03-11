@@ -63,7 +63,6 @@ courseCtrl.getCourseView = async (req, res) => {
           const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
           countCursos+= topics;
         }
-        console.log(countCursos);
         newArray.totalTopics = countCursos;
 
         const inscriptions = await modelInscription.countDocuments({idCourse: course._id});
@@ -134,7 +133,6 @@ courseCtrl.getCourseDashUser = async (req, res) => {
         const topics = await modelTopic.countDocuments({idBlock: blocks[i]._id});
         countCursos+= topics;
       }
-      console.log(countCursos);
       newArray.totalTopics = countCursos;
 
       const inscriptions = await modelInscription.countDocuments({idCourse: course._id});
@@ -148,17 +146,13 @@ courseCtrl.getCourseDashUser = async (req, res) => {
 
       const endTopic = await modelTopicComplete.find({idCourse: course._id, idUser: req.params.idUser}).sort({createdAt: -1});
       if(endTopic.length > 0){
-        console.log("tema end entre complete");
         newArray.endTopicView = endTopic[0].idTopic;
-        console.log(endTopic[0].idTopic);
       }else{
-        console.log("tema end topic");
         const blocks = await modelBlock.find({ idCourse: course._id }).sort({preference: 1});
         if(blocks.length > 0){
           const topicsCourse = await modelTopic.find({idBlock: blocks[0]._id}).sort({preference: 1});
           if(topicsCourse.length > 0){
             newArray.endTopicView = topicsCourse[0]._id;
-            console.log(topicsCourse[0]._id);
           }else{
             newArray.endTopicView = null;
           }
