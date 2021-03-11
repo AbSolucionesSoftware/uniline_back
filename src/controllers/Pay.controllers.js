@@ -96,9 +96,10 @@ payCtrl.confirmPay = async (req, res) => {
                   const cartUser = await modelCart.findOne({
                     idUser: payBase.idUser,
                   });
+                  console.log(cartUser);
                   cartUser.courses.map((courseCart) => {
-                    payBase.courses.map(async (courseCompra) => {
-                      if (courseCart.course === courseCompra.idCourse) {
+                    for(i=0; i < payBase.courses.length; i++){
+                      if (toString(courseCart.course) === toString(payBase.courses[i].idCourse)) {
                         await modelCart.updateOne(
                           {
                             _id: cartUser._id,
@@ -112,6 +113,9 @@ payCtrl.confirmPay = async (req, res) => {
                           }
                         );
                       }
+                    }
+                    payBase.courses.map(async (courseCompra) => {
+                      
                     });
                   });
                 }
