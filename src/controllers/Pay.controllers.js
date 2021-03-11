@@ -74,6 +74,9 @@ payCtrl.confirmPay = async (req, res) => {
               if (!postStored) {
                 res.status(500).json({ message: "Error al crear el pago." });
               } else {
+                const cartUser = await modelCart.findOne({
+                  idUser: payBase.idUser,
+                });
                 payBase.courses.map(async (course) => {
                   const newInscription = new modelInscription({
                     idCourse: course.idCourse,
@@ -89,14 +92,9 @@ payCtrl.confirmPay = async (req, res) => {
                     numCertificate: reuserFunction.generateNumCertifictate(10),
                   });
                   await newInscription.save();
-                });
-                const cartUser = await modelCart.findOne({
-                  idUser: payBase.idUser,
-                });
-                console.log(cartUser);
-                cartUser.courses.map(async(courseCart) => {
-                  for(i=0; i < payBase.courses.length; i++){
-                    if (courseCart.course === payBase.courses[i].idCourse) {
+                  
+                  for(i=0; i < cartUser.courses.length; i++){
+                    if (course.idCourse === cartUser.courses[i].course) {
                       await modelCart.updateOne(
                         {
                           _id: cartUser._id,
@@ -104,7 +102,7 @@ payCtrl.confirmPay = async (req, res) => {
                         {
                           $pull: {
                             courses: {
-                              _id: courseCart._id,
+                              _id: cartUser.courses[i]._id,
                             },
                           },
                         }
@@ -112,6 +110,7 @@ payCtrl.confirmPay = async (req, res) => {
                     }
                   }
                 });
+
                 res.status(200).json({ message: "Pago realizado" });
               }
             }
