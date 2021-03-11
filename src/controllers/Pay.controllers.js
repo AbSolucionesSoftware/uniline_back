@@ -62,6 +62,7 @@ payCtrl.confirmPay = async (req, res) => {
         payment_method: null,
         confirm: true,
       });
+      console.log(payBase);
 
       if (payment) {
         await modelPay.findByIdAndUpdate(
