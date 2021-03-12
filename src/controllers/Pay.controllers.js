@@ -6,6 +6,7 @@ const modelInscription = require("../models/Inscription");
 const reuserFunction = require("../middleware/reuser");
 const modelCart = require("../models/Cart");
 const modelCourse = require("../models/Course");
+const modelUser = require("../models/User");
 
 const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
 
@@ -140,8 +141,14 @@ payCtrl.getPay = async (req,res) => {
           if(err){
             res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
           }else{
-            console.log(populatedTransactions);
-            res.status(200).json(populatedTransactions);
+            await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, function(err, populatedTransactions2) {
+              // Your populated translactions are inside populatedTransactions
+              if(err){
+                res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
+              }else{
+                res.status(200).json(populatedTransactions2);
+              }
+            });
           }
         });
 			}			
