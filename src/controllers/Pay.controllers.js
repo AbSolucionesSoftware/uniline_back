@@ -58,9 +58,7 @@ payCtrl.confirmPay = async (req, res) => {
         amount: payBase.amount,
         currency: "MXN",
         description: JSON.stringify(payBase._id),
-        payment_method_types: ["card"],
-        payment_method: payBase.stripeObject,
-        confirm: true,
+        source: sesionStripe.id,
       });
       if (payment) {
         await modelPay.findByIdAndUpdate(
