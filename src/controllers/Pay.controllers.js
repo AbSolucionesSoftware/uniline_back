@@ -54,7 +54,7 @@ payCtrl.confirmPay = async (req, res) => {
     const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
     console.log(payBase);
     if (payBase) {
-      const payment = await stripe.paymentIntents.create({
+      const payment = await stripe.charges.create({
         amount: payBase.amount,
         currency: "MXN",
         description: JSON.stringify(payBase._id),
