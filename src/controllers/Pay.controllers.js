@@ -52,13 +52,14 @@ payCtrl.confirmPay = async (req, res) => {
   try {
     const payBase = await modelPay.findById(req.params.idPay);
     const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
-    console.log(payBase);
     if (payBase) {
-      const payment = await stripe.charges.create({
+      const payment = await stripe.paymentIntents.create({
         amount: payBase.amount,
         currency: "MXN",
         description: JSON.stringify(payBase._id),
-        source: payBase.stripeObject,
+        payment_method_types: ["card"],
+        payment_method: payBase.stripeObject,
+        confirm: true,
       });
       if (payment) {
         await modelPay.findByIdAndUpdate(
