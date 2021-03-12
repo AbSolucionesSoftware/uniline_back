@@ -130,8 +130,6 @@ payCtrl.confirmPay = async (req, res) => {
   }
 };
 
-
-
 payCtrl.getPay = async (req,res) => {
   try {
     await modelPay.findById(req.params.idPay, async (err, courses) => {
