@@ -130,8 +130,9 @@ payCtrl.confirmPay = async (req, res) => {
 
 payCtrl.getPay = async (req,res) => {
   try {
-    const pay = await modelPay.findById(req.params.IdPay);
-    res.status(200).json(pay.courses);
+    const pay = await modelPay.findById(req.params.idPay);
+    console.log(pay);
+    res.status(200).json(pay);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
