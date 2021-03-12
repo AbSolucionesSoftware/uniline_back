@@ -82,16 +82,21 @@ cartCtrl.deleteCourse = async (req, res) => {
 cartCtrl.getCartCourse = async (req, res) => {
     try {
         const cartUser = await modelCart.findOne({idUser: req.params.idUser}).populate('idUser').populate({ path: 'courses.course', model: "course" });
-        let newCart = cartUser;
-        let courses = [];
-        let courseNew = {};
-        for(i = 0; i < cartUser.courses.length; i++ ){
-            courseNew = cartUser.courses[i].course;
-            const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
-            courseNew.idProfessor = user;
+        if(cartUser){
+            let newCart = cartUser;
+            let courses = [];
+            let courseNew = {};
+            for(i = 0; i < cartUser.courses.length; i++ ){
+                courseNew = cartUser.courses[i].course;
+                const user = await modelUser.findById(cartUser.courses[i].course.idProfessor);
+                courseNew.idProfessor = user;
+            }
+            newCart.coursess = courses;
+            res.status(200).json(newCart);
+        }else{
+            res.status(500).json({ message: "El usuario no existe." });
         }
-        newCart.coursess = courses;
-        res.status(200).json(newCart);
+
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error);
