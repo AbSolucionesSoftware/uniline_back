@@ -62,9 +62,6 @@ payCtrl.confirmPay = async (req, res) => {
         payment_method: payBase.stripeObject,
         confirm: true,
       });
-
-      console.log(payBase);
-
       if (payment) {
         await modelPay.findByIdAndUpdate(
           payBase._id,
@@ -80,7 +77,7 @@ payCtrl.confirmPay = async (req, res) => {
                   idUser: payBase.idUser,
                 });
                 payBase.courses.map(async (course) => {
-                  /* const newInscription = new modelInscription({
+                  const newInscription = new modelInscription({
                     idCourse: course.idCourse,
                     idUser: payBase.idUser,
                     codeKey: "",
@@ -93,7 +90,7 @@ payCtrl.confirmPay = async (req, res) => {
                     ending: false,
                     numCertificate: reuserFunction.generateNumCertifictate(10),
                   });
-                  await newInscription.save(); */
+                  await newInscription.save();
                 });
                 for(z=0; z < payBase.courses.length; z++){
                   for(i=0; i < cartUser.courses.length; i++){
@@ -157,7 +154,6 @@ payCtrl.getPay = async (req,res) => {
           });
         }
 			}			
-
     });
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
