@@ -133,6 +133,7 @@ payCtrl.confirmPay = async (req, res) => {
 payCtrl.getPay = async (req,res) => {
   try {
     await modelPay.findById(req.params.idPay, async (err, courses) => {
+      console.log(courses);
       if(err){
 				res.status(505).json({ message: 'Ups, algo paso', err });
 			}else{
