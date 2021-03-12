@@ -97,7 +97,7 @@ payCtrl.confirmPay = async (req, res) => {
                   for(i=0; i < cartUser.courses.length; i++){
                     console.log(JSON.stringify(payBase.courses[z].idCourse));
                     console.log(JSON.stringify(cartUser.courses[i].course));
-                    if (payBase.courses[z].idCourse === cartUser.courses[i].course) {
+                    if (JSON.stringify(payBase.courses[z].idCourse) === JSON.stringify(cartUser.courses[i].course)) {
                       console.log("llego");
                       await modelCart.updateOne(
                         {
