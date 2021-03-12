@@ -136,21 +136,25 @@ payCtrl.getPay = async (req,res) => {
       if(err){
 				res.status(505).json({ message: 'Ups, algo paso', err });
 			}else{
-        await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err, populatedTransactions) {
-          // Your populated translactions are inside populatedTransactions
-          if(err){
-            res.status(505).json({ message: 'Ups, algo paso', err });
-          }else{
-            await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err, populatedTransactions2) {
-              // Your populated translactions are inside populatedTransactions
-              if(err){
-                res.status(505).json({ message: 'Ups, algo paso', err });
-              }else{
-                res.status(200).json(populatedTransactions2.courses);
-              }
-            });
-          }
-        });
+        if(!courses){
+          res.status(505).json({ message: 'Ups, algo paso', err });
+        }else{
+          await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err, populatedTransactions) {
+            // Your populated translactions are inside populatedTransactions
+            if(err){
+              res.status(505).json({ message: 'Ups, algo paso', err });
+            }else{
+              await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err, populatedTransactions2) {
+                // Your populated translactions are inside populatedTransactions
+                if(err){
+                  res.status(505).json({ message: 'Ups, algo paso', err });
+                }else{
+                  res.status(200).json(populatedTransactions2.courses);
+                }
+              });
+            }
+          });
+        }
 			}			
 
     });
