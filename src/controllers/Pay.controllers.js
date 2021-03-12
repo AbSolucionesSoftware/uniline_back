@@ -95,10 +95,7 @@ payCtrl.confirmPay = async (req, res) => {
                 });
                 for(z=0; z < payBase.courses.length; z++){
                   for(i=0; i < cartUser.courses.length; i++){
-                    console.log(JSON.stringify(payBase.courses[z].idCourse));
-                    console.log(JSON.stringify(cartUser.courses[i].course));
                     if (JSON.stringify(payBase.courses[z].idCourse) === JSON.stringify(cartUser.courses[i].course)) {
-                      console.log("llego");
                       await modelCart.updateOne(
                         {
                           _id: cartUser._id,
@@ -134,7 +131,7 @@ payCtrl.confirmPay = async (req, res) => {
 payCtrl.getPay = async (req,res) => {
   try {
     const pay = await modelPay.findById(req.params.IdPay);
-    res.status(200).json(pay);
+    res.status(200).json(pay.courses);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
