@@ -8,8 +8,6 @@ const modelCart = require("../models/Cart");
 const modelCourse = require("../models/Course");
 const modelUser = require("../models/User");
 
-const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
-
 payCtrl.createPay = async (req, res) => {
   try {
     console.log(req.body);
@@ -53,6 +51,7 @@ payCtrl.createPay = async (req, res) => {
 payCtrl.confirmPay = async (req, res) => {
   try {
     const payBase = await modelPay.findById(req.params.idPay);
+    const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
     if (payBase) {
       const payment = await stripe.paymentIntents.create({
         amount: payBase.amount,
