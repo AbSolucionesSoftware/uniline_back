@@ -5,6 +5,7 @@ const Stripe = require("stripe");
 const modelInscription = require("../models/Inscription");
 const reuserFunction = require("../middleware/reuser");
 const modelCart = require("../models/Cart");
+const modelCourse = require("../models/Course");
 
 const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
 
@@ -130,10 +131,21 @@ payCtrl.confirmPay = async (req, res) => {
 
 payCtrl.getPay = async (req,res) => {
   try {
-    const pay = await modelPay.findById(req.params.idPay);
-    console.log(pay);
-    console.log(req.params.idPay);
-    res.status(200).json(pay.courses);
+    const pay = await modelPay.findById(req.params.idPay, async (err, courses) => {
+      if(err){
+				res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
+			}else{
+        await modelCourse.populate(courses, {path: 'courses.idCourse'}, function(err, populatedTransactions) {
+          // Your populated translactions are inside populatedTransactions
+          if(err){
+            res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
+          }else{
+            res.status(200).json(populatedTransactions);
+          }
+        });
+			}			
+
+    });
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
