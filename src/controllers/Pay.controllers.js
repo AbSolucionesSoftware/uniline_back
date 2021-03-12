@@ -76,20 +76,23 @@ payCtrl.confirmPay = async (req, res) => {
                   idUser: payBase.idUser,
                 });
                 payBase.courses.map(async (course) => {
-                  const newInscription = new modelInscription({
-                    idCourse: course.idCourse,
-                    idUser: payBase.idUser,
-                    codeKey: "",
-                    code: false,
-                    priceCourse: course.priceCourse,
-                    freeCourse: false,
-                    promotionCourse: course.pricePromotionCourse,
-                    persentagePromotionCourse: course.persentagePromotion,
-                    studentAdvance: "0",
-                    ending: false,
-                    numCertificate: reuserFunction.generateNumCertifictate(10),
-                  });
-                  await newInscription.save();
+                  const inscriptionBase = await modelInscription.findOne({idCourse: course.idCourse, idUser: payBase.idUser});
+                  if(!inscriptionBase){
+                    const newInscription = new modelInscription({
+                      idCourse: course.idCourse,
+                      idUser: payBase.idUser,
+                      codeKey: "",
+                      code: false,
+                      priceCourse: course.priceCourse,
+                      freeCourse: false,
+                      promotionCourse: course.pricePromotionCourse,
+                      persentagePromotionCourse: course.persentagePromotion,
+                      studentAdvance: "0",
+                      ending: false,
+                      numCertificate: reuserFunction.generateNumCertifictate(10),
+                    });
+                    await newInscription.save();
+                  }
                 });
                 for(z=0; z < payBase.courses.length; z++){
                   for(i=0; i < cartUser.courses.length; i++){

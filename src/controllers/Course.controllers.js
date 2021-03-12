@@ -780,27 +780,31 @@ courseCtrl.coursePrice = async (req,res) => {
 
 courseCtrl.courseFreeInscription = async (req,res) => {
   try {
-    const courseBase = await modelCourse.findById(req.params.idCourse);
-    if(courseBase.priceCourse.free === true){
-      const newInscription = new modelInscription({
-        idCourse: req.params.idCourse,
-        idUser: req.params.idUser,
-        codeKey: "",
-        code: false,
-        priceCourse: courseBase.priceCourse.price,
-        freeCourse: true,
-        promotionCourse: courseBase.priceCourse.promotionPrice,
-        persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
-        studentAdvance: "0",
-        ending: false,
-        numCertificate: reuserFunction.generateNumCertifictate(10)
-      });
-      await newInscription.save();
-      res.status(200).json({message: "Curso adquirido."})
+    const inscriptionBase = await modelInscription.findOne({idCourse: req.params.idCourse, idUser: req.params.idUser});
+    if(inscriptionBase){
+      res.status(404).json({message: "Este usuario ya tiene este curso"});
     }else{
-      res.status(404).json({message: "Este curso no se puede adquirir"})
+      const courseBase = await modelCourse.findById(req.params.idCourse);
+      if(courseBase.priceCourse.free === true){
+        const newInscription = new modelInscription({
+          idCourse: req.params.idCourse,
+          idUser: req.params.idUser,
+          codeKey: "",
+          code: false,
+          priceCourse: courseBase.priceCourse.price,
+          freeCourse: true,
+          promotionCourse: courseBase.priceCourse.promotionPrice,
+          persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
+          studentAdvance: "0",
+          ending: false,
+          numCertificate: reuserFunction.generateNumCertifictate(10)
+        });
+        await newInscription.save();
+        res.status(200).json({message: "Curso adquirido."})
+      }else{
+        res.status(404).json({message: "Este curso no se puede adquirir"});
+      }
     }
-
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -856,29 +860,34 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
     const courseBase = await modelCourse.findById(idCourse);
     const courseCoup = await modelCoupon.findOne({code});
     if(courseCoup){
-      if(courseCoup.exchange === false){
-        await modelCoupon.findByIdAndUpdate(courseCoup._id,
-          {
-            exchange: true,
-            idUser: idUser
-          });
-        const newInscription = new modelInscription({
-          idCourse: idCourse,
-          idUser: idUser,
-          codeKey: code,
-          code: true,
-          priceCourse: courseBase.priceCourse.price,
-          freeCourse: false,
-          promotionCourse: courseBase.priceCourse.promotionPrice,
-          persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
-          studentAdvance: "0",
-          ending: false,
-          numCertificate: reuserFunction.generateNumCertifictate(10)
-        });
-        await newInscription.save();
-        res.status(200).json({message: "Codigo canjeado correctamente."});
+      const inscriptionBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
+      if(inscriptionBase){
+        res.status(400).json({message: "Este usuario ya tiene este curso."});
       }else{
-        res.status(400).json({message: "Este codigo ya fue canjeado."});
+        if(courseCoup.exchange === false){
+          await modelCoupon.findByIdAndUpdate(courseCoup._id,
+            {
+              exchange: true,
+              idUser: idUser
+            });
+          const newInscription = new modelInscription({
+            idCourse: idCourse,
+            idUser: idUser,
+            codeKey: code,
+            code: true,
+            priceCourse: courseBase.priceCourse.price,
+            freeCourse: false,
+            promotionCourse: courseBase.priceCourse.promotionPrice,
+            persentagePromotionCourse: courseBase.priceCourse.persentagePromotion,
+            studentAdvance: "0",
+            ending: false,
+            numCertificate: reuserFunction.generateNumCertifictate(10)
+          });
+          await newInscription.save();
+          res.status(200).json({message: "Codigo canjeado correctamente."});
+        }else{
+          res.status(400).json({message: "Este codigo ya fue canjeado."});
+        }
       }
     }else{
       res.status(404).json({message: "Este codigo no existe."});
