@@ -76,7 +76,6 @@ courseCtrl.getCourseView = async (req, res) => {
           async function (err, GroupBlocks) {
             const listCourseAdmin = [];
             for (i = 0; i < GroupBlocks.length; i++) {
-              console.log(GroupBlocks[i]._id);
               const topics = await modelTopic.aggregate(
                 [
                   {
@@ -92,7 +91,6 @@ courseCtrl.getCourseView = async (req, res) => {
                   if (err) {
                     console.log(err);
                   } else {
-                    console.log(topicsBase);
                     return topicsBase;
                   }
                 }
