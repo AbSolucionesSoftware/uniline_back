@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const auth = require("../middleware/auth");
-const { createPay, confirmPay } = require("../controllers/Pay.controllers");
+const { createPay, confirmPay, getPay } = require("../controllers/Pay.controllers");
 
 router.route("/generate/").post(auth,createPay);
 
