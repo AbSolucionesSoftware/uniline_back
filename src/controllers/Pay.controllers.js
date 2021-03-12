@@ -132,6 +132,7 @@ payCtrl.getPay = async (req,res) => {
   try {
     const pay = await modelPay.findById(req.params.idPay);
     console.log(pay);
+    console.log(req.params.idPay);
     res.status(200).json(pay);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
