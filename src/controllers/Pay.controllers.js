@@ -163,4 +163,83 @@ payCtrl.getPay = async (req,res) => {
   }
 }
 
+payCtrl.pauWithPayPal = async (req,res) => {
+  try {
+    console.log(req.body);
+    const {
+      idPaypal,
+      courses,
+      username,
+      idUser,
+      total,
+      typePay,
+    } = req.body;
+    const newPay = new modelPay({
+      stripeObject: idPaypal.id,
+      idUser: idUser,
+      nameUser: username,
+      typePay: typePay,
+      statusPay: false,
+      total: total,
+      amount: Math.round(100 * parseFloat(total)),
+      courses: courses,
+      statusPay: true
+    });
+    await newPay.save( async (err, userStored) => {
+      if (err) {
+        res.status(500).json({ message: "Ups, algo paso", err });
+      } else {
+        if (!userStored) {
+          res.status(404).json({ message: "Error" });
+        } else {
+          const cartUser = await modelCart.findOne({
+            idUser: idUser,
+          });
+          courses.map(async (course) => {
+            const inscriptionBase = await modelInscription.findOne({idCourse: course.idCourse, idUser: idUser});
+              if(!inscriptionBase){
+                const newInscription = new modelInscription({
+                  idCourse: course.idCourse,
+                  idUser: idUser,
+                  codeKey: "",
+                  code: false,
+                  priceCourse: course.priceCourse,
+                  freeCourse: false,
+                  promotionCourse: course.pricePromotionCourse,
+                  persentagePromotionCourse: course.persentagePromotion,
+                  studentAdvance: "0",
+                  ending: false,
+                  numCertificate: reuserFunction.generateNumCertifictate(10),
+                });
+                await newInscription.save();
+              }
+          })
+          for(z=0; z < courses.length; z++){
+            for(i=0; i < cartUser.courses.length; i++){
+              if (JSON.stringify(courses[z].idCourse) === JSON.stringify(cartUser.courses[i].course)) {
+                await modelCart.updateOne(
+                  {
+                    _id: cartUser._id,
+                  },
+                  {
+                    $pull: {
+                      courses: {
+                        _id: cartUser.courses[i]._id,
+                      },
+                    },
+                  }
+                );
+              }
+            }
+          }
+          res.status(200).json({ message: "Pago realizado" });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
 module.exports = payCtrl;
