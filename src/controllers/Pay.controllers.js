@@ -78,7 +78,7 @@ payCtrl.confirmPay = async (req, res) => {
                   idUser: payBase.idUser,
                 });
                 payBase.courses.map(async (course) => {
-                  /* const newInscription = new modelInscription({
+                  const newInscription = new modelInscription({
                     idCourse: course.idCourse,
                     idUser: payBase.idUser,
                     codeKey: "",
@@ -91,7 +91,7 @@ payCtrl.confirmPay = async (req, res) => {
                     ending: false,
                     numCertificate: reuserFunction.generateNumCertifictate(10),
                   });
-                  await newInscription.save(); */
+                  await newInscription.save();
                 });
                 for(z=0; z < payBase.courses.length; z++){
                   for(i=0; i < cartUser.courses.length; i++){
