@@ -136,12 +136,12 @@ payCtrl.getPay = async (req,res) => {
       if(err){
 				res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
 			}else{
-        await modelCourse.populate(courses, {path: 'courses.idCourse'}, function(err, populatedTransactions) {
+        await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err, populatedTransactions) {
           // Your populated translactions are inside populatedTransactions
           if(err){
             res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
           }else{
-            await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, function(err, populatedTransactions2) {
+            await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err, populatedTransactions2) {
               // Your populated translactions are inside populatedTransactions
               if(err){
                 res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
