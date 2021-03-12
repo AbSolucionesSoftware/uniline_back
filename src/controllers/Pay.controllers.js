@@ -140,6 +140,7 @@ payCtrl.getPay = async (req,res) => {
           if(err){
             res.send({ message: 'Ups, algo paso al obtenero el pedidos', err });
           }else{
+            console.log(populatedTransactions);
             res.status(200).json(populatedTransactions);
           }
         });
