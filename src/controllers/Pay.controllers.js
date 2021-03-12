@@ -140,15 +140,15 @@ payCtrl.getPay = async (req,res) => {
         if(!courses){
           res.status(505).json({ message: 'Ups, algo paso', err });
         }else{
-          await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err, populatedTransactions) {
+          await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err2, populatedTransactions) {
             // Your populated translactions are inside populatedTransactions
-            if(err){
-              res.status(505).json({ message: 'Ups, algo paso', err });
+            if(err2){
+              res.status(505).json({ message: 'Ups, algo paso', err2 });
             }else{
-              await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err, populatedTransactions2) {
+              await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err3, populatedTransactions2) {
                 // Your populated translactions are inside populatedTransactions
-                if(err){
-                  res.status(505).json({ message: 'Ups, algo paso', err });
+                if(err3){
+                  res.status(505).json({ message: 'Ups, algo paso', err3 });
                 }else{
                   res.status(200).json(populatedTransactions2.courses);
                 }
