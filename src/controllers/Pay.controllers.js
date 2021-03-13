@@ -232,7 +232,7 @@ payCtrl.pauWithPayPal = async (req,res) => {
               }
             }
           }
-          res.status(200).json({ message: "Pago realizado" });
+          res.status(200).json({ idPay: courseBase._id });
         }
       }
     });
