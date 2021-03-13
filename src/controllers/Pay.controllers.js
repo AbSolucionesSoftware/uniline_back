@@ -175,7 +175,7 @@ payCtrl.pauWithPayPal = async (req,res) => {
       typePay,
     } = req.body;
     const newPay = new modelPay({
-      payPalPayment: idPaypal.id,
+      payPalPayment: idPaypal,
       idUser: idUser,
       nameUser: username,
       typePay: typePay,

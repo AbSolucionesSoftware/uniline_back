@@ -472,6 +472,15 @@ courseCtrl.moreBuyCourse = async (req,res) => {
   }
 }
 
+courseCtrl.getUsersCourse = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+ 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 courseCtrl.getBlockAndTopicCourse = async (req, res) => {
