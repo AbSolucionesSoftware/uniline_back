@@ -131,7 +131,7 @@ payCtrl.confirmPay = async (req, res) => {
 
 payCtrl.getPay = async (req,res) => {
   try {
-    if(req.params.idPay){
+    if(req.params.idPay !== undefined){
       await modelPay.findById(req.params.idPay, async (err, courses) => {
         console.log(courses);
         if(err){
