@@ -137,7 +137,7 @@ payCtrl.getPay = async (req,res) => {
 				res.status(505).json({ message: 'Ups, algo paso', err });
 			}else{
         if(!courses){
-          res.status(505).json({ message: 'Ups, algo paso 2', err });
+          res.status(505).json({ message: 'Ups, algo paso', err });
         }else{
           await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err2, populatedTransactions) {
             // Your populated translactions are inside populatedTransactions

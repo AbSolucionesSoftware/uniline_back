@@ -37,7 +37,8 @@ const {
     moreBuyCourse,
     searchCourse,
     getCourseDashUser,
-    courseFreeInscription
+    courseFreeInscription,
+    getUsersCourse
  } = require('../controllers/Course.controllers');
 
 router.route('/').post(auth,createCourse).get(getCourses);
@@ -63,6 +64,8 @@ router.route('/public/:idCourse').put(auth,publicCourse);
 router.route('/more/buy/').get(moreBuyCourse);
 
 router.route('/search/:search').get(searchCourse);
+
+router.route('/dashboard/teacher/:idCourse/users').get(auth,getUsersCourse);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
