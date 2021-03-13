@@ -474,8 +474,7 @@ courseCtrl.moreBuyCourse = async (req,res) => {
 
 courseCtrl.getUsersCourse = async (req,res) => {
   try {
-    const isnciptionBase = modelInscription.find({idCourse: req.params.idCourse}).populate('idUser');
-    console.log(isnciptionBase);
+    const isnciptionBase = await modelInscription.find({idCourse: req.params.idCourse}).populate('idUser');
     res.status(200).json(isnciptionBase);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
