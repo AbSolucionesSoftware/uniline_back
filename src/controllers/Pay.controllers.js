@@ -185,17 +185,17 @@ payCtrl.pauWithPayPal = async (req,res) => {
       courses: courses,
       statusPay: true
     });
-    await newPay.save( async (err, userStored) => {
+    await newPay.save( async (err, courseBase) => {
       if (err) {
         res.status(500).json({ message: "Ups, algo paso", err });
       } else {
-        if (!userStored) {
+        if (!courseBase) {
           res.status(404).json({ message: "Error" });
         } else {
           const cartUser = await modelCart.findOne({
             idUser: idUser,
           });
-          courses.map(async (course) => {
+          courseBase.courses.map(async (course) => {
             const inscriptionBase = await modelInscription.findOne({idCourse: course.idCourse, idUser: idUser});
               if(!inscriptionBase){
                 const newInscription = new modelInscription({
@@ -214,9 +214,9 @@ payCtrl.pauWithPayPal = async (req,res) => {
                 await newInscription.save();
               }
           })
-          for(z=0; z < courses.length; z++){
+          for(z=0; z < courseBase.courses.length; z++){
             for(i=0; i < cartUser.courses.length; i++){
-              if (JSON.stringify(courses[z].idCourse) === JSON.stringify(cartUser.courses[i].course)) {
+              if (JSON.stringify(courseBase.courses[z].idCourse) === JSON.stringify(cartUser.courses[i].course)) {
                 await modelCart.updateOne(
                   {
                     _id: cartUser._id,
