@@ -131,32 +131,37 @@ payCtrl.confirmPay = async (req, res) => {
 
 payCtrl.getPay = async (req,res) => {
   try {
-    await modelPay.findById(req.params.idPay, async (err, courses) => {
-      console.log(courses);
-      if(err){
-				res.status(505).json({ message: 'Ups, algo paso', err });
-			}else{
-        if(!courses){
+    if(req.params.idPay){
+      await modelPay.findById(req.params.idPay, async (err, courses) => {
+        console.log(courses);
+        if(err){
           res.status(505).json({ message: 'Ups, algo paso', err });
         }else{
-          await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err2, populatedTransactions) {
-            // Your populated translactions are inside populatedTransactions
-            if(err2){
-              res.status(505).json({ message: 'Ups, algo paso', err2 });
-            }else{
-              await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err3, populatedTransactions2) {
-                // Your populated translactions are inside populatedTransactions
-                if(err3){
-                  res.status(505).json({ message: 'Ups, algo paso', err3 });
-                }else{
-                  res.status(200).json(populatedTransactions2.courses);
-                }
-              });
-            }
-          });
-        }
-			}			
-    });
+          if(!courses){
+            res.status(505).json({ message: 'Ups, algo paso', err });
+          }else{
+            await modelCourse.populate(courses, {path: 'courses.idCourse'}, async  function(err2, populatedTransactions) {
+              // Your populated translactions are inside populatedTransactions
+              if(err2){
+                res.status(505).json({ message: 'Ups, algo paso', err2 });
+              }else{
+                await modelUser.populate(populatedTransactions, {path: 'courses.idCourse.idProfessor'}, async function(err3, populatedTransactions2) {
+                  // Your populated translactions are inside populatedTransactions
+                  if(err3){
+                    res.status(505).json({ message: 'Ups, algo paso', err3 });
+                  }else{
+                    res.status(200).json(populatedTransactions2.courses);
+                  }
+                });
+              }
+            });
+          }
+        }			
+      });
+    }else{
+      res.status(505).json({ message: 'id no existente' });
+    }
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
