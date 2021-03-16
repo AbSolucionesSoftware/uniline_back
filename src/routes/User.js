@@ -19,7 +19,7 @@ router.route("/firebase").post(userFirebaseSign);
 
 router.route("/").post(createUser);
 
-router.route("/:idUser/teacher").put(auth, createTeacher);
+router.route("/:idUser/teacher").put(createTeacher);
 
 router.route("/:idUser").get(getUser).put(auth, uploadFile, editUser);
 
