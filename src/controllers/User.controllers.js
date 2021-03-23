@@ -98,6 +98,7 @@ userCtrl.createTeacher = async (req, res) => {
     const newTeacher = userBase;
 
     newTeacher.type = "Maestro";
+    newTeacher.admin = false;
     await modelUser.findByIdAndUpdate(idUser, newTeacher);
     const userUpdate = await modelUser.findById(idUser);
     const token = jwt.sign(
@@ -163,6 +164,7 @@ userCtrl.editUser = async (req, res) => {
             _id: userUpdate._id,
             sessiontype: userUpdate.sessiontype,
             rol: userUpdate.type,
+            admin: userUpdate.admin,
           },
           process.env.AUTH_KEY
         );
@@ -205,6 +207,7 @@ userCtrl.signInUser = async (req, res) => {
               _id: userBase._id,
               sessiontype: userBase.sessiontype,
               rol: userBase.type,
+              admin: userBase.admin,
             },
             process.env.AUTH_KEY
           );
@@ -292,6 +295,7 @@ userCtrl.verifyResetPassword = async (req, res) => {
                         _id: userBase._id,
                         sessiontype: userBase.sessiontype,
                         rol: userBase.type,
+                        admin: userBase.admin,
                       },
                       process.env.AUTH_KEY
                     );
@@ -333,6 +337,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
               _id: userBase._id,
               sessiontype: userBase.sessiontype,
               rol: userBase.type,
+              admin: userBase.admin,
             },
             process.env.AUTH_KEY
           );
@@ -351,6 +356,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
           newUser.name = name;
           newUser.email = email;
           newUser.policies = true;
+          newUser.admin = false;
           newUser.type = "Estudiante";
           newUser.sessiontype = "Firebase";
           newUser.password = hash;
@@ -376,6 +382,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
                     _id: newUser._id,
                     sessiontype: newUser.sessiontype,
                     rol: newUser.type,
+                    admin: newUser.admin,
                   },
                   process.env.AUTH_KEY
                 );
