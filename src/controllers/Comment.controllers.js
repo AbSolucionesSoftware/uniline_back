@@ -23,6 +23,7 @@ commentCtrl.getCommentsCourse = async (req,res) => {
 commentCtrl.createCommentCourse = async (req,res) => {
     try {
         const newComment = new modelComment(req.body);
+        console.log(req.body);
         newComment.idCourse = req.params.idCourse;
         newComment.idUser = req.params.idUser;
         newComment.likes = 0;
