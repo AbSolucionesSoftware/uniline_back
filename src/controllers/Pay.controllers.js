@@ -54,7 +54,7 @@ payCtrl.confirmPay = async (req, res) => {
     const payBase = await modelPay.findById(req.params.idPay);
     const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
     if (payBase) {
-      const payment = null;
+      let payment = null;
       if(movil){
         payment = await stripe.charges.create({
           amount: payBase.amount,
