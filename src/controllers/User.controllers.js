@@ -527,7 +527,7 @@ userCtrl.registerTeacherUser = async (req,res) => {
 
 userCtrl.getTeachers = async (req,res) => {
   try {
-    const teachers = await modelUser.find({type: "Maestro",admin: false});
+    const teachers = await modelUser.find({type: "Maestro"});
     res.status(200).json(teachers);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
