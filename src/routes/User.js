@@ -33,6 +33,6 @@ router.route("/generate/reset/pass").post(generateCodeResetPassword);
 
 router.route("/verify/:keyBlackList").put(verifyResetPassword);
 
-router.route("/teacher").get(getTeachers).post(registerTeacherUser);
+router.route("/action/teacher/").get(auth,getTeachers).post(auth,registerTeacherUser);
 
 module.exports = router;

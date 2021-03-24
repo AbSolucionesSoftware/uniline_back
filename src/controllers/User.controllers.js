@@ -45,6 +45,7 @@ userCtrl.createUser = async (req, res) => {
               newUser.type = "Estudiante";
               newUser.sessiontype = "ApiRest";
               newUser.password = hash;
+              newUser.admin = false;
               newUser.save(async (err, userStored) => {
                 if (err) {
                   res.status(500).json({
@@ -93,11 +94,12 @@ userCtrl.createUser = async (req, res) => {
 
 userCtrl.createTeacher = async (req, res) => {
   try {
+    const { type } = req.body;
     const idUser = req.params.idUser;
     const userBase = await modelUser.findById(idUser);
     const newTeacher = userBase;
 
-    newTeacher.type = "Maestro";
+    newTeacher.type = type;
     newTeacher.admin = false;
     await modelUser.findByIdAndUpdate(idUser, newTeacher);
     const userUpdate = await modelUser.findById(idUser);
@@ -455,7 +457,68 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
 
 userCtrl.registerTeacherUser = async (req,res) => {
   try {
-    
+    const { name, email, password, repeatPassword, acceptPolicies = true } = req.body;
+    const newUser = new modelUser();
+
+    if (acceptPolicies) {
+      if (!password || !repeatPassword) {
+        res.status(404).json({ message: "The password is required." });
+      } else {
+        if (password === repeatPassword) {
+          bcrypt.hash(password, null, null, function (err, hash) {
+            if (err) {
+              res
+                .status(500)
+                .json({ message: "Error encrypting the password.", err });
+            } else {
+              newUser.name = name;
+              newUser.email = email;
+              newUser.policies = true;
+              newUser.type = "Maestro";
+              newUser.sessiontype = "ApiRest";
+              newUser.password = hash;
+              newUser.admin = false;
+              newUser.save(async (err, userStored) => {
+                if (err) {
+                  res.status(500).json({
+                    message: "Ups, algo paso al registrar el usuario",
+                    err,
+                  });
+                } else {
+                  if (!userStored) {
+                    res
+                      .status(404)
+                      .json({ message: "Error al crear el usuario" });
+                  } else {
+                    const cart = new modelCart({
+                      idUser: userStored._id,
+                    });
+                    await cart.save();
+                    const token = jwt.sign(
+                      {
+                        email: newUser.email,
+                        name: newUser.name,
+                        imagen: newUser.urlImage ? newUser.urlImage : null,
+                        _id: newUser._id,
+                        sessiontype: newUser.sessiontype,
+                        rol: newUser.type,
+                      },
+                      process.env.AUTH_KEY
+                    );
+                    res.json({ token });
+                  }
+                }
+              });
+            }
+          });
+        } else {
+          res.status(500).json({ message: "The passwords are not the same." });
+        }
+      }
+    } else {
+      res.status(500).json({ message: "The policies is required." });
+    }
+
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -464,7 +527,7 @@ userCtrl.registerTeacherUser = async (req,res) => {
 
 userCtrl.getTeachers = async (req,res) => {
   try {
-    const teachers = await modelUser.find({type: "Maestro"});
+    const teachers = await modelUser.find({type: "Maestro",admin: false});
     res.status(200).json(teachers);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
