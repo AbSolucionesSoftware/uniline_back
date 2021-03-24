@@ -50,17 +50,28 @@ payCtrl.createPay = async (req, res) => {
 
 payCtrl.confirmPay = async (req, res) => {
   try {
+    const { movil = false } = req.body;
     const payBase = await modelPay.findById(req.params.idPay);
     const stripe = new Stripe(process.env.LLAVE_SECRETA_STRIPE);
     if (payBase) {
-      const payment = await stripe.paymentIntents.create({
-        amount: payBase.amount,
-        currency: "MXN",
-        description: JSON.stringify(payBase._id),
-        payment_method_types: ["card"],
-        payment_method: payBase.stripeObject,
-        confirm: true,
-      });
+      const payment = null;
+      if(movil){
+        payment = await stripe.charges.create({
+          amount: payBase.amount,
+          currency: 'mxn',
+          description: JSON.stringify(payBase._id),
+          source: payBase.stripeObject,
+        });
+      }else{
+        payment = await stripe.paymentIntents.create({
+          amount: payBase.amount,
+          currency: "MXN",
+          description: JSON.stringify(payBase._id),
+          payment_method_types: ["card"],
+          payment_method: payBase.stripeObject,
+          confirm: true,
+        });
+      }
       if (payment) {
         await modelPay.findByIdAndUpdate(
           payBase._id,
