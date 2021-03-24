@@ -453,4 +453,23 @@ userCtrl.resetPasswordUserSession = async (req, res) => {
   }
 };
 
+userCtrl.registerTeacherUser = async (req,res) => {
+  try {
+    
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+userCtrl.getTeachers = async (req,res) => {
+  try {
+    const teachers = await modelUser.find({type: "Maestro"});
+    res.status(200).json(teachers);
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
 module.exports = userCtrl;

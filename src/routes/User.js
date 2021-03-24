@@ -12,7 +12,9 @@ const {
   userFirebaseSign,
   resetPasswordUserSession,
   generateCodeResetPassword,
-  verifyResetPassword
+  verifyResetPassword,
+  getTeachers,
+  registerTeacherUser
 } = require("../controllers/User.controllers");
 
 router.route("/firebase").post(userFirebaseSign);
@@ -30,5 +32,7 @@ router.route("/reset/password/:idUser").put(auth, resetPasswordUserSession);
 router.route("/generate/reset/pass").post(generateCodeResetPassword);
 
 router.route("/verify/:keyBlackList").put(verifyResetPassword);
+
+router.route("/teacher").get(getTeachers).post(registerTeacherUser);
 
 module.exports = router;
