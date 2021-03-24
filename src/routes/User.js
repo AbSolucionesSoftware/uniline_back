@@ -14,12 +14,13 @@ const {
   generateCodeResetPassword,
   verifyResetPassword,
   getTeachers,
-  registerTeacherUser
+  registerTeacherUser,
+  getUsers
 } = require("../controllers/User.controllers");
 
 router.route("/firebase").post(userFirebaseSign);
 
-router.route("/").post(createUser);
+router.route("/").post(createUser).get(getUsers);
 
 router.route("/:idUser/teacher").put(createTeacher);
 
