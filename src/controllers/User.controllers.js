@@ -554,7 +554,7 @@ userCtrl.getTeachers = async (req,res) => {
 
 userCtrl.getUsers = async (req, res) => {
   try {
-    const users = await modelUser.find({type: "Estudiante"});
+    const users = await modelUser.find();
     res.status(200).json(users);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
