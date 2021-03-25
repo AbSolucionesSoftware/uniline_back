@@ -37,6 +37,6 @@ router.route("/verify/:keyBlackList").put(verifyResetPassword);
 
 router.route("/action/teacher/").get(auth,getTeachers).post(auth,registerTeacherUser);
 
-router.route("/inscription/remove/:idInscription").delete(deleteInscriptionCourse);
+router.route("/inscription/remove/:idInscription").delete(auth,deleteInscriptionCourse);
 
 module.exports = router;
