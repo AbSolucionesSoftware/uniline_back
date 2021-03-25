@@ -8,6 +8,7 @@ const blackListPass = require("../models/BlackListPassword");
 const reuserfunction = require("../middleware/reuser");
 const sendEmail = require("../middleware/sendEmail");
 const modelBlackList = require("../models/BlackListPassword");
+const modelCourse = require("../models/Course");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -537,8 +538,23 @@ userCtrl.getTeachers = async (req,res) => {
 
 userCtrl.getUsers = async (req, res) => {
   try {
-    const users = await modelUser.find();
-    res.status(200).json(users);
+    const users = await modelUser.aggregate([
+			{
+				$match: {
+					$or: [ { admin: { $exists: false } }, { admin: false } ],
+				}
+			},
+		]);
+    console.log(users);
+    let arrayFinal = [];
+    for(i=0; i < users.length; i++){
+      const userConts = await modelCourse.countDocuments({idProfessor: users[i]._id});
+      arrayFinal.push({
+        user: users[i],
+        courses: userConts
+      })
+    }
+    res.status(200).json(arrayFinal);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
