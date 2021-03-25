@@ -15,7 +15,8 @@ const {
   verifyResetPassword,
   getTeachers,
   registerTeacherUser,
-  getUsers
+  getUsers,
+  deleteInscriptionCourse
 } = require("../controllers/User.controllers");
 
 router.route("/firebase").post(userFirebaseSign);
@@ -35,5 +36,7 @@ router.route("/generate/reset/pass").post(generateCodeResetPassword);
 router.route("/verify/:keyBlackList").put(verifyResetPassword);
 
 router.route("/action/teacher/").get(auth,getTeachers).post(auth,registerTeacherUser);
+
+router.route("/inscription/remove/:idInscription").delete(deleteInscriptionCourse);
 
 module.exports = router;

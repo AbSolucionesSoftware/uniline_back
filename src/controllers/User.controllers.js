@@ -9,6 +9,7 @@ const reuserfunction = require("../middleware/reuser");
 const sendEmail = require("../middleware/sendEmail");
 const modelBlackList = require("../models/BlackListPassword");
 const modelCourse = require("../models/Course");
+const modelInscription = require("../models/Inscription");
 
 userCtrl.uploadFile = async (req, res, next) => {
   try {
@@ -556,6 +557,20 @@ userCtrl.getUsers = async (req, res) => {
   try {
     const users = await modelUser.find();
     res.status(200).json(users);
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
+
+userCtrl.deleteInscriptionCourse = async (req,res) => {
+  try {
+    if(req.params.idInscription){
+      await modelInscription.findByIdAndDelete(req.params.idInscription);
+      res.status(200).json({message: "Usuario eliminado del curso"});
+    }else{
+      res.status(404).json({message: "No hay inscripcion por borrar."});
+    }
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
