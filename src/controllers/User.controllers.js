@@ -528,8 +528,24 @@ userCtrl.registerTeacherUser = async (req,res) => {
 
 userCtrl.getTeachers = async (req,res) => {
   try {
-    const teachers = await modelUser.find({type: "Maestro"});
-    res.status(200).json(teachers);
+    const teachers = await modelUser.aggregate([
+			{
+				$match: {
+					$or: [ { admin: { $exists: false } }, { admin: false } ],
+          $and: [ { type: "Maestro" } ]
+				}
+			},
+		]);
+    console.log(teachers);
+    let arrayFinal = [];
+    for(i=0; i < teachers.length; i++){
+      const userConts = await modelCourse.countDocuments({idProfessor: teachers[i]._id});
+      arrayFinal.push({
+        teacher: teachers[i],
+        courses: userConts
+      })
+    };
+    res.status(200).json(arrayFinal);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
@@ -538,23 +554,8 @@ userCtrl.getTeachers = async (req,res) => {
 
 userCtrl.getUsers = async (req, res) => {
   try {
-    const users = await modelUser.aggregate([
-			{
-				$match: {
-					$or: [ { admin: { $exists: false } }, { admin: false } ],
-				}
-			},
-		]);
-    console.log(users);
-    let arrayFinal = [];
-    for(i=0; i < users.length; i++){
-      const userConts = await modelCourse.countDocuments({idProfessor: users[i]._id});
-      arrayFinal.push({
-        user: users[i],
-        courses: userConts
-      })
-    }
-    res.status(200).json(arrayFinal);
+    const users = await modelUser.find({type: "Estudiante"});
+    res.status(200).json(users);
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
