@@ -727,6 +727,7 @@ courseCtrl.editOrderTopic = async (req, res) => {
 
 courseCtrl.registerTopicComplete = async (req, res) => {
   try {
+    console.log(req.body);
     const {idTopic, idUser, idCourse, public } = req.body;
     if(public == false){
       const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});

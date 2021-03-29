@@ -565,11 +565,7 @@ userCtrl.getUsers = async (req, res) => {
 
 userCtrl.deleteInscriptionCourse = async (req,res) => {
   try {
-    console.log(req.params.idInscription);
     if(req.params.idInscription){
-      console.log("llego");
-      const inscription = await modelInscription.findById(req.params.idInscription);
-      console.log(inscription);
       await modelInscription.findByIdAndDelete(req.params.idInscription);
       res.status(200).json({message: "Usuario eliminado del curso."});
     }else{
