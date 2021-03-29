@@ -729,43 +729,46 @@ courseCtrl.registerTopicComplete = async (req, res) => {
   try {
     console.log(req.body);
     const {idTopic, idUser, idCourse, public } = req.body;
-    if(public == false){
-      const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
-      if(deleteTopicComplete){
-        await modelTopicComplete.findByIdAndDelete(deleteTopicComplete._id);
-      }
+    if(!idTopic || !idUser || !idCourse){
+      res.status(404).json({ message: "Datos incompletos", datos: req.body});
     }else{
-      const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
-      if(topicBase.length === 0){
-        const newTopicComplete = new modelTopicComplete(req.body);
-        await newTopicComplete.save();
-      }
-    }
-    const blockBase = await modelBlock.find({idCourse: idCourse});
-    const totalTopicsComplete = await modelTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
-    let countCursos = 0;
-    for(i = 0; i < blockBase.length; i++){
-      const topics = await modelTopic.countDocuments({idBlock: blockBase[i]._id});
-      countCursos+= topics;
-    }
-    const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
-    const inscriptionUserBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
-    if(avance >= 100){
-      if(inscriptionUserBase){
-        if(inscriptionUserBase.ending === false){
-          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance),endDate: new Date(),ending: true});
-        }else{
-          await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+      if(public == false){
+        const deleteTopicComplete = await modelTopicComplete.findOne({idTopic: idTopic, idUser: idUser});
+        if(deleteTopicComplete){
+          await modelTopicComplete.findByIdAndDelete(deleteTopicComplete._id);
         }
       }else{
-        res.status(404).json({ message: "Este usuario no a comprado el curso"});
+        const topicBase = await modelTopicComplete.find({idTopic: idTopic, idUser: idUser});
+        if(topicBase.length === 0){
+          const newTopicComplete = new modelTopicComplete(req.body);
+          await newTopicComplete.save();
+        }
       }
-    }else{
-      await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+      const blockBase = await modelBlock.find({idCourse: idCourse});
+      const totalTopicsComplete = await modelTopicComplete.countDocuments({idUser: idUser, idCourse: idCourse});
+      let countCursos = 0;
+      for(i = 0; i < blockBase.length; i++){
+        const topics = await modelTopic.countDocuments({idBlock: blockBase[i]._id});
+        countCursos+= topics;
+      }
+      const avance = (100 / Math.round(countCursos)) * Math.round(totalTopicsComplete);
+      const inscriptionUserBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
+      if(avance >= 100){
+        if(inscriptionUserBase){
+          if(inscriptionUserBase.ending === false){
+            await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance),endDate: new Date(),ending: true});
+          }else{
+            await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+          }
+        }else{
+          res.status(404).json({ message: "Este usuario no a comprado el curso"});
+        }
+      }else{
+        await modelInscription.findOneAndUpdate({idCourse: idCourse, idUser: idUser}, {studentAdvance: Math.round(avance)});
+      }
+      
+      res.status(200).json({message: Math.round(avance)});
     }
-    
-    res.status(200).json({message: Math.round(avance)});
-
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
