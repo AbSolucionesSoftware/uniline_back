@@ -21,6 +21,7 @@ homeworkCtrl.createHomework = async (req,res) => {
         /* const { qualificationHomework } = req.body; */
         /* const { qualificationHomework } = req.body;  */
         const createHomework = new modelHomework();
+        console.log("LLego a homwork");
         if(req.file){
             createHomework.homeworkFileKey = req.file.key;
             createHomework.homeworkFileUrl = req.file.location;
@@ -37,7 +38,6 @@ homeworkCtrl.createHomework = async (req,res) => {
                     }
                 }
             });
-           
         }else{
             res.status(404).json({message: "La tarea no fue encontrada."})
         }
