@@ -22,7 +22,7 @@ homeworkCtrl.createHomework = async (req,res) => {
         /* const { qualificationHomework } = req.body;  */
         const createHomework = new modelHomework();
         console.log("LLego a homwork");
-        console.log(req.body);
+        console.log(req.file);
         if(req.file){
             createHomework.homeworkFileKey = req.file.key;
             createHomework.homeworkFileUrl = req.file.location;
