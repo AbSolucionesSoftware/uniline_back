@@ -44,6 +44,7 @@ const fileFilter = (req, file, cb) => {
       bucket: process.env.NAME_BUCKET_AMS,
       acl: 'public-read',
       metadata: function (req, file, cb) {
+        console.log(file);
         cb(null, {fieldName: 'Testing_metadata'});
       },
       key: function (req, file, cb) {
