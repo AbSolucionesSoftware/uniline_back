@@ -41,7 +41,7 @@ homeworkCtrl.createHomework = async (req,res) => {
                 }
             });
         }else{
-            res.status(404).json({message: "La tarea no fue encontrada."})
+            res.status(404).json({message: "La tarea no fue encontrada.", info: {body: req.body, file:req.file }});
         }
     } catch (error) {
         res.status(505).json({ message: "Error del servidor", error });
