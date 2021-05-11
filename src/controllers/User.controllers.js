@@ -349,7 +349,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
           res.json({ token });
         }
       } else {
-        res.status(500).json({ message: "Este usuario es invalido invalido." });
+        res.status(500).json({ message: "Ingresa sesion manualmente." });
       }
     } else {
       const newUser = new modelUser();
