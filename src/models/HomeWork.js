@@ -15,6 +15,11 @@ const homeWorkSchema = new Schema(
     qualificationHomework: {
       type: Float
     },
+    idTopic: {
+      type: Schema.ObjectId,
+      ref: "topic",
+    },
+    topicBoolean: Boolean,
     homeworkFileKey: String,
     homeworkFileUrl: String,
     comments: [

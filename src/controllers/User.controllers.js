@@ -139,12 +139,14 @@ userCtrl.getUser = async (req, res) => {
 
 userCtrl.editUser = async (req, res) => {
   try {
+    console.log(req.body);
     if (req.body.password) {
       res.status(500).json({ message: "Error de datos enviados." });
     } else {
       const userBase = await modelUser.findById(req.params.idUser);
       const updateUser = req.body;
       if (userBase) {
+        console.log(req.file);
         if (req.file) {
           updateUser.keyImage = req.file.key;
           updateUser.urlImage = req.file.location;
