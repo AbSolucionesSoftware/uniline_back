@@ -200,7 +200,7 @@ userCtrl.signInUser = async (req, res) => {
 
     if (userBase) {
       if (userBase.sessiontype === "Firebase") {
-        res.status(504).json({ message: "Usuario no valido." });
+        res.status(504).json({ message: "Este usuario inicio sesion con Google o Facebook." });
       } else {
         if (!bcrypt.compareSync(password, userBase.password)) {
           res.status(404).json({ message: "Contraseña incorrecta" });
@@ -279,7 +279,7 @@ userCtrl.verifyResetPassword = async (req, res) => {
         const userBase = await modelUser.findOne({email: blackListBase.email});
         if(userBase){
           if(userBase.sessiontype === "Firebase"){
-            res.status(500).json({message: "Este usuario no tiene este privilegio."});
+            res.status(500).json({message: "Este usuario no tiene este privilegio ya que inicio sesion con Google o Facebook."});
           }else{
             if(!password && !repeatPassword){
               res.status(500).json({message: "Las contasenas no existen."});
@@ -351,7 +351,7 @@ userCtrl.userFirebaseSign = async (req, res) => {
           res.json({ token });
         }
       } else {
-        res.status(500).json({ message: "Ingresa sesion manualmente." });
+        res.status(500).json({ message: "Este usuario tiene que iniciar sesion directamente."});
       }
     } else {
       const newUser = new modelUser();
