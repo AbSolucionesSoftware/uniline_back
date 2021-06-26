@@ -205,7 +205,8 @@ courseCtrl.getCourseTeacher = async (req, res) => {
           course: courses[i],
           numInscription: "",
           sales: "",
-          numCalification: ""
+          numCalification: "",
+          blockCourse: true
         };
         const numScription = await modelInscription.countDocuments({idCourse: courses[i]._id});
         courseActual.numInscription = numScription;
@@ -223,6 +224,12 @@ courseCtrl.getCourseTeacher = async (req, res) => {
         courseActual.sales = sumTotal;
         const numCalificationCourse = await modelCommentCourse.countDocuments({idCourse: courses[i]._id});
         courseActual.numCalification = numCalificationCourse;
+        const blockCourseBase = await modelBlock.find({idCourse: courses[i]._id});
+        if(blockCourseBase.length > 0){
+          courseActual.blockCourse = true;
+        }else{
+          courseActual.blockCourse = false;
+        } 
         coursesFinal.push(courseActual);
       }
       res.status(200).json(coursesFinal);
@@ -300,6 +307,29 @@ courseCtrl.editCourse = async (req, res) => {
     console.log(error);
   }
 };
+
+courseCtrl.deleteCourse = async (req, res) => {
+  try {
+      const blockCursos = await modelBlock.find({idCourse: req.params.idCourse});
+      if(blockCursos.length > 0){
+        res.status(504).json({ message: "Este curso no se puede eliminar, aun tiene bloques.", error });
+      }else{
+        const incription = await modelInscription.find({idCourse: req.params.idCourse});
+        if(incription.length > 1){
+            res.status(500).json({ message: "Curso ya tiene estudiantes inscritos." });
+        }else{
+          await modelCourse.findByIdAndDelete(req.params.idCourse);
+          for(let i = 0; i < incription.length; i++){
+            await modelInscription.findByIdAndDelete(incription[i]._id);
+            res.status(200).json({ message: "Curso eliminado" });
+          }
+        }
+      }
+  } catch (error) {
+    res.status(505).json({ message: "Error del servidor", error });
+    console.log(error);
+  }
+}
 
 courseCtrl.uploadFileCourse = async (req, res) => {
   try {

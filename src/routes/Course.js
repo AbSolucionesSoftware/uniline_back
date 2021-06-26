@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const { 
     createCourse,
     editCourse,
+    deleteCourse,
     editLerningsRequiredStudents,
     uploadFileCourse,
     uploadFile,
@@ -45,7 +46,7 @@ router.route('/').post(auth,createCourse).get(getCourses);
 
 router.route('/learnings/:idCourse').put(auth,editLerningsRequiredStudents);
 
-router.route('/:idCourse').put(auth,editCourse).get(getCourse);
+router.route('/:idCourse').put(auth,editCourse).get(getCourse).delete(auth,deleteCourse);
 
 router.route('/view-course/:slugCourse').get(getCourseView);
 
@@ -67,7 +68,7 @@ router.route('/search/:search').get(searchCourse);
 
 router.route('/dashboard/teacher/:idCourse/users').get(auth,getUsersCourse);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Block >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/data/:idCourse').get(auth,getBlockAndTopicCourse)
 
@@ -77,7 +78,7 @@ router.route('/block/edit/:idBlock').put(auth,editBlockCourse);
 
 router.route('/block/delete/:idBlock').delete(auth,deleteBlockCourse);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/topic/:idBlock').post(auth,createTopicBlock).put(auth,EditTopicBlock);
 
@@ -93,32 +94,30 @@ router.route('/topic/delete/:idTopic').delete(auth,DeleteTopicBlock);
 
 router.route('/content/order').put(auth,editOrderTopic);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Routes Temas >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/complete/topic/').post(registerTopicComplete);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Promocion Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/price-promotion/:idCourse').put(auth,coursePrice);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Cupones Curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/coupon/:idCourse').post(auth,generateCoupon).get(auth,getCouponCourse);
 
 router.route('/coupon/exchange/').put(auth,exchangeCouponCourse);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Dashboard del usuario >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
-
-//<<<<<<<<<<< Lista del curso >>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Lista del curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/datalist/:idCourse/user/:idUser').get(getListCourse);
 
-//<<<<<<<<<<< Informacion del curso >>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Informacion del curso >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/view/:slugCourse/user-progress/:idUser').get(auth,getCourseDashUser);
 
 
-//<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>//
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Comentario y calificacion del Curso >>>>>>>>>>>>>>>>>>>>>>>//
 
 router.route('/comment/:idUser/course/:idCourse').post(auth,aggregateCommentCourse);
 
