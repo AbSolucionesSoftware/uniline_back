@@ -65,6 +65,7 @@ commentCtrl.deleteCommentCourse = async (req,res) => {
 commentCtrl.createAnswerCommentCourse = async (req,res) => {
     try {
         const { comment } = req.body;
+        console.log(req.body);
         await modelComment.updateOne(
             {
                 _id: req.params.idComment
