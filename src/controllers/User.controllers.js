@@ -197,13 +197,12 @@ userCtrl.signInUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const userBase = await modelUser.findOne({ email: email });
-
     if (userBase) {
       if (userBase.sessiontype === "Firebase") {
         res.status(504).json({ message: "Este usuario inicio sesion con Google o Facebook." });
       } else {
         if (!bcrypt.compareSync(password, userBase.password)) {
-          res.status(404).json({ message: "Contraseña incorrecta" });
+          res.status(404).json({ message: "Usuario o contraseña incorrectos." });
         } else {
           const token = jwt.sign(
             {
@@ -329,76 +328,81 @@ userCtrl.verifyResetPassword = async (req, res) => {
 userCtrl.userFirebaseSign = async (req, res) => {
   try {
     const { email, name } = req.body;
-    const userBase = await modelUser.findOne({ email: email });
-    if (userBase) {
-      if (userBase.sessiontype === "Firebase") {
-        if (!bcrypt.compareSync(email, userBase.password)) {
-          res.status(500).json({ message: "Contraseña incorrecta" });
+    if(!email || !name){
+      res.status(500).json({ message: "Algo fallo" });
+    }else{
+      const userBase = await modelUser.findOne({ email: email });
+      if (userBase) {
+        if (userBase.sessiontype === "Firebase") {
+          if (!bcrypt.compareSync(email, userBase.password)) {
+            res.status(500).json({ message: "Usuario o contraseña incorrectos."});
+          } else {
+            const token = jwt.sign(
+              {
+                email: userBase.email,
+                name: userBase.name,
+                imagen: userBase.urlImage,
+                _id: userBase._id,
+                sessiontype: userBase.sessiontype,
+                rol: userBase.type,
+                admin: userBase.admin,
+              },
+              process.env.AUTH_KEY
+            );
+            //token
+            res.json({ token });
+          }
         } else {
-          const token = jwt.sign(
-            {
-              email: userBase.email,
-              name: userBase.name,
-              imagen: userBase.urlImage,
-              _id: userBase._id,
-              sessiontype: userBase.sessiontype,
-              rol: userBase.type,
-              admin: userBase.admin,
-            },
-            process.env.AUTH_KEY
-          );
-          //token
-          res.json({ token });
+          res.status(500).json({ message: "Este usuario tiene que iniciar sesion directamente."});
         }
       } else {
-        res.status(500).json({ message: "Este usuario tiene que iniciar sesion directamente."});
-      }
-    } else {
-      const newUser = new modelUser();
-      bcrypt.hash(email, null, null, function (err, hash) {
-        if (err) {
-          res.status(500).json({ message: "Parece que paso un error.", err });
-        } else {
-          newUser.name = name;
-          newUser.email = email;
-          newUser.policies = true;
-          newUser.admin = false;
-          newUser.type = "Estudiante";
-          newUser.sessiontype = "Firebase";
-          newUser.password = hash;
-          newUser.save(async (err, userStored) => {
-            if (err) {
-              res.status(404).json({
-                message: "Ups, algo paso al registrar el usuario",
-                err,
-              });
-            } else {
-              if (!userStored) {
-                res.status(404).json({ message: "Error al crear el usuario" });
-              } else {
-                const cart = new modelCart({
-                  idUser: userStored._id,
+        const newUser = new modelUser();
+        bcrypt.hash(email, null, null, function (err, hash) {
+          if (err) {
+            res.status(500).json({ message: "Parece que paso un error.", err });
+          } else {
+            newUser.name = name;
+            newUser.email = email;
+            newUser.policies = true;
+            newUser.admin = false;
+            newUser.type = "Estudiante";
+            newUser.sessiontype = "Firebase";
+            newUser.password = hash;
+            newUser.save(async (err, userStored) => {
+              if (err) {
+                res.status(404).json({
+                  message: "Ups, algo paso al registrar el usuario",
+                  err,
                 });
-                await cart.save();
-                const token = jwt.sign(
-                  {
-                    email: newUser.email,
-                    name: newUser.name,
-                    imagen: newUser.urlImage ? newUser.urlImage : null,
-                    _id: newUser._id,
-                    sessiontype: newUser.sessiontype,
-                    rol: newUser.type,
-                    admin: newUser.admin,
-                  },
-                  process.env.AUTH_KEY
-                );
-                res.json({ token });
+              } else {
+                if (!userStored) {
+                  res.status(404).json({ message: "Error al crear el usuario" });
+                } else {
+                  const cart = new modelCart({
+                    idUser: userStored._id,
+                  });
+                  await cart.save();
+                  const token = jwt.sign(
+                    {
+                      email: newUser.email,
+                      name: newUser.name,
+                      imagen: newUser.urlImage ? newUser.urlImage : null,
+                      _id: newUser._id,
+                      sessiontype: newUser.sessiontype,
+                      rol: newUser.type,
+                      admin: newUser.admin,
+                    },
+                    process.env.AUTH_KEY
+                  );
+                  res.json({ token });
+                }
               }
-            }
-          });
-        }
-      });
+            });
+          }
+        });
+      }
     }
+    
   } catch (error) {
     res.status(505).json({ message: "Error del servidor", error });
     console.log(error);
