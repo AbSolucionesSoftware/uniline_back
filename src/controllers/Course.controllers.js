@@ -902,7 +902,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
     //agregar conicion de curso yt cupon que sea el mismo curso
     const { idUser,idCourse,code } = req.body;
     const courseBase = await modelCourse.findById(idCourse);
-    const courseCoup = await modelCoupon.findOne({code});
+    const courseCoup = await modelCoupon.findOne({code: code.trim()});
     if(courseCoup){
       const inscriptionBase = await modelInscription.findOne({idCourse: idCourse, idUser: idUser});
       if(inscriptionBase){
@@ -917,7 +917,7 @@ courseCtrl.exchangeCouponCourse = async (req,res) => {
           const newInscription = new modelInscription({
             idCourse: idCourse,
             idUser: idUser,
-            codeKey: code,
+            codeKey: code.trim(),
             code: true,
             priceCourse: courseBase.priceCourse.price,
             freeCourse: false,
