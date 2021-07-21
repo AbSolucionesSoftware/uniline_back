@@ -209,8 +209,6 @@ userTallerCtrl.createSendEmail = async (req, res) => {
                         <div style=" max-width: 550px; height: 100px;">
                             ${message}
                         </div>
-                        <h4>Gracias</h4>
-                        <h6>(Este correo es informativo. No es necesario responder)</h6>
                     </div>
             `;
         await sendEmail.sendEmail(
