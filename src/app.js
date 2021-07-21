@@ -39,7 +39,7 @@ app.use('/api/comment',require('./routes/Comment'));
 app.use('/api/homework',require('./routes/Homework'));
 app.use('/api/pay',require('./routes/Pay'));
 app.use('/api/send',require('./routes/send'));
-
+app.use('/api/taller',require('./routes/Taller'));
 
 //carpeta publica
 app.use(express.static('uploads'));

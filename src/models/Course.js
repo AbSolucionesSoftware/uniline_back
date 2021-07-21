@@ -49,7 +49,28 @@ const courseSchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true
-    }
+    },
+    // >>>>>>> TALLER  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    taller:{
+        nameTaller: String,
+        fechaTaller: String,
+        descripcionTaller:String,
+        aprendizajesTaller: [
+          {
+            apredizaje: String
+          }
+        ], 
+        publicTaller: Boolean,
+        keyImageTaller: String,
+        urlImageTaller: String,
+        nameMaestro: String,
+        descripcionMaestro: String,
+        keyImageMaestro: String,
+        urlImageMaestro: String,
+        infoCorreo: String
+    },
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
   },
   {
     timestamps: true,
