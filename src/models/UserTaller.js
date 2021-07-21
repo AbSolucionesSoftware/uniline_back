@@ -4,6 +4,7 @@ const userTallerSchema = new Schema(
     {
         nameUser: String,
         emailUser: String,
+        politicas: Boolean,
         idCourse: {
             type: Schema.ObjectId,
             ref: 'course'

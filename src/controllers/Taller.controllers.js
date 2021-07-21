@@ -203,7 +203,6 @@ userTallerCtrl.deleteUsersTaller = async (req, res) => {
 userTallerCtrl.createSendEmail = async (req, res) => {
     try {
         const { emailUser, message, nameUser } = req.body;
-    
         const htmlContentUser = `
                     <div>                    
                         <h3 style="font-family: sans-serif; margin: 15px 15px;">Gracias por inscribirte a nuestro Taller ${nameUser}</h3>
@@ -214,7 +213,6 @@ userTallerCtrl.createSendEmail = async (req, res) => {
                         <h6>(Este correo es informativo. No es necesario responder)</h6>
                     </div>
             `;
-    
         await sendEmail.sendEmail(
             emailUser,
             "Registro Taller",
